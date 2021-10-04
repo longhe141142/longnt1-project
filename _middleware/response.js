@@ -1,3 +1,4 @@
+const { SendResponse } = require("../_config/responseInterface");
 class CustomResponse {
   static SendStatus = (res) => {
     res.status(200).send(
@@ -23,26 +24,17 @@ class CustomResponse {
     //   statusCode: statusCode,
     //   message: message,
     // });
-    if (statusCode >= 400) {
-      res.formatter.badRequest({
-        status: statusCode >= 400 ? "FAILED" : "SUCCESS",
-        statusCode: statusCode,
-        message: message,
-      });
-    } else {
-      res.formatter.ok({
-        status: statusCode >= 400 ? "FAILED" : "SUCCESS",
-        statusCode: statusCode,
-        message: message,
-      });
-    }
+
+    let messageObject = {
+      status: statusCode,
+      message: message,
+    };
+    SendResponse(res,statusCode, messageObject);
   };
 
   static sendObject(res, status, object) {
     // res.status(status).send(JSON.stringify(object));
-    res.formatter.ok(
-        object
-    );
+    SendResponse(res,status, object);
   }
 }
 

@@ -4,6 +4,7 @@ const logger = require("../../_utils/logger");
 const CustomResponse = require("../../_middleware/response");
 const nextErr = require("../../_middleware/handerError");
 const { ErrorHandler } = require("../../_middleware/handling/ErrorHandle");
+const { authJWT } = require("../../_middleware/auth");
 
 class AuthRouter extends BaseRouter {
   constructor() {
@@ -27,20 +28,22 @@ class AuthRouter extends BaseRouter {
     let user = await this._service.loginService(req);
 
     if (user instanceof Error || !user) {
-      if(user instanceof Error) {
+      if (user instanceof Error) {
         logger.error(user);
         nextErr(new ErrorHandler(404, "system error"), req, res, next);
-       
-      }else{
-        nextErr(new ErrorHandler(404, "Invalid userName or password"), req, res, next);
-
+        return;
+      } else {
+        nextErr(
+          new ErrorHandler(404, "Invalid userName or password"),
+          req,
+          res,
+          next
+        );
       }
       return;
-     
     }
-
-
-    CustomResponse.sendObject(res, 200, user);
+    // CustomResponse.sendObject(res, 200, user);
+    authJWT(req, res, user);
   };
 }
 

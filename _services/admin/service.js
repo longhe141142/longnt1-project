@@ -11,12 +11,11 @@ module.exports = class AdminService extends BaseService {
     const { employee, ...user } = data;
     employee.createdBy = "user.id";
     employee.updatedBy = "user.id";
+    
     let transaction = await User.sequelize.transaction();
     try {
       //add admin
-      let admin = await User.addNew(user, transaction, "admin", false, [
-        Employee,
-      ]);
+      let admin = await User.createAdministrator(user, transaction, "admin");
       if (!admin) {
         return false;
       }

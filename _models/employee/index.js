@@ -17,5 +17,11 @@ module.exports= class Employee extends BaseModel {
             target:"id",
             as: "user"
         })
+
+        this.belongsTo(models.User,{
+            foreignKey:"managerId",
+            target:"id",
+            as:"manager"
+        })
     }
 }

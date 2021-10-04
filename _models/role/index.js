@@ -4,7 +4,9 @@ const USerRole = require("../userRole");
 const User = require("../user");
 const UserRole = require("../userRole");
 const Role_permission = require("../role_permission");
+const Api = require("../api")
 module.exports = class Role extends BaseModel {
+  
   static tableName = "role";
   static modelName = "role";
   static include = [
@@ -20,10 +22,14 @@ module.exports = class Role extends BaseModel {
       model: Role_permission,
       as: "role_permission",
     },
+    {
+      model: Api,
+      as:"api"
+    }
   ];
   static schema = require("./schema");
-
   static associate(models) {
+
     this.hasMany(models.UserRole, {
       foreignKey: "roleId",
       targetKey: "id",
@@ -44,6 +50,7 @@ module.exports = class Role extends BaseModel {
       foreignKey: "apiId",
       targetKey: "id",
       through: models.Role_permission,
+      as:"api"
     });
   }
 

@@ -15,8 +15,17 @@ module.exports = {
     type: Sequelize.STRING(35),
     allowNull: true,
   },
+  router: {
+    type: Sequelize.STRING(45),
+    allowNull: false,
+  },
+  feature: {
+    type: Sequelize.STRING(200),
+    allowNull: true,
+  },
   description: {
     type: Sequelize.STRING(220),
-    allowNull: true,
+    allowNull: false,
+    defaultValue: "",
   },
 };

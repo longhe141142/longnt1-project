@@ -70,6 +70,7 @@ module.exports = class BaseModel extends Sequelize.Model {
 
     return this.create(data, options);
   }
+
   static addMany(data, transaction, who, skipInclude = true, include) {
     let who1 = who || "admin";
 
@@ -118,6 +119,22 @@ module.exports = class BaseModel extends Sequelize.Model {
       options.include = include || this.include;
     }
 
+    return this.findOne(options);
+  }
+
+  static getDetailByWhere(where, transaction, skipInclude = true, include) {
+    let options = {
+      where,
+      returning: true,
+    };
+
+    console.log(where)
+    if (!skipInclude && (include || this.include)) {
+      options.include = include || this.include;
+    }
+    if (transaction) {
+      options.transaction = transaction;
+    }
     return this.findOne(options);
   }
 };

@@ -46,6 +46,11 @@ module.exports = class User extends BaseModel {
       foreignKey: "userId",
       targetKey: "id",
     });
+    this.hasMany(models.Employee, {
+      foreignKey: "managerId",
+      targetKey: "id",
+      as: "OwnEmployee",
+    });
   }
 
   //register
@@ -74,12 +79,32 @@ module.exports = class User extends BaseModel {
     return this.create(data, options);
   };
 
+  //register admin
+
+  static createAdministrator = async (user, transaction, who) => {
+    const salt = await bcrypt.genSalt(10);
+    // const hashedPassword = await bcrypt.hash(data.password, salt);
+    const hashedPassword = await bcrypt.hash(user.password, salt);
+    user.password = hashedPassword;
+    let options = {
+      returning: true,
+    };
+    if (who) {
+      (user.createdBy = who), (user.updatedBy = who);
+    }
+    if (transaction) {
+      options.transaction = transaction;
+    }
+
+    return this.create(user, options);
+  };
+
   //check if password is right
   static verifyPassword = async (user, password) => {
     try {
       let cmp = await bcrypt.compare(password, user.password);
 
-      console.log(cmp)
+      console.log(cmp);
       return cmp;
     } catch (error) {
       return error;
@@ -100,4 +125,6 @@ module.exports = class User extends BaseModel {
     await user.addRole(role, options);
     return this.getDetailById(user.id, transaction, false, [Employee, Role]);
   };
+
+ 
 };

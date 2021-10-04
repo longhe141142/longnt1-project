@@ -26,5 +26,9 @@ module.exports = {
   managerId: {
     type: Sequelize.STRING(36),
     allowNull: true,
+    references: {
+      model: "user",
+      key:"id"
+    }
   },
 };

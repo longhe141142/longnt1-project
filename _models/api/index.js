@@ -20,7 +20,7 @@ module.exports = class Api extends BaseModel {
     this.belongsToMany(models.Role, {
       foreignKey: "roleId",
       targetKey: "id",
-      through: "role_permission",
+      through: models.Role_permission,
     });
 
     this.hasMany(models.Role_permission, {

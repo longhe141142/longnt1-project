@@ -44,4 +44,8 @@ module.exports = {
     type: Sequelize.STRING(36),
     allowNull: true,
   },
+  avatar:{
+    type: Sequelize.STRING,
+    
+  }
 };
