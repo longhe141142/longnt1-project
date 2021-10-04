@@ -19,7 +19,7 @@ module.exports = class UserRouter extends BaseRouter {
     this.get(
       "/viewOwnEmployees",
       verifyToken,
-      Authorize("user", "get", "view profile"),
+       Authorize("/user", "/get", "view profile"),
       this.getEmployeeManage
     );
   }
@@ -75,16 +75,16 @@ module.exports = class UserRouter extends BaseRouter {
   getEmployeeManage = async (req, res, next) => {
     let user = await User.getDetailByWhere(
       {
-        userName: req.body.userName,
+        userName: req.user.data.userName,
       },
       null,
       false,
       [Employee, "OwnEmployee"]
     );
     console.log(user);
-    let manager = req.user || user;
+    let manager =  user;
     let employees = await this._service.getOwnEmployee(manager);
-    if (employees instanceof Error) {
+    if (employees instanceof Error|| employees === false)  {
       logger.error(employees);
       nextErr(new ErrorHandler(404, "Cant retrieve employees"), req, res, next);
       return;

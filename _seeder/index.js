@@ -6,12 +6,12 @@ const Api = require("../_models/api");
 const logger = require("../_utils/logger");
 
 let InitData = async () => {
-   roles.map(async (val) => {
+  roles.map(async (val) => {
     await Role.addNew(val, null, "admin");
   });
 
-   apis.map(async (val) => {
-      await Api.addNew(val, null, "admin");
+  apis.map(async (val) => {
+    await Api.addNew(val, null, "admin");
   });
 };
 
@@ -31,14 +31,12 @@ let InitAssociationData = async () => {
         feature: "view profile",
       },
     });
-   
-    console.log(apiRecord)
+
+    console.log(apiRecord);
 
     console.log(employee);
     await employee.addApi(apiRecord, {
       through: { createdBy: "admin", updatedBy: "admin" },
-    }).then((d) => {
-          console.log("kk",d)
     });
 
     // let w=await employees[0].getApis()
@@ -49,4 +47,4 @@ let InitAssociationData = async () => {
   }
 };
 
-module.exports = { InitData,InitAssociationData };
+module.exports = { InitData, InitAssociationData };

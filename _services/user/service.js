@@ -17,6 +17,9 @@ module.exports = class UserService extends BaseService {
   viewProfile = () => {};
 
   getOwnEmployee = async (manager) => {
+    if(!manager){
+        return false;
+    }
     try {
       let result = await manager.getOwnEmployee();
       return result;

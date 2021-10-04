@@ -5,7 +5,8 @@ const { ErrorHandler } = require("./handling/ErrorHandle");
 const CustomResponse = require("./response");
 const Role = require("../_models/role");
 const Role_permision = require("../_models/role_permission");
-const Api = require("../_models/api")
+const Api = require("../_models/api");
+const logger = require("../_utils/logger");
 
 module.exports.auth = (req, res, next) => {
   req.user = {
@@ -51,7 +52,7 @@ module.exports.verifyToken = (req, res, next) => {
   }
   try {
     const decoded = jwt.verify(token, config.token_secret);
-    console.log("decoded", decoded);
+    // console.log("decoded", decoded);
     req.user = decoded;
     next();
   } catch (err) {
@@ -59,23 +60,37 @@ module.exports.verifyToken = (req, res, next) => {
   }
 };
 
-module.exports.Authorize = async (router, method, feature) => {
-  let user = req.user;
-  let { roles } = req.user;
-  let canAccess = false;
-  let api = await Api.findOne(
-    {
-      where:{
-        router:router,
-        method:method,
-        feature:feature,
+module.exports.Authorize = (router, method, feature) => {
+  return async (req, res, next) => {
+    let user = req.user.data;
+    let { roles } = user;
+    // console.log("employee",employee);
+    let canAccess = false;
+    let api = await Api.findOne({
+      where: {
+        router: router,
+        method: method,
+        feature: feature,
+      },
+    });
+    for (val of roles) {
+      let permission = await Role_permision.findOne({
+        where: {
+          apiId: api.id,
+          roleId: val.id,
+        },
+      });
+      if (permission != null || permission != undefined) {
+        canAccess = true;
       }
     }
-  )
 
-  return (req, res, next) => {
-    res.send(api)
-  }
-
-  
+    console.log("222api", api);
+    if (canAccess) {
+        next();
+        logger.info("Authorized")
+    }else{
+      res.send("cant access")
+    }
+  };
 };

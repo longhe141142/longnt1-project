@@ -18,13 +18,13 @@ module.exports = class Api extends BaseModel {
 
   static associate(models) {
     this.belongsToMany(models.Role, {
-      foreignKey: "roleId",
+      foreignKey: "apiId",
       targetKey: "id",
       through: models.Role_permission,
     });
 
     this.hasMany(models.Role_permission, {
-      foreignKey: "roleId",
+      foreignKey: "apiId",
       targetKey: "id",
     });
   }

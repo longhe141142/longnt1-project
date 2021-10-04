@@ -32,7 +32,7 @@ module.exports = class Role extends BaseModel {
 
     this.hasMany(models.UserRole, {
       foreignKey: "roleId",
-      targetKey: "id",
+      targetKey: "s",
     });
 
     this.belongsToMany(models.User, {
@@ -47,7 +47,7 @@ module.exports = class Role extends BaseModel {
     });
 
     this.belongsToMany(models.Api, {
-      foreignKey: "apiId",
+      foreignKey: "roleId",
       targetKey: "id",
       through: models.Role_permission,
       as:"api"

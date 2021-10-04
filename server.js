@@ -15,6 +15,7 @@ app.get("/", (req, res) => res.send("App is working"));
 const initService = (app) => {
   const service = new InitialService(app);
   service.registerService();
+
   logger.info("Initializing service...");
 };
 
@@ -24,6 +25,7 @@ const initSequelize = async () => {
     .then(async () => {
       logger.info(`Establish connection successfully:--->`);
       // await InitData();
+
       return true;
     })
     .catch((err) => {
@@ -42,7 +44,10 @@ const startServer = async () => {
 initService(app);
 initSequelize();
 startServer().then(async () => {
+  // await InitAssociationData();
   await InitAssociationData();
+
+
 });
 
 module.exports = app;
