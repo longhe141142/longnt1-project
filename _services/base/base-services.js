@@ -6,7 +6,7 @@ module.exports = class BaseService extends CoreService {
   constructor(model, include) {
     super();
     if (!model || !include) {
-      logger.warn("model may not set");
+      // logger.warn("model may not set");
     }
     this._include = include;
     this._model = model;

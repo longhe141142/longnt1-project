@@ -9,17 +9,17 @@ const Role = require("../../_models/role");
 const UserRole = require("../../_models/userRole");
 const User = require("../../_models/user");
 
+
 module.exports = class AdminRouter extends BaseRouter {
   constructor() {
     let adService = new AdminService();
     super(adService);
-    // console.log(apiService.addAPIs);
     this.post("/add", this.createAdmin);
     this.get("/:id", this.getAdminDetail);
-    this.get("/upgrade/test", this.testSetRole);
+    // this.get("/upgrade/test", this.testSetRole);
     this.post("/upgrade", this.upgradeUser);
 
-    this.post("/upgrade/:id", this.addPermission);
+    this.patch("/upgrade/:id", this.addPermission);
   }
 
   createAdmin = async (req, res, next) => {
@@ -54,77 +54,77 @@ module.exports = class AdminRouter extends BaseRouter {
   };
 
   //use this only for testing
-  testSetRole = async (req, res, next) => {
-    let transaction = await User.sequelize.transaction();
-    try {
-      let user = await User.findOne({
-        where: {
-          userName: "admindeptrai",
-        },
-        transaction: transaction,
-      });
+  // testSetRole = async (req, res, next) => {
+  //   let transaction = await User.sequelize.transaction();
+  //   try {
+  //     let user = await User.findOne({
+  //       where: {
+  //         userName: "admindeptrai",
+  //       },
+  //       transaction: transaction,
+  //     });
 
-      // let role = await Role.create(
-      //   {
-      //     name: "superAdmin",
-      //     description: "sss",
-      //     createdBy: "super",
-      //     updatedBy: "super",
-      //   },
-      //   { transaction: transaction }
-      // );
+  //     // let role = await Role.create(
+  //     //   {
+  //     //     name: "superAdmin",
+  //     //     description: "sss",
+  //     //     createdBy: "super",
+  //     //     updatedBy: "super",
+  //     //   },
+  //     //   { transaction: transaction }
+  //     // );
 
-      let role = await Role.findOne({
-        where: {
-          name: "superAdmin",
-        },
-        transaction: transaction,
-      });
-      if(!role &&!role instanceof Error){
-        role = await Role.create(
-          {
-            name: "superAdmin",
-            description: "sss",
-            createdBy: "super",
-            updatedBy: "super",
-          },
-          { transaction: transaction }
-        );
-      }
-      // let userRole = await UserRole.create(
-      //   {
-      //     createdBy: "admin",
-      //     updatedBy: "admin",
-      //   },
-      //   { transaction: transaction }
-      // );
+  //     let role = await Role.findOne({
+  //       where: {
+  //         name: "superAdmin",
+  //       },
+  //       transaction: transaction,
+  //     });
+  //     if(!role &&!role instanceof Error){
+  //       role = await Role.create(
+  //         {
+  //           name: "superAdmin",
+  //           description: "sss",
+  //           createdBy: "super",
+  //           updatedBy: "super",
+  //         },
+  //         { transaction: transaction }
+  //       );
+  //     }
+  //     // let userRole = await UserRole.create(
+  //     //   {
+  //     //     createdBy: "admin",
+  //     //     updatedBy: "admin",
+  //     //   },
+  //     //   { transaction: transaction }
+  //     // );
 
-      // await user.setRoles([role.id,...arr], {
-      //   transaction: transaction,
-      // });
+  //     // await user.setRoles([role.id,...arr], {
+  //     //   transaction: transaction,
+  //     // });
 
-      await user.addRole(role, {
-        transaction: transaction,
-        through: {
-          createdBy: "admin",
-          updatedBy: "admin",
-        },
-      });
+  //     await user.addRole(role, {
+  //       transaction: transaction,
+  //       through: {
+  //         createdBy: "admin",
+  //         updatedBy: "admin",
+  //       },
+  //     });
 
-      let rel = await user.getRoles({}, { transaction: transaction });
-      let arr = rel.map((val) => {
-        return val.id;
-      });
-      console.log(arr);
+  //     let rel = await user.getRoles({}, { transaction: transaction });
+  //     let arr = rel.map((val) => {
+  //       return val.id;
+  //     });
+  //     console.log(arr);
 
-      console.log(rel);
-      res.send(rel);
-      transaction.commit();
-    } catch (err) {
-      console.log(err);
-      transaction.rollback();
-    }
-  };
+  //     console.log(rel);
+  //     res.send(rel);
+  //     transaction.commit();
+  //   } catch (err) {
+  //     console.log(err);
+  //     transaction.rollback();
+  //   }
+  // };
 
   upgradeUser = async (req, res, next) => {
     //input : request,output: instance of User model or error

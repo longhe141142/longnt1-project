@@ -106,7 +106,7 @@ module.exports = class BaseModel extends Sequelize.Model {
       options.include = include || this.include;
     }
 
-    // console.log("entry:", id, include);
+
     return this.findOne(options);
   }
   static getOneByWhere(where, skipInclude = true, include) {
@@ -128,7 +128,6 @@ module.exports = class BaseModel extends Sequelize.Model {
       returning: true,
     };
 
-    console.log(where)
     if (!skipInclude && (include || this.include)) {
       options.include = include || this.include;
     }
@@ -136,5 +135,19 @@ module.exports = class BaseModel extends Sequelize.Model {
       options.transaction = transaction;
     }
     return this.findOne(options);
+  }
+
+  static getAllWithDetail(where, transaction, skipInclude = true, include) {
+    let options = {
+      where,
+      returning: true,
+    };
+    if (!skipInclude && (include || this.include)) {
+      options.include = include || this.include;
+    }
+    if (transaction) {
+      options.transaction = transaction;
+    }
+    return this.findAll(options);
   }
 };

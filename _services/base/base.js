@@ -13,8 +13,7 @@ module.exports =class BaseRouter extends Router {
             logger.warn("Service have not been initialized!")
         }
         this._service = service
-        console.log(this._service.getSimple)
-        // this.get('/simple',this._service.simple)
+
     }
 
 }

@@ -43,7 +43,6 @@ class AuthService extends BaseService {
         transaction
       );
 
-      console.log("userData", userData.id);
 
       let rel = await User.getDetailById(userData.id, transaction, false, [
         Employee,

@@ -5,7 +5,7 @@ const { auth } = require("../_middleware/auth");
 const AuthRouter = require("./authentication/index");
 const ApiRouter = require("./api/index");
 const AdminRouter = require("./admin/index");
-const { verifyToken } = require("../_middleware/auth");
+const { verifyToken, IsAdmin } = require("../_middleware/auth");
 module.exports = class InitialService {
   _service = null;
   _app = null;
@@ -31,7 +31,7 @@ module.exports = class InitialService {
     this._router.use("/apitest", this.apiRouter);
     this._router.use("/", this.authRouter);
     // this._router.use("/admin", verifyToken, this.AdminRouter);
-    this._router.use("/admin",verifyToken, this.AdminRouter);
-
+    this._router.use("/admin", verifyToken, IsAdmin(), this.AdminRouter);
+    // this._router.use("/admin", verifyToken, this.AdminRouter);
   };
 };

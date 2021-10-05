@@ -20,7 +20,6 @@ module.exports = class AdminService extends BaseService {
         return false;
       }
 
-      // console.log(admin);
 
       //after add admins then setRole for it
 

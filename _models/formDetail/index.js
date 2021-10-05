@@ -13,7 +13,6 @@ module.exports = class FormDetail extends BaseModel {
   static schema = require("./schema");
 
   static associate(models) {
-    logger.info("?????");
 
     this.belongsTo(models.Form, {
       foreignKey: "formId",

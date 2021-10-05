@@ -32,16 +32,13 @@ let InitAssociationData = async () => {
       },
     });
 
-    console.log(apiRecord);
 
-    console.log(employee);
     await employee.addApi(apiRecord, {
       through: { createdBy: "admin", updatedBy: "admin" },
     });
 
     // let w=await employees[0].getApis()
     // await employees[0].addApis()
-    // console.log(w)
   } catch (err) {
     logger.error(err);
   }

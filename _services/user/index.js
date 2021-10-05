@@ -12,53 +12,48 @@ module.exports = class UserRouter extends BaseRouter {
   constructor() {
     const user = new UserService();
     super(user);
-    this.post("/getSimp", this.simpleUserApi);
+    // this.post("/getSimp", this.simpleUserApi);
     this.patch("/uploadAvt", this.uploadAvatar);
-    this.put("/test", this.addUserToManage);
-    this.get("/viewInformation", this.getUserDetail);
+    this.post(
+      "/addEmployee",
+      verifyToken,
+      Authorize("/user", "/post", "/api/user/addEmployee"),
+      this.addUserToManage
+    );
+    this.get("/ViewProfile", verifyToken, this.getUserDetail);
     this.get(
       "/viewOwnEmployees",
       verifyToken,
-       Authorize("/user", "/get", "view profile"),
+      Authorize("/user", "/get", "/api/user/viewOwnEmployees"),
       this.getEmployeeManage
+    );
+    this.get(
+      "/displayEmployeeList",
+      verifyToken,
+      Authorize("/user", "/get", "/api/user/displayEmployeeList"),
+      this.getEmpList
     );
   }
 
-  simpleUserApi = (req, res) => {
-    res.send(this._service.getModel());
-  };
+  // simpleUserApi = (req, res) => {
+  //   res.send(this._service.getModel());
+  // };
 
   uploadAvatar = (req, res, next) => {};
 
   addUserToManage = async (req, res, next) => {
-    let user = await User.findOne({
-      where: {
-        userName: "tpt249",
-      },
-    });
-    let employee = await Employee.findOne({
-      where: {
-        userId: user.id,
-      },
-    });
-
-    let user2 = await User.findOne({
-      where: {
-        userName: "bigherodz54",
-      },
-    });
-
-    await user2.addOwnEmployee(employee);
-
-    let usr3 = await User.getDetailById(user2.id, null, false, [
-      Employee,
-      "OwnEmployee",
-    ]);
-    res.send(usr3);
+    let employeeOfManager = await this._service.addEmployee(req);
+    if (employeeOfManager instanceof Error) {
+      nextErr(new ErrorHandler(404, "Cant add employee"), req, res, next);
+      return;
+    } else {
+      CustomResponse.sendObject(res, 200, employeeOfManager);
+    }
   };
 
+  //view profile
   getUserDetail = async (req, res, next) => {
-    let { userName } = req.body;
+    let { userName } = req.user.data;
 
     let user = await User.getDetailByWhere(
       {
@@ -68,27 +63,27 @@ module.exports = class UserRouter extends BaseRouter {
       false,
       [Employee, "OwnEmployee"]
     );
-
     res.send(user);
   };
 
   getEmployeeManage = async (req, res, next) => {
-    let user = await User.getDetailByWhere(
-      {
-        userName: req.user.data.userName,
-      },
-      null,
-      false,
-      [Employee, "OwnEmployee"]
-    );
-    console.log(user);
-    let manager =  user;
-    let employees = await this._service.getOwnEmployee(manager);
-    if (employees instanceof Error|| employees === false)  {
+    let employees = await this._service.getYourEmployee(req);
+    if (employees instanceof Error || employees === false) {
       logger.error(employees);
       nextErr(new ErrorHandler(404, "Cant retrieve employees"), req, res, next);
       return;
     }
     CustomResponse.sendObject(res, 200, employees);
+  };
+
+  getEmpList = async (req, res, next) => {
+    let ret = {};
+    let employeeList = await this._service.getAllEmployeeOnly();
+    if (employeeList instanceof Error || !employeeList) {
+      next(new Error(404, "Cant load site"), req, res, next);
+    } else {
+      ret["employee-list"] = employeeList;
+      CustomResponse.sendObject(res, 201, ret);
+    }
   };
 };

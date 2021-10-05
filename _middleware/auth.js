@@ -18,7 +18,6 @@ module.exports.auth = (req, res, next) => {
 };
 
 const generateAccessToken = (user) => {
-  console.log("user", user);
   return jwt.sign(
     {
       exp: Math.floor(Date.now() / 1000) + 6000 * 60,
@@ -36,7 +35,6 @@ module.exports.authJWT = (req, res, User) => {
       User: User,
       token: User.token,
     };
-    console.log("token", User.token);
     CustomResponse.SendStatus_WithMessage(res, 200, ret);
   } catch (err) {
     // nextErr(new ErrorHandler(404, "generate token failed"), req, res, next);
@@ -52,7 +50,6 @@ module.exports.verifyToken = (req, res, next) => {
   }
   try {
     const decoded = jwt.verify(token, config.token_secret);
-    // console.log("decoded", decoded);
     req.user = decoded;
     next();
   } catch (err) {
@@ -60,19 +57,20 @@ module.exports.verifyToken = (req, res, next) => {
   }
 };
 
-module.exports.Authorize = (router, method, feature) => {
+module.exports.Authorize = (router, method, url) => {
+  
   return async (req, res, next) => {
     let user = req.user.data;
     let { roles } = user;
-    // console.log("employee",employee);
     let canAccess = false;
     let api = await Api.findOne({
       where: {
         router: router,
         method: method,
-        feature: feature,
+        url: url,
       },
     });
+
     for (val of roles) {
       let permission = await Role_permision.findOne({
         where: {
@@ -85,12 +83,31 @@ module.exports.Authorize = (router, method, feature) => {
       }
     }
 
-    console.log("222api", api);
     if (canAccess) {
-        next();
-        logger.info("Authorized")
-    }else{
-      res.send("cant access")
+      next();
+      logger.info("Authorized");
+    } else {
+      res.send("cant access");
+    }
+  };
+};
+
+module.exports.IsAdmin = () => {
+  return async (req, res, next) => {
+    let canAccess = false;
+    let user = req.user.data;
+    let { roles } = user;
+    let Authorize = roles.filter((role) => {
+      return role.name === "admin" || role.id === 1;
+    });
+    if (Authorize.length > 0) {
+      canAccess = true;
+    }
+    if (canAccess) {
+      next();
+      logger.info("Authorized");
+    } else {
+      CustomResponse.SendStatus_WithMessage(res, 404, "BAD REQUEST");
     }
   };
 };

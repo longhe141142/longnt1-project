@@ -14,7 +14,7 @@ class DB {
       .filter((file) => file.isDirectory())
       .map((directory) => {
         const model = require(path.join(__dirname, directory.name));
-        logger.info(path.join(_dirname, directory.name));
+        // logger.info(path.join(_dirname, directory.name));
         model.init(sequelize);
         models[_.upperFirst(directory.name)] = model;
         // logger.info(`model: ${model}`);
@@ -22,14 +22,11 @@ class DB {
 
     Object.values(models)
       .filter((val) => {
-        console.log("val", val);
         return typeof val.associate === "function";
       })
       .map((val) => {
         val.associate(models);
-        console.log("?");
       });
-    console.log(">>>>");
   }
 
   connect = () => {
