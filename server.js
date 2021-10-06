@@ -5,7 +5,7 @@ const logger = require("./_utils/logger");
 const config = require("./_config/config");
 const InitialService = require("./_services/index");
 const { responseEnhancer } = require("express-response-formatter");
-let { InitData, InitAssociationData } = require("./_seeder/index");
+let { InitAssociationData } = require("./_seeder/index");
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(responseEnhancer());
@@ -24,7 +24,7 @@ const initSequelize = async () => {
   db.connect()
     .then(async () => {
       logger.info(`Establish connection successfully:--->`);
-      // await InitData();
+      // await InitAssociationData();
 
       return true;
     })
@@ -45,9 +45,6 @@ initService(app);
 initSequelize();
 startServer().then(async () => {
   // await InitAssociationData();
-  await InitAssociationData();
-
-
 });
 
 module.exports = app;

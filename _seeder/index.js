@@ -5,38 +5,37 @@ const Role = require("../_models/role");
 const Api = require("../_models/api");
 const logger = require("../_utils/logger");
 
-let InitData = async () => {
-  roles.map(async (val) => {
-    await Role.addNew(val, null, "admin");
-  });
+let InitROLE = async () => {
+  await Promise.all(
+    roles.map(async (val) => {
+      return await Role.addNew(val, null, "admin");
+    })
+  );
 
-  apis.map(async (val) => {
-    await Api.addNew(val, null, "admin");
-  });
+  // apis.map(async (val) => {
+  //   await Api.addNew(val, null, "admin");
+  // });
 };
 
 let InitAssociationData = async () => {
   try {
+    await InitROLE();
     // let employee = await Role.getDetailByWhere({
     //   name: "admin",
     // },null,true,null);
-    let employee = await Role.findOne({
-      where: {
-        name: "employee",
-      },
-    });
-
-    let apiRecord = await Api.findOne({
-      where: {
-        feature: "view profile",
-      },
-    });
-
-
-    await employee.addApi(apiRecord, {
-      through: { createdBy: "admin", updatedBy: "admin" },
-    });
-
+    // let employee = await Role.findOne({
+    //   where: {
+    //     name: "employee",
+    //   },
+    // });
+    // let apiRecord = await Api.findOne({
+    //   where: {
+    //     feature: "view profile",
+    //   },
+    // });
+    // await employee.addApi(apiRecord, {
+    //   through: { createdBy: "admin", updatedBy: "admin" },
+    // });
     // let w=await employees[0].getApis()
     // await employees[0].addApis()
   } catch (err) {
@@ -44,4 +43,4 @@ let InitAssociationData = async () => {
   }
 };
 
-module.exports = { InitData, InitAssociationData };
+module.exports = {  InitAssociationData };

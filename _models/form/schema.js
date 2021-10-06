@@ -18,7 +18,7 @@ module.exports = {
   },
   userId: {
     type: Sequelize.STRING(36),
-    allowNull: false,
+    allowNull: true,
     references: {
       model: "user",
       key: "id",
@@ -33,4 +33,14 @@ module.exports = {
     allowNull: true,
     defaultValue: date,
   },
+ isApproved:{
+    type: Sequelize.INTEGER,
+     allowNull:true,
+    defaultValue:0
+  },
+  isRejected:{
+    type: Sequelize.INTEGER,
+    allowNull:true,
+    defaultValue:0
+  }
 };

@@ -66,7 +66,9 @@ module.exports = class UserRouter extends BaseRouter {
     res.send(user);
   };
 
+  //add employee to your team
   getEmployeeManage = async (req, res, next) => {
+    //call service & input:request output:array of employee
     let employees = await this._service.getYourEmployee(req);
     if (employees instanceof Error || employees === false) {
       logger.error(employees);
@@ -78,6 +80,7 @@ module.exports = class UserRouter extends BaseRouter {
 
   getEmpList = async (req, res, next) => {
     let ret = {};
+    //call service & input:null output:array of employee
     let employeeList = await this._service.getAllEmployeeOnly();
     if (employeeList instanceof Error || !employeeList) {
       next(new Error(404, "Cant load site"), req, res, next);

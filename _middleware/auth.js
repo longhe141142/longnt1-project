@@ -52,42 +52,57 @@ module.exports.verifyToken = (req, res, next) => {
     const decoded = jwt.verify(token, config.token_secret);
     req.user = decoded;
     next();
+    return
   } catch (err) {
     res.status(400).send(err);
   }
 };
 
 module.exports.Authorize = (router, method, url) => {
-  
   return async (req, res, next) => {
-    let user = req.user.data;
-    let { roles } = user;
-    let canAccess = false;
-    let api = await Api.findOne({
-      where: {
-        router: router,
-        method: method,
-        url: url,
-      },
-    });
+    try {
+      let user = req.user.data;
+      let { roles } = user;
+      let canAccess = false;
+      if (checkIfAdmin(roles)) {
+        logger.info("Authorized");
+        next();
+        return;
+      } else {
+        let api = await Api.findOne({
+          where: {
+            router: router,
+            method: method,
+            url: url,
+          },
+        });
 
-    for (val of roles) {
-      let permission = await Role_permision.findOne({
-        where: {
-          apiId: api.id,
-          roleId: val.id,
-        },
-      });
-      if (permission != null || permission != undefined) {
-        canAccess = true;
+        for (val of roles) {
+          let permission = await Role_permision.findOne({
+            where: {
+              apiId: api.id,
+              roleId: val.id,
+            },
+          });
+          if (permission != null || permission != undefined) {
+            canAccess = true;
+          }
+        }
+
+        if (canAccess) {
+          next();
+          logger.info("Authorized");
+          return;
+        } else {
+          res.send("cant access");
+          logger.error("UnAuthorized")
+          return
+        }
       }
-    }
-
-    if (canAccess) {
-      next();
-      logger.info("Authorized");
-    } else {
-      res.send("cant access");
+    } catch (error) {
+      nextErr(new ErrorHandler(400, "Unauthorized!"), req, res, next);
+      console.log(error);
+      return;
     }
   };
 };
@@ -110,4 +125,13 @@ module.exports.IsAdmin = () => {
       CustomResponse.SendStatus_WithMessage(res, 404, "BAD REQUEST");
     }
   };
+};
+
+checkIfAdmin = (roles) => {
+  let Authorize = roles.filter((role) => {
+    return role.name === "admin" || role.id === 1;
+  });
+  if (Authorize.length > 0) {
+    canAccess = true;
+  }
 };

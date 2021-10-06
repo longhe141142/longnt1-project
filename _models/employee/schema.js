@@ -11,8 +11,12 @@ module.exports = {
     type: Sequelize.STRING(70),
     allowNull: false,
   },
+  firstName: {
+    type: Sequelize.STRING(70),
+    allowNull: false,
+  },
   fullName: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.STRING(140),
     allowNull: true,
   },
   userId: {
@@ -28,7 +32,7 @@ module.exports = {
     allowNull: true,
     references: {
       model: "user",
-      key:"id"
-    }
+      key: "id",
+    },
   },
 };

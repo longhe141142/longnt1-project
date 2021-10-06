@@ -18,5 +18,11 @@ module.exports = class Form extends BaseModel {
       foreignKey: "userId",
       targetKey: "id",
     });
+
+    this.hasOne(models.FormDetail,{
+      foreignKey: "formId",
+      targetKey: "id",
+      as:"FormDetail"
+    })
   }
 };

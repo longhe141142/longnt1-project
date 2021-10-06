@@ -29,6 +29,7 @@ class AuthService extends BaseService {
         {
           ...employee,
           userId: userData.id,
+          fullName: employee.firstName + employee.lastName,
         },
         { transaction: transaction }
       );
@@ -42,7 +43,6 @@ class AuthService extends BaseService {
         ],
         transaction
       );
-
 
       let rel = await User.getDetailById(userData.id, transaction, false, [
         Employee,
