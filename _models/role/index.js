@@ -28,11 +28,12 @@ module.exports = class Role extends BaseModel {
     }
   ];
   static schema = require("./schema");
-  static associate(models) {
 
+
+  static associate(models) {
     this.hasMany(models.UserRole, {
       foreignKey: "roleId",
-      targetKey: "s",
+      targetKey: "id",
     });
 
     this.belongsToMany(models.User, {
