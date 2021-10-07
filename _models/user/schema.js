@@ -10,7 +10,6 @@ module.exports = {
   userName: {
     type: Sequelize.STRING(36),
     allowNull: false,
-    unique: true,
   },
   password: {
     type: Sequelize.STRING(70),

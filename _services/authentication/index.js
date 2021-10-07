@@ -5,12 +5,33 @@ const CustomResponse = require("../../_middleware/response");
 const nextErr = require("../../_middleware/handerError");
 const { ErrorHandler } = require("../../_middleware/handling/ErrorHandle");
 const { authJWT } = require("../../_middleware/auth");
+const { body } = require("express-validator");
+const {
+  registrationSchema,
+  testSchema,
+} = require("../../_middleware/request-validator/validator");
+const {
+  confirmValidation,
+  validatorProcess,registerValidation
+} = require("../../_middleware/request-validator/index");
 
 class AuthRouter extends BaseRouter {
   constructor() {
     const authService = new AuthService();
     super(authService);
-    this.post("/register", this.register);
+    // this.post(
+    //   "/register",
+    //   validatorProcess(this._checkSchema, registrationSchema),
+    //   confirmValidation(this._validationResult),
+    //   this.register
+    // );
+    this.post(
+      "/register",
+      registerValidation(testSchema),
+      this.register
+    );
+
+    // this.get("/login", this.login);
     this.get("/login", this.login);
   }
 

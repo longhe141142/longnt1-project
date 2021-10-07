@@ -66,7 +66,7 @@ module.exports = class UserRouter extends BaseRouter {
       },
       null,
       false,
-      [Employee, "OwnEmployee"]
+      [Employee]
     );
     res.send(user);
   };

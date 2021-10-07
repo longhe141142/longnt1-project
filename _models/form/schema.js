@@ -1,6 +1,6 @@
 const Sequelize = require("sequelize");
 const date = new Date();
-date.setDate(date.getDate() + 2);
+date.setDate(date.getDate() + 30);
 module.exports = {
   id: {
     type: Sequelize.STRING(36),
@@ -33,14 +33,14 @@ module.exports = {
     allowNull: true,
     defaultValue: date,
   },
- isApproved:{
+  isApproved: {
     type: Sequelize.INTEGER,
-     allowNull:true,
-    defaultValue:0
+    allowNull: true,
+    defaultValue: 0,
   },
-  isRejected:{
+  isRejected: {
     type: Sequelize.INTEGER,
-    allowNull:true,
-    defaultValue:0
-  }
+    allowNull: true,
+    defaultValue: 0,
+  },
 };

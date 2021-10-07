@@ -15,9 +15,21 @@ class DataUtils {
   warning(functionCall,message,dir){
     logger.warn(`[${functionCall}] [${dir}] <${message}>` )
   }
+
+  isEmpty(string) {
+      const reg = /^(\s*)$/
+      return reg.test(string)
+  }
+
+  whiteSpaceChecker(string){
+    const reg = /((.\s)|(\s.))+/
+    return reg.test(string)
+
+  }
 }
 
 
 module.exports = new DataUtils();
 
 // console.log(new DataUtils().isNumber(5))
+console.log(new DataUtils().whiteSpaceChecker("pxz41"))
