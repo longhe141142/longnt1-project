@@ -54,14 +54,18 @@ module.exports = class User extends BaseModel {
   }
 
   //register
+  /*
+  input: data: Object (information of user)
+
+  */
   static registerUser = async (
     data,
     transaction,
     skipInclude = true,
     include
   ) => {
+    //starting hash password
     const salt = await bcrypt.genSalt(10);
-    // const hashedPassword = await bcrypt.hash(data.password, salt);
     const hashedPassword = await bcrypt.hash(data.password, salt);
 
     data.password = hashedPassword;
@@ -83,7 +87,6 @@ module.exports = class User extends BaseModel {
 
   static createAdministrator = async (user, transaction, who) => {
     const salt = await bcrypt.genSalt(10);
-    // const hashedPassword = await bcrypt.hash(data.password, salt);
     const hashedPassword = await bcrypt.hash(user.password, salt);
     user.password = hashedPassword;
     let options = {
@@ -116,12 +119,13 @@ module.exports = class User extends BaseModel {
   static addNewRole = async (user, role, transaction, who) => {
     let options = {};
     options.through = {
-      createdBy: who,
+      createdBy: who,//set  createdBy for UserRole
       updatedBy: who,
     };
     if (transaction) {
       options.transaction = transaction;
     }
+    //add role for user
     await user.addRole(role, options);
     return this.getDetailById(user.id, transaction, false, [Employee, Role]);
   };

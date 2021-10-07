@@ -60,25 +60,14 @@ module.exports = class Role extends BaseModel {
     if (transaction) {
       options.transaction = transaction;
     }
-    // let roleRecord = this.findOne({
-    //   where: {
-    //     id: roleId,
-    //   },
-    // })
-    //   .then((role) => {
-    //     console.log("role:", role);
-    //     return role.addUser(user,{through:  { role: 'manager' }});
-    //   })
-    //   .catch((err) => err);
+
     let roleRecord = await this.findOne({
       where: {
         id: roleId,
       },
       transaction: transaction,
     });
-    // console.log(roleRecord);
 
-    // console.log(user);
     let userRole = await USerRole.create(
       {
         createdBy: "admin",
@@ -86,7 +75,6 @@ module.exports = class Role extends BaseModel {
       },
       options
     );
-    // console.log(userRole.id);
     await roleRecord.addUser(user, {
       ...options,
       through: { userId: user.id },

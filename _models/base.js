@@ -2,12 +2,15 @@ const Sequelize = require("sequelize");
 const logger = require("../_utils/logger");
 
 module.exports = class BaseModel extends Sequelize.Model {
+  /*Override all static variable 
+  if exist on Sequelize.Model*/
   static tableName = "";
   static modelName = "";
   static schema = {};
   static timestamps = true;
   static includes = null;
 
+  /*Init model in here*/
   static init(sequelize) {
     if (
       !this.tableName ||
@@ -19,8 +22,8 @@ module.exports = class BaseModel extends Sequelize.Model {
         new Error("The model name, table name and schema cannot be empty!")
       );
     }
-    // this.sequelize = sequelize;
 
+    //config after call super init
     let configOptions = {
       tableName: this.tableName,
       modelName: this.modelName,
@@ -30,7 +33,9 @@ module.exports = class BaseModel extends Sequelize.Model {
 
     return super.init(
       {
-        ...this.schema,
+        ...this.schema, //schema's fields ex: User have fields: id,email,userName,password,....etc(individual field)
+
+        /*This part use for all model(common field) */
         isDeleted: {
           type: Sequelize.BOOLEAN,
           allowNull: false,
@@ -51,8 +56,13 @@ module.exports = class BaseModel extends Sequelize.Model {
   //will override later
   static associate(models) {}
 
-  // static addNew(data,transaction,who){}
-
+  /*
+  data: data to set {data: Object}
+  transaction: use for multiple manipulate database data {data: sequelize.transaction}
+  skipInclude: decide if include the association Model or not {true,false}
+  who:updatedBy,cratedBy {String}
+  include:include the model associated {instance of BaseModel}
+  */
   static addNew(data, transaction, who, skipInclude = true, include) {
     if (who) {
       data.createdBy = who;
@@ -71,8 +81,15 @@ module.exports = class BaseModel extends Sequelize.Model {
     return this.create(data, options);
   }
 
+  /*
+  data: data to set {data: Array[...Objects]}
+  transaction: use for multiple manipulate database data {data: sequelize.transaction}
+  skipInclude: decide if include the association Model or not {true,false}
+  who:updatedBy,cratedBy {String}
+  include:include the model associated {instance of BaseModel}
+  */
   static addMany(data, transaction, who, skipInclude = true, include) {
-    let who1 = who || "admin";
+    let who1 = who || "admin"; //if who is not provided,set default is admin
 
     data.map((val) => {
       val.createdBy = who1;
@@ -80,7 +97,7 @@ module.exports = class BaseModel extends Sequelize.Model {
     });
 
     const options = {
-      returning: true,
+      returning: true, //set this to return instance of Model
       transaction: transaction,
     };
 
@@ -106,9 +123,14 @@ module.exports = class BaseModel extends Sequelize.Model {
       options.include = include || this.include;
     }
 
-
     return this.findOne(options);
   }
+
+  /*
+ where:condition to match
+ skipInclude: decide if include the association Model or not {true,false}
+ include:include the model associated {instance of BaseModel}
+ */
   static getOneByWhere(where, skipInclude = true, include) {
     let options = {
       where,
@@ -122,6 +144,14 @@ module.exports = class BaseModel extends Sequelize.Model {
     return this.findOne(options);
   }
 
+  /*
+ where:condition to match
+ transaction
+ skipInclude: decide if include the association Model or not {true,false}
+ include:include the model associated {instance of BaseModel}
+
+ output: instance of Sequelize.Model
+ */
   static getDetailByWhere(where, transaction, skipInclude = true, include) {
     let options = {
       where,
@@ -137,6 +167,13 @@ module.exports = class BaseModel extends Sequelize.Model {
     return this.findOne(options);
   }
 
+  /*
+ where:condition to match
+ transaction
+ skipInclude: decide if include the association Model or not {true,false}
+ include:include the model associated {instance of BaseModel}
+ output: Array instance of Sequelize.Model
+ */
   static getAllWithDetail(where, transaction, skipInclude = true, include) {
     let options = {
       where,

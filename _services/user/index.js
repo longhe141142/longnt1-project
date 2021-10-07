@@ -7,6 +7,7 @@ const nextErr = require("../../_middleware/handerError");
 const { ErrorHandler } = require("../../_middleware/handling/ErrorHandle");
 const logger = require("../../_utils/logger");
 const { Authorize, verifyToken } = require("../../_middleware/auth");
+const { imageUpload } = require("../../_middleware/multerUpload");
 
 module.exports = class UserRouter extends BaseRouter {
   constructor() {
@@ -33,13 +34,17 @@ module.exports = class UserRouter extends BaseRouter {
       Authorize("/user", "/get", "/api/user/displayEmployeeList"),
       this.getEmpList
     );
+    this.patch(
+      "/uploadAvatar",
+      verifyToken,
+      imageUpload(User).single("image"),
+      this.uploadAvatar
+    );
   }
 
   // simpleUserApi = (req, res) => {
   //   res.send(this._service.getModel());
   // };
-
-  uploadAvatar = (req, res, next) => {};
 
   addUserToManage = async (req, res, next) => {
     let employeeOfManager = await this._service.addEmployee(req);
@@ -88,5 +93,14 @@ module.exports = class UserRouter extends BaseRouter {
       ret["employee-list"] = employeeList;
       CustomResponse.sendObject(res, 201, ret);
     }
+  };
+  uploadAvatar = async (req, res, next) => {
+    const image = req.file;
+    let userData = req.user.data;
+    let user = await User.getDetailByWhere({
+      id: userData.id,
+    });
+    user.avatar = image.filename;
+    await user.save();
   };
 };

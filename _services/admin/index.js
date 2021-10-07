@@ -5,8 +5,8 @@ const logger = require("../../_utils/logger");
 const CustomResponse = require("../../_middleware/response");
 const nextErr = require("../../_middleware/handerError");
 const { ErrorHandler } = require("../../_middleware/handling/ErrorHandle");
-const Role = require("../../_models/role");
-const UserRole = require("../../_models/userRole");
+// const Role = require("../../_models/role");
+// const UserRole = require("../../_models/userRole");
 const User = require("../../_models/user");
 
 
@@ -19,10 +19,11 @@ module.exports = class AdminRouter extends BaseRouter {
     // this.get("/upgrade/test", this.testSetRole);
     this.post("/upgrade", this.upgradeUser);
 
-    this.patch("/upgrade/:id", this.addPermission);
+    // this.patch("/upgrade/:id", this.addPermission);
   }
 
   createAdmin = async (req, res, next) => {
+    
     let log = await this._service.createAdmin(req.body);
     if (!log || log instanceof Error) {
       logger.error(log);
@@ -32,15 +33,15 @@ module.exports = class AdminRouter extends BaseRouter {
     }
   };
 
-  addPermission = async (req, res, next) => {
-    let user = await this._service.setRoleUser(req.params.id, req);
-    if (!user || user instanceof Error) {
-      nextErr(new ErrorHandler(404, "can't set permission!"), req, res, next);
-      return;
-    }
+  // addPermission = async (req, res, next) => {
+  //   let user = await this._service.setRoleUser(req.params.id, req);
+  //   if (!user || user instanceof Error) {
+  //     nextErr(new ErrorHandler(404, "can't set permission!"), req, res, next);
+  //     return;
+  //   }
 
-    CustomResponse.sendObject(res, 200, user);
-  };
+  //   CustomResponse.sendObject(res, 200, user);
+  // };
 
   getAdminDetail = async (req, res, next) => {
     let log = await this._service.getDetail(req.params.id);

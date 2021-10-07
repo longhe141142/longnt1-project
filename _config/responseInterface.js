@@ -1,7 +1,10 @@
+
+//using express-response formatter
+//use for middleware response
 module.exports.SendResponse = (res, statuscode, messageObject) => {
   const DataUtils = require("../_utils/index");
   if (!DataUtils.isNumber(statuscode)) {
-    statuscode = DataUtils.toNumber(statuscode);
+    statuscode = DataUtils.toNumber(statuscode);//convert to number
   }
   switch (statuscode) {
     case 200:
