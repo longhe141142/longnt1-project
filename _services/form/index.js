@@ -23,10 +23,13 @@ module.exports = class FormRouter extends BaseRouter {
       Authorize("/form", "/post", "/api/form/create"),
       this.createForm
     );
+    // this.post(
+    //   "/createManyForm",this.createManyForm
+    // )
   }
 
   createForm = async (req, res, next) => {
-    let result = await this._service.addNewForm(req);
+    let result = await this._service.addNewForm2(req);
     if (!result || result instanceof Error) {
       nextErr(new ErrorHandler(404, "Can't add form"), req, res, next);
       return;
@@ -35,6 +38,13 @@ module.exports = class FormRouter extends BaseRouter {
     }
   };
 
-  
-
+  createManyForm = async (req, res, next) => {
+    let result = await this._service.addManyForm(req, res, next);
+    if (!result || result instanceof Error) {
+      nextErr(new ErrorHandler(404, "Can't add form"), req, res, next);
+      return;
+    } else {
+      CustomResponse.sendObject(res, 200, result);
+    }
+  };
 };

@@ -5,16 +5,16 @@ const CustomResponse = require("../../_middleware/response");
 const nextErr = require("../../_middleware/handerError");
 const { ErrorHandler } = require("../../_middleware/handling/ErrorHandle");
 const { authJWT } = require("../../_middleware/auth");
-const { body } = require("express-validator");
-const {
-  registrationSchema,
-  testSchema,
-} = require("../../_middleware/request-validator/validator");
-const {
-  confirmValidation,
-  validatorProcess,registerValidation
-} = require("../../_middleware/request-validator/index");
-
+// const { body } = require("express-validator");
+// const {
+//   registerSchema,
+// } = require("../../_middleware/request-validator/validator");
+// const {
+//   registerValidation,
+// } = require("../../_middleware/request-validator/index");
+const{
+  authenValidation
+} = require("../../_middleware/request-validator/authentication")
 class AuthRouter extends BaseRouter {
   constructor() {
     const authService = new AuthService();
@@ -25,11 +25,7 @@ class AuthRouter extends BaseRouter {
     //   confirmValidation(this._validationResult),
     //   this.register
     // );
-    this.post(
-      "/register",
-      registerValidation(testSchema),
-      this.register
-    );
+    this.post("/register", authenValidation.register, this.register);
 
     // this.get("/login", this.login);
     this.get("/login", this.login);
@@ -39,10 +35,11 @@ class AuthRouter extends BaseRouter {
     let user = await this._service.registerService(req);
     if (!user || user instanceof Error) {
       logger.error(user);
-      nextErr(new ErrorHandler(404, "Can't register"), req, res, next);
+      nextErr(new ErrorHandler(404, user.message), req, res, next);
       return;
     }
     CustomResponse.sendObject(res, 200, user);
+    res.end();
   };
 
   login = async (req, res, next) => {
@@ -55,7 +52,7 @@ class AuthRouter extends BaseRouter {
         return;
       } else {
         nextErr(
-          new ErrorHandler(404, "Invalid userName or password"),
+          new ErrorHandler(404, user.message),
           req,
           res,
           next

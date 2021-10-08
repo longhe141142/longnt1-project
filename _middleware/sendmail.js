@@ -23,7 +23,7 @@ const sendMail = (options) => {
       : path.resolve(_dirname, "../_views/form2.html");
 
   const templateVars = {
-    emailAddress: "pizza@test.com",
+    content: options.content,
     resetLink: "https://justatest.com",
   };
 

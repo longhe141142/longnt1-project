@@ -8,7 +8,7 @@ const options = {
   host: config.db_host,
   port: config.db_port,
   dialect: "mysql",
-  logging: config.db_logging === true ? console.log : false,
+  logging:true,
   pool: {
     max: 5,
     min: 0,

@@ -1,15 +1,13 @@
-const User = require("../../_models/user");
-const dataUtils = require("../../_utils/index");
-const joi = require("joi");
-const logger = require("../..//_utils/logger");
-const { error } = require("./error.interface");
 const {
   checkWhiteSpace,
   checkPhoneNumber,
   checkIdentity,
   checkSocialInsurance,
   alphaCharacterOnly,
-} = require("./helper");
+} = require("../helper");
+const { error } = require("../error.interface");
+const joi = require("joi");
+
 const registerSchema = joi.object({
   userName: joi
     .string()
@@ -64,12 +62,7 @@ const registerSchema = joi.object({
     .max(30)
     .error(error("lastName", "string"))
     .required(),
-  firstName: joi
-    .string()
-
-    .min(3)
-    .max(30)
-    .error(error("firstName", "string")),
+  firstName: joi.string().min(3).max(30).error(error("firstName", "string")),
   employee: joi
     .object()
     .required()

@@ -20,6 +20,25 @@ class AuthService extends BaseService {
     employee.createdBy = user.userName;
     employee.updatedBy = user.userName;
 
+    const EmailCheck = await User.findOne({
+      where: {
+        email: user.email,
+      },
+    });
+
+    const userNameCheck = await User.findOne({
+      where: {
+        userName: user.userName,
+      },
+    });
+
+    if (userNameCheck) {
+      return new Error("USerName already in use");
+    }
+    if (EmailCheck) {
+      return new Error("Email existed");
+    }
+
     const transaction = await User.sequelize.transaction();
     try {
       const userData = await User.registerUser(user, transaction, false, [

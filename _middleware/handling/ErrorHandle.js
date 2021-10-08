@@ -1,3 +1,7 @@
+const {
+  SendResponse,
+} = require("../../_middleware/../_config/responseInterface");
+
 class ErrorHandler extends Error {
   constructor(statusCode, message) {
     super();
@@ -8,12 +12,8 @@ class ErrorHandler extends Error {
 
 const handleError = (err, res) => {
   const { statusCode, message } = err;
-  // res.status(statusCode).send(JSON.stringify({
-  //   status: "error",
-  //   statusCode,
-  //   message
-  // }));
-  res.formatter.badRequest({
+
+  SendResponse(res, statusCode, {
     status: "error",
     statusCode,
     message,
