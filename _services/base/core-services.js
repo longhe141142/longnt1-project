@@ -1,3 +1,5 @@
+const UserRole = require("../../_models/userRole")
+
 module.exports = class CoreService {
   simpleFunction = () => {
     console.log("simple function from core!");
@@ -14,5 +16,23 @@ module.exports = class CoreService {
       userId: userId,
       roleId: roleId,
     };
+  };
+
+  getHighestRole = async (userId) => {
+    return await UserRole.findAll({
+      where: {
+        userId: userId,
+      },
+    })
+      .then((data) => {
+        return data.map((val) => {
+          return val.roleId;
+        });
+      })
+      .then((roles) => {
+        return roles.reduce((acc, curr) => {
+          return acc < curr ? acc : curr;
+        }, roles[0]);
+      });
   };
 };

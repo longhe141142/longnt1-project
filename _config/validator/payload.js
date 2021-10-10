@@ -9,9 +9,13 @@ let payload = (req) => {
       identityNumber: req.body.identityNumber,
       socialInsurance: req.body.socialInsurance,
       employee: req.body.employee,
-      lastName: req.body.employee.lastName,
-      firstName: req.body.firstName,
+      // lastName: req.body.employee.lastName,
+      // firstName: req.body.firstName,
     },
+    login:{
+      userName: req.body.userName,
+      password: req.body.password
+    }
   };
 };
 module.exports = { payload };

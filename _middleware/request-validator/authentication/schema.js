@@ -56,18 +56,45 @@ const registerSchema = joi.object({
 
   age: joi.number().integer().min(18).max(60).error(error("age", "number")),
 
-  lastName: joi
-    .string()
-    .min(3)
-    .max(30)
-    .error(error("lastName", "string"))
-    .required(),
-  firstName: joi.string().min(3).max(30).error(error("firstName", "string")),
+  // lastName: joi
+  //   .string()
+  //   .min(3)
+  //   .max(30)
+  //   .error(error("lastName", "string"))
+  //   .required(),
+  // firstName: joi.string().min(3).max(30).error(error("firstName", "string")),
   employee: joi
-    .object()
-    .required()
-    .error(error("employee", "object"))
+    .object({
+      lastName: joi
+        .string()
+        .min(3)
+        .max(30)
+        .required()
+        .error(error("lastName", "string")),
+      firstName: joi
+        .string()
+        .min(3)
+        .max(30)
+        .required()
+        .error(error("firstName", "string")),
+    })
     .required(),
+  // .error(error("employee", "object")),
+  // .required(),
 });
 
-module.exports = { registerSchema };
+const loginSchema = joi.object({
+  password: joi
+    .string()
+    .required()
+    .error(error("password", "string"))
+    .custom(checkWhiteSpace("password")),
+
+  userName: joi
+    .string()
+    .required()
+    .error(error("userName", "string"))
+    .custom(checkWhiteSpace("userName")),
+});
+
+module.exports = { registerSchema,loginSchema };

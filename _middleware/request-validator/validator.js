@@ -66,7 +66,6 @@ const registerSchema = joi.object({
     .required(),
   firstName: joi
     .string()
-
     .min(3)
     .max(30)
     .error(error("firstName", "string")),

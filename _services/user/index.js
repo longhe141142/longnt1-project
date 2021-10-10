@@ -40,6 +40,8 @@ module.exports = class UserRouter extends BaseRouter {
       imageUpload(User).single("image"),
       this.uploadAvatar
     );
+
+
   }
 
   // simpleUserApi = (req, res) => {
@@ -49,7 +51,7 @@ module.exports = class UserRouter extends BaseRouter {
   addUserToManage = async (req, res, next) => {
     let employeeOfManager = await this._service.addEmployee(req);
     if (employeeOfManager instanceof Error) {
-      nextErr(new ErrorHandler(404, "Cant add employee"), req, res, next);
+      nextErr(new ErrorHandler(404, `${employeeOfManager.message}`), req, res, next);
       return;
     } else {
       CustomResponse.sendObject(res, 200, employeeOfManager);
@@ -86,7 +88,7 @@ module.exports = class UserRouter extends BaseRouter {
   getEmpList = async (req, res, next) => {
     let ret = {};
     //call service & input:null output:array of employee
-    let employeeList = await this._service.getAllEmployeeOnly();
+    let employeeList = await this._service.getAllEmployeeOnly(req);
     if (employeeList instanceof Error || !employeeList) {
       next(new Error(404, "Cant load site"), req, res, next);
     } else {

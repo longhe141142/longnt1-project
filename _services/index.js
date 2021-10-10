@@ -33,8 +33,8 @@ module.exports = class InitialService {
     this._router.use("/apitest", this.apiRouter);
     this._router.use("/", this.authRouter);
     // this._router.use("/admin", verifyToken, this.AdminRouter);
-    this._router.use("/admin", verifyToken, IsAdmin(), this.AdminRouter);
-    // this._router.use("/admin", verifyToken, this.AdminRouter);
+    // this._router.use("/admin", verifyToken, IsAdmin(), this.AdminRouter);
+    this._router.use("/admin", verifyToken, this.AdminRouter);
     this._router.use("/form", verifyToken, this.FormRouter);
   };
 };

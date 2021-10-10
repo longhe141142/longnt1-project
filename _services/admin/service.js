@@ -8,10 +8,12 @@ module.exports = class AdminService extends BaseService {
   //admin seeders
   createAdmin = async (data) => {
     //data : req
+    console.log("entry")
+
     const { employee, ...user } = data;
-    employee.createdBy = "user.id";
-    employee.updatedBy = "user.id";
-    
+    // employee.createdBy = "user.id";
+    // employee.updatedBy = "user.id";
+    console.log("entry")
     let transaction = await User.sequelize.transaction();
     try {
       //add admin
