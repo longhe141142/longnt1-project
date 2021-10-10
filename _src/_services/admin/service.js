@@ -84,8 +84,10 @@ module.exports = class AdminService extends BaseService {
         UserRole,
         Employee,
       ]);
+      if(!userRecord) return new Error("User not existed")
       //find role by roleId [roleId<----(1)]
       let role = await Role.getDetailById(roleId, transaction, true);
+      if(!role) return new Error("Role not true")
       //add role to user from override method of User model
       userRecord = await User.addNewRole(
         userRecord,

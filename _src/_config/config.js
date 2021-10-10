@@ -1,7 +1,7 @@
 const dotenv = require("dotenv");
 const path = require("path");
 // Load environment constiables from .env file
-dotenv.config({ path: path.join(__dirname, "../.env") });
+dotenv.config({ path: path.join(__dirname, "../../.env") });
 const env = process.env.NODE_ENV;
 
 const configs = {

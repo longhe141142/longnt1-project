@@ -1,6 +1,17 @@
 const UserRole = require("../../_models/userRole")
 
 module.exports = class CoreService {
+   formSatus = {
+       SUBMITTED:"SUBMITTED",
+       NEW:"NEW",
+       CLOSED:"CLOSED"
+   }
+
+   ManagerAction = {
+     APPROVE:"APPROVE",
+     REJECT:"REJECT",
+   }
+
   simpleFunction = () => {
     console.log("simple function from core!");
     return {

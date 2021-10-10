@@ -19,8 +19,8 @@ const sendMail = (options) => {
   let { type, content, from, mailReceiver } = options;
   const templatePath =
     type === 1
-      ? path.resolve(__dirname, "../_views/form.html")
-      : path.resolve(_dirname, "../_views/form2.html");
+      ? path.resolve(__dirname, "../../_public/_views/form.html")
+      : path.resolve(_dirname, "../../_public/_views/form2.html");
 
   const templateVars = {
     content: options.content,
@@ -42,7 +42,7 @@ const sendMail = (options) => {
   if (html != null) {
   }
 
-  mainOptions.subject = type === 1 ? "danh gia dinh ky" : "thu viec";
+  mainOptions.subject = type === 0 ? "danh gia dinh ky" : "thu viec";
   mainOptions.text = content;
 
   var transporter = nodemailer.createTransport(TransporterOptions);

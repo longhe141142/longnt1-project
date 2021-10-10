@@ -20,29 +20,64 @@ module.exports = class FormRouter extends BaseRouter {
     super(form);
     this.post(
       "/create",
-      Authorize("/form", "/post", "/api/form/create"),
+      Authorize(
+        this.authorize.form.ROUTER,
+        this.authorize.form.createForm.METHOD,
+        this.authorize.form.createForm.URL
+      ),
       this.createForm
     );
     this.put("/submit", this.submitForm);
-    this.patch(
-      "/checkDueDate",
-      Authorize("/form", "/patch", "/api/form/checkDueDate")
-    );
-    // this.get(
-    //   "/YourEmployeeForm",
-    //   Authorize("/form", "/get", "api/form/YourEmployeeForm"),
-    //   this.viewEmployeeForm
+    // this.patch(
+    //   "/checkDueDate",
+    //   Authorize("/form", "/patch", "/api/form/checkDueDate")
     // );
     this.patch("/modify/content", this.updateContent);
     this.patch(
       "/modify/comment",
-      Authorize("/form", "/patch", "/api/form//modify/comment"),
+      Authorize(
+        this.authorize.form.ROUTER,
+        this.authorize.form.managerComment.METHOD,
+        this.authorize.form.managerComment.URL
+      ),
       this.updateComment
     );
     this.get(
       "/list/intern",
-      Authorize("/form", "/get", "/api/form//list/intern"),
+      Authorize(
+        this.authorize.form.ROUTER,
+        this.authorize.form.viewIntern.METHOD,
+        this.authorize.form.viewIntern.URL
+      ),
       this.viewInterForm
+    );
+    this.get(
+      "/list/evaluate",
+      Authorize(
+        this.authorize.form.ROUTER,
+        this.authorize.form.viewEvaluate.METHOD,
+        this.authorize.form.viewEvaluate.URL
+      ),
+      this.viewEvaluateForm
+    );
+    this.get("/list/yours", this.viewYourForm);
+    this.put(
+      "/approve",
+      Authorize(
+        this.authorize.form.ROUTER,
+        this.authorize.form.approveAction.METHOD,
+        this.authorize.form.approveAction.URL
+      ),
+      this.approve
+    );
+    this.put(
+      "/reject",
+      Authorize(
+        this.authorize.form.ROUTER,
+        this.authorize.form.rejectAction.METHOD,
+        this.authorize.form.rejectAction.URL
+      ),
+      this.reject
     );
   }
 
@@ -120,7 +155,7 @@ module.exports = class FormRouter extends BaseRouter {
   };
 
   viewInterForm = async (req, res, next) => {
-    let employeeForms = await this._service.viewForm(req,1);
+    let employeeForms = await this._service.viewForm(req, 1);
     if (employeeForms instanceof Error) {
       return nextErr(
         new ErrorHandler(400, employeeForms.message),
@@ -129,12 +164,66 @@ module.exports = class FormRouter extends BaseRouter {
         next
       );
     }
-    CustomResponse.sendObject(res, 200,employeeForms)
+    CustomResponse.sendObject(res, 200, employeeForms);
   };
 
-  viewEvaluateForm = async (req, res, next) =>{
-    
-  }
+  viewEvaluateForm = async (req, res, next) => {
+    let employeeForms = await this._service.viewForm(req, 2);
+    if (employeeForms instanceof Error) {
+      return nextErr(
+        new ErrorHandler(400, employeeForms.message),
+        req,
+        res,
+        next
+      );
+    }
+    CustomResponse.sendObject(res, 200, employeeForms);
+  };
 
-  checkDueDate = async (req, res, next) => {};
+  viewYourForm = async (req, res, next) => {
+    let employeeForm = await this._service.viewForm(req, 3);
+    if (employeeForm instanceof Error) {
+      return nextErr(
+        new ErrorHandler(400, employeeForms.message),
+        req,
+        res,
+        next
+      );
+    }
+    CustomResponse.sendObject(res, 200, employeeForm);
+  };
+
+  approve = async (req, res, next) => {
+    let managerAction = this._service.ManagerAction;
+    let approvedForm = await this._service.approveOrReject(
+      req,
+      managerAction.APPROVE
+    );
+    if (approvedForm instanceof Error) {
+      return nextErr(
+        new ErrorHandler(400, approvedForm.message),
+        req,
+        res,
+        next
+      );
+    }
+    CustomResponse.sendObject(res, 200, approvedForm);
+  };
+
+  reject = async (req, res, next) => {
+    let managerAction = this._service.ManagerAction;
+    let approvedForm = await this._service.approveOrReject(
+      req,
+      managerAction.REJECT
+    );
+    if (approvedForm instanceof Error) {
+      return nextErr(
+        new ErrorHandler(400, approvedForm.message),
+        req,
+        res,
+        next
+      );
+    }
+    CustomResponse.sendObject(res, 200, approvedForm);
+  };
 };

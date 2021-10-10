@@ -21,54 +21,6 @@ module.exports = class FormService extends BaseService {
     let { formDetail, userId, ...form } = req.body;
     const transaction = await User.sequelize.transaction();
     try {
-      // await  Promise.all(
-      //   userId.map(async (id) => {
-      //     let userInstance = await User.getDetailByWhere(
-      //       {
-      //         id: id,
-      //       },
-      //       transaction,
-      //       false,
-      //       [Employee]
-      //     );
-
-      //     form.isRejected = 0;
-      //     form.isApproved = 0;
-      //     form.status = "NEW";
-      //     form.dueDate = new Date(form.dueDate);
-      //     let formData = await Form.addNew(
-      //       form,
-      //       transaction,
-      //       req.user.userName
-      //     );
-      //     await formData.setUser(userInstance, {
-      //       transaction: transaction,
-      //     });
-
-      //     let formDetailData = await FormDetail.addNew(
-      //       formDetail,
-      //       transaction,
-      //       req.user.userName
-      //     );
-
-      //     await formDetailData.setForm(formData, {
-      //       transaction: transaction,
-      //     });
-
-      //     let options = {
-      //       type: formData.type,
-      //       content: formData.content,
-      //       from: null,
-      //       content: "",
-      //       mailReceiver:
-      //         userInstance.email !== null
-      //           ? userInstance.email
-      //           : "bigherodz54@gmail.com",
-      //     };
-
-      //     this._eventEmitter.emit("sendmail", options);
-      //   })
-      // );
       let formObj = {};
 
       let formArray = [];
@@ -164,6 +116,8 @@ module.exports = class FormService extends BaseService {
       if (isDue) {
         return new Error("You can't submit because form is overdue");
       }
+      if (form.status === this.formSatus.CLOSED)
+        return new Error("FORM CLOSED,CAN'T SUBMIT");
 
       if (form.status === "SUBMITTED") {
         return new Error("CANT SUBMIT TWICE");
@@ -321,7 +275,7 @@ module.exports = class FormService extends BaseService {
           let forms = await Form.getAllWithDetail(
             {
               userId: user.id,
-              status: "SUBMITTED",
+              status: this.formSatus.SUBMITTED,
               type: 1,
             },
             null,
@@ -359,7 +313,7 @@ module.exports = class FormService extends BaseService {
           let forms = await Form.getAllWithDetail(
             {
               userId: user.id,
-              status: "SUBMITTED",
+              status: this.formSatus.SUBMITTED,
               type: 1,
             },
             null,
@@ -375,7 +329,7 @@ module.exports = class FormService extends BaseService {
         }
 
         console.log(ret);
-        return ret;
+        return checkNoForm ? ret : new Error("No Form submitted yet!");
       }
     } catch (error) {
       return error;
@@ -392,7 +346,7 @@ module.exports = class FormService extends BaseService {
           let forms = await Form.getAllWithDetail(
             {
               userId: user.id,
-              status: "SUBMITTED",
+              status: this.formSatus.SUBMITTED,
               type: 0,
             },
             null,
@@ -430,14 +384,13 @@ module.exports = class FormService extends BaseService {
           let forms = await Form.getAllWithDetail(
             {
               userId: user.id,
-              status: "SUBMITTED",
+              status: this.formSatus.SUBMITTED,
               type: 0,
             },
             null,
             false,
             ["FormDetail"]
           );
-          // logger.info(userList)
           let dataObj = {
             user: user,
             forms: forms,
@@ -445,17 +398,31 @@ module.exports = class FormService extends BaseService {
           ret.push(dataObj);
         }
 
-        console.log(ret);
-        return ret;
+        return checkNoForm ? ret : new Error("No Form submitted yet!");
       }
     } catch (error) {
       return error;
     }
   };
 
- viewYourForm = async (req)=>{
-
- }
+  viewYourForm = async (req) => {
+    try {
+      let userData = req.user.data;
+      let forms = await Form.getAllWithDetail(
+        {
+          userId: userData.id,
+        },
+        null,
+        false,
+        "FormDetail"
+      );
+      if (forms.length === 0)
+        return new Error("You have no form,wait in the future");
+      return forms;
+    } catch (error) {
+      return error;
+    }
+  };
 
   viewForm = async (req, type) => {
     let yourRole = await this.getHighestRole(req.user.data.id);
@@ -465,8 +432,59 @@ module.exports = class FormService extends BaseService {
       case 2:
         return await this.viewEvalFormList(req, yourRole);
       case 3:
-        
-        break;
+        return await this.viewYourForm(req);
     }
+  };
+
+  formAction = async (manager, formId, action) => {
+    let transaction = await Form.sequelize.transaction();
+    try {
+      let form = await Form.getDetailById(formId, transaction, false, [
+        "FormDetail",
+      ]);
+      if (!form) return new Error(`FORM IS NOT EXISTED`);
+      let user = await User.getDetailById(form.userId, transaction, false, [
+        Employee,
+      ]);
+      if (manager.id != user.employee.managerId)
+        return new Error(`YOU HAVE NOT PERMISSION IN THIS FORM`);
+
+      if (form.status !== this.formSatus.SUBMITTED) {
+        return new Error(`FORM IS PENDING FOR SUBMISSION`);
+      }
+
+      if (action === this.ManagerAction.APPROVE) {
+        if (form.isRejected === 1) {
+          form.isRejected = 0;
+          await form.save({
+            transaction: transaction,
+          });
+        }
+        form.isApproved = 1;
+      }else{
+        if (form.isApproved === 1) {
+          form.isApproved = 0;
+          await form.save({
+            transaction: transaction,
+          });
+        }
+        form.isRejected = 1;
+      }
+
+      await form.save({
+        transaction: transaction,
+      });
+      await transaction.commit();
+      return form;
+    } catch (e) {
+      await transaction.rollback();
+      return e;
+    }
+  };
+
+  approveOrReject = async (req, action) => {
+    let userData = req.user.data;
+    let { id: formId } = req.body;
+    return await this.formAction(userData, formId, action);
   };
 };

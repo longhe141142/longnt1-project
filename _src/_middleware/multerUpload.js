@@ -3,7 +3,7 @@ const multer = require("multer");
 const path = require("path");
 const { mkdirSync, deleFIle } = require("./../_utils/fileUtils");
 const { StorageOptions, UploadOptions } = require("../_config/multer.config");
-const pathdir = path.resolve(__dirname, "../");
+const pathdir = path.resolve(__dirname, "../../");
 
 mkdirSync(pathdir + "/_public/uploads");
 
