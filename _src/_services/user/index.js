@@ -18,20 +18,32 @@ module.exports = class UserRouter extends BaseRouter {
     this.post(
       "/addEmployee",
       verifyToken,
-      Authorize("/user", "/post", "/api/user/addEmployee"),
+      Authorize(
+        this.authorize.user.ROUTER,
+        this.authorize.user.addEmployee.METHOD,
+        this.authorize.user.addEmployee.URL
+      ),
       this.addUserToManage
     );
     this.get("/ViewProfile", verifyToken, this.getUserDetail);
     this.get(
       "/viewOwnEmployees",
       verifyToken,
-      Authorize("/user", "/get", "/api/user/viewOwnEmployees"),
+      Authorize(
+        this.authorize.user.ROUTER,
+        this.authorize.user.viewOwnEmployee.METHOD,
+        this.authorize.user.viewOwnEmployee.URL
+      ),
       this.getEmployeeManage
     );
     this.get(
       "/displayEmployeeList",
       verifyToken,
-      Authorize("/user", "/get", "/api/user/displayEmployeeList"),
+      Authorize(
+        this.authorize.user.ROUTER,
+        this.authorize.user.viewAllEmployee.METHOD,
+        this.authorize.user.viewAllEmployee.URL
+      ),
       this.getEmpList
     );
     this.patch(
@@ -40,8 +52,6 @@ module.exports = class UserRouter extends BaseRouter {
       imageUpload(User).single("image"),
       this.uploadAvatar
     );
-
-
   }
 
   // simpleUserApi = (req, res) => {
@@ -51,7 +61,12 @@ module.exports = class UserRouter extends BaseRouter {
   addUserToManage = async (req, res, next) => {
     let employeeOfManager = await this._service.addEmployee(req);
     if (employeeOfManager instanceof Error) {
-      nextErr(new ErrorHandler(404, `${employeeOfManager.message}`), req, res, next);
+      nextErr(
+        new ErrorHandler(404, `${employeeOfManager.message}`),
+        req,
+        res,
+        next
+      );
       return;
     } else {
       CustomResponse.sendObject(res, 200, employeeOfManager);
@@ -77,9 +92,8 @@ module.exports = class UserRouter extends BaseRouter {
   getEmployeeManage = async (req, res, next) => {
     //call service & input:request output:array of employee
     let employees = await this._service.getYourEmployee(req);
-    if (employees instanceof Error || employees === false) {
-      logger.error(employees);
-      nextErr(new ErrorHandler(404, "Cant retrieve employees"), req, res, next);
+    if (employees instanceof Error) {
+      nextErr(new ErrorHandler(404, employees.message), req, res, next);
       return;
     }
     CustomResponse.sendObject(res, 200, employees);

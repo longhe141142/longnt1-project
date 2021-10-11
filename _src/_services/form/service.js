@@ -461,7 +461,7 @@ module.exports = class FormService extends BaseService {
           });
         }
         form.isApproved = 1;
-      }else{
+      } else {
         if (form.isApproved === 1) {
           form.isApproved = 0;
           await form.save({
@@ -486,5 +486,19 @@ module.exports = class FormService extends BaseService {
     let userData = req.user.data;
     let { id: formId } = req.body;
     return await this.formAction(userData, formId, action);
+  };
+
+  checkDue = async (req) => {
+    let now = new Date().getTime();
+    let forms = await Form.findAll({});
+    await Promise.all(
+      forms.map(async (form)=>{
+        let formResolve = await form;
+        let dueDAte = Date.parse(formResolve.dueDate);
+        console.log("=================",dueDAte)
+        return []
+      })
+    )
+   
   };
 };

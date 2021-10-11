@@ -40,6 +40,9 @@ module.exports = class UserService extends BaseService {
       let manager = user;
       //get employee of this user
       let employees = await this.getOwnEmployee(manager);
+      if (employees.length === 0) {
+        return new Error("You have no employee,add someone to your team first");
+      }
       return employees;
     } catch (error) {
       logger.error(error);
@@ -63,6 +66,17 @@ module.exports = class UserService extends BaseService {
           return acc < curr ? acc : curr;
         }, roles[0]);
       });
+  };
+
+  canAdd =  (employeeRoleId, managerRoleId) => {
+    console.log(employeeRoleId,managerRoleId)
+    return managerRoleId === 2 && employeeRoleId !== 4
+      ? new Error(`can't add this employee because you have not enough permission.You are Director,can add Manager only
+    (PERMISSION DENIED)`)
+      : managerRoleId === 4 && employeeRoleId !== 5
+      ? new Error(`can't add this employee because you have not enough permission.You are Manager,can add Employee only
+      (PERMISSION DENIED)`)
+      : true;
   };
 
   getAllEmployeeOnly = async (req) => {
@@ -121,14 +135,14 @@ module.exports = class UserService extends BaseService {
         return new Error("EMPLOYEE NOT FOUND");
       }
       let userInfo = await User.getDetailById(employeeInfo.userId, null);
+      let [employeeRoleId, managerRoleId] = await Promise.all([
+        this.getHighestRole(userInfo.id),
+        this.getHighestRole(managerId),
+      ]);
 
-      if (
-        (await this.getHighestRole(userInfo.id)) <=
-        (await this.getHighestRole(managerId))
-      ) {
-        return new Error(
-          `can't add this employee because you have not enough permission`
-        );
+      let canAdd = this.canAdd(employeeRoleId,managerRoleId)
+      if(canAdd instanceof Error) {
+        return new Error(canAdd)
       }
       let manager = await User.getDetailById(managerId, null, true);
       await manager.addOwnEmployee(employeeInfo);

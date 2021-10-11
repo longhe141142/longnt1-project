@@ -24,7 +24,7 @@ const sendMail = (options) => {
 
   const templateVars = {
     content: options.content,
-    resetLink: "https://justatest.com",
+    // resetLink: "https://justatest.com",
   };
 
   const template = fs.readFileSync(templatePath, "utf-8");
@@ -42,7 +42,7 @@ const sendMail = (options) => {
   if (html != null) {
   }
 
-  mainOptions.subject = type === 0 ? "danh gia dinh ky" : "thu viec";
+  mainOptions.subject = type === 0 ? "Periodic assessment" : "Probation";
   mainOptions.text = content;
 
   var transporter = nodemailer.createTransport(TransporterOptions);

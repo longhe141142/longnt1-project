@@ -7,6 +7,7 @@ const Role = require("../_models/role");
 const Role_permision = require("../_models/role_permission");
 const Api = require("../_models/api");
 const logger = require("../_utils/logger");
+const User = require("../_models/user");
 
 module.exports.auth = (req, res, next) => {
   req.user = {
@@ -42,7 +43,7 @@ module.exports.authJWT = (req, res, User) => {
   }
 };
 
-module.exports.verifyToken = (req, res, next) => {
+module.exports.verifyToken = async (req, res, next) => {
   const token = req.header("AuthenticateToken");
 
   if (!token) {
@@ -50,9 +51,18 @@ module.exports.verifyToken = (req, res, next) => {
   }
   try {
     const decoded = jwt.verify(token, config.token_secret);
+    console.log(decoded);
+    let user = await User.findOne({
+      where: {
+        id: decoded.data.id,
+      },
+    });
+    if(!user){
+     return res.status(400).send(`User Not Found,Failed Verify`);
+    }
     req.user = decoded;
     next();
-    return
+    return;
   } catch (err) {
     res.status(400).send(err);
   }
@@ -95,8 +105,8 @@ module.exports.Authorize = (router, method, url) => {
           return;
         } else {
           res.send("cant access");
-          logger.error("UnAuthorized")
-          return
+          logger.error("UnAuthorized");
+          return;
         }
       }
     } catch (error) {

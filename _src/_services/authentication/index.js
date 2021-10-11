@@ -52,7 +52,7 @@ class AuthRouter extends BaseRouter {
         return;
       } else {
         nextErr(
-          new ErrorHandler(404, user.message),
+          new ErrorHandler(404, "User Not Found"),
           req,
           res,
           next

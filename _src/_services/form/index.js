@@ -79,6 +79,15 @@ module.exports = class FormRouter extends BaseRouter {
       ),
       this.reject
     );
+    this.patch(
+      "/checkDue",
+      Authorize(
+        this.authorize.form.ROUTER,
+        this.authorize.form.checkDue.METHOD,
+        this.authorize.form.checkDue.URL
+      ),
+      this.checkDueDateForm
+    );
   }
 
   createForm = async (req, res, next) => {
@@ -128,7 +137,7 @@ module.exports = class FormRouter extends BaseRouter {
     CustomResponse.sendObject(res, 200, modifiedForm);
   };
 
-  viewProved = async (req, res, next) => {
+  viewAppProved = async (req, res, next) => {
     // let OwnEmployee =
     let userData = req.user.data;
     let manager = await User.findOne({
@@ -142,7 +151,6 @@ module.exports = class FormRouter extends BaseRouter {
   };
 
   viewRejected = async (req, res, next) => {
-    // let OwnEmployee =
     let userData = req.user.data;
     let manager = await User.findOne({
       where: {
@@ -225,5 +233,9 @@ module.exports = class FormRouter extends BaseRouter {
       );
     }
     CustomResponse.sendObject(res, 200, approvedForm);
+  };
+
+  checkDueDateForm = async (req, res, next) => {
+    await this._service.checkDue(req);
   };
 };

@@ -9,7 +9,6 @@ const { ErrorHandler } = require("../../_middleware/handling/ErrorHandle");
 // const UserRole = require("../../_models/userRole");
 const User = require("../../_models/user");
 
-
 module.exports = class AdminRouter extends BaseRouter {
   constructor() {
     let adService = new AdminService();
@@ -23,7 +22,6 @@ module.exports = class AdminRouter extends BaseRouter {
   }
 
   createAdmin = async (req, res, next) => {
-    
     let log = await this._service.createAdmin(req.body);
     if (!log || log instanceof Error) {
       logger.error(log);
@@ -130,19 +128,14 @@ module.exports = class AdminRouter extends BaseRouter {
   upgradeUser = async (req, res, next) => {
     //input : request,output: instance of User model or error
     let userRecord = await this._service.promoteUser(req);
-    if (!userRecord || userRecord instanceof Error) {
+    if (userRecord instanceof Error) {
       //oops ,st wrong!
-      nextErr(new ErrorHandler(404, "cant set role"), req, res, next);
+      nextErr(new ErrorHandler(404, userRecord.message), req, res, next);
       logger.error(`userRecord ${userRecord}`);
       return;
     }
 
-    if (userRecord instanceof User) {
-      //aww,everything is ok!
-      CustomResponse.SendStatus_WithMessage(res, 200, userRecord);
-    } else {
-      //so weird
-      res.send("???");
-    }
+    //aww,everything is ok!
+    CustomResponse.SendStatus_WithMessage(res, 200, userRecord);
   };
 };

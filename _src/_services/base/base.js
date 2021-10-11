@@ -45,7 +45,25 @@ module.exports = class BaseRouter extends Router {
         URL: "/api/form/reject",
         METHOD: "/put",
       },
+      checkDue: {
+        URL: "/api/form/checkDue",
+        METHOD: "/patch",
+      },
     },
-    user: {},
+    user: {
+      ROUTER: "/user",
+      addEmployee: {
+        URL: "/api/user/addEmployee",
+        METHOD: "/post",
+      },
+      viewOwnEmployee: {
+        URL: "/api/user/ViewOwnEmployees",
+        METHOD: "/get",
+      },
+      viewAllEmployee: {
+        URL: "/api/user/displayEmployeeList",
+        METHOD: "/get",
+      },
+    },
   };
 };

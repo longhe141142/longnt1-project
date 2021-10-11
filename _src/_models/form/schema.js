@@ -43,4 +43,9 @@ module.exports = {
     allowNull: true,
     defaultValue: 0,
   },
+  isDue: {
+    type: Sequelize.INTEGER,
+    allowNull: true,
+    defaultValue: 0,
+  },
 };
