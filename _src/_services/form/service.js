@@ -24,8 +24,8 @@ module.exports = class FormService extends BaseService {
       let formObj = {};
 
       let formArray = [];
+
       for (let id of userId) {
-        console.log("entryy");
         let userInstance = await User.getDetailByWhere(
           {
             id: id,
@@ -54,7 +54,6 @@ module.exports = class FormService extends BaseService {
         //   transaction: transaction,
         // });
 
-        console.log(formData.dataValues);
         // await userInstance.addForm(formData,{
         //   transaction: transaction,
         // })
@@ -86,10 +85,9 @@ module.exports = class FormService extends BaseService {
         this._eventEmitter.emit("sendmail", options);
       }
       await transaction.commit();
-      console.log(formArray);
       return formArray;
     } catch (error) {
-      console.log(error);
+      logger.error(error);
       await transaction.rollback();
       return error;
     }
@@ -488,17 +486,58 @@ module.exports = class FormService extends BaseService {
     return await this.formAction(userData, formId, action);
   };
 
-  checkDue = async (req) => {
+  checkDue = async () => {
+    let formChanged = 0;
     let now = new Date().getTime();
     let forms = await Form.findAll({});
-    await Promise.all(
-      forms.map(async (form)=>{
-        let formResolve = await form;
-        let dueDAte = Date.parse(formResolve.dueDate);
-        console.log("=================",dueDAte)
-        return []
-      })
-    )
-   
+    if (forms.length === 0) {
+      return new Error(`No form available now`);
+    }
+    let transaction = await Form.sequelize.transaction();
+    try {
+      await Promise.all(
+        forms.map(async (form) => {
+          let formInstance = await form;
+          let dueDAte = Date.parse(formInstance.dueDate);
+          if (now - dueDAte > 0) {
+            formChanged++;
+            return formInstance.update(
+              {
+                isDue: 1,
+              },
+              { transaction: transaction }
+            );
+          }
+        })
+      );
+      transaction.commit();
+      return `${formChanged} form over Due!`;
+    } catch (error) {
+      transaction.rollback();
+      return error;
+    }
+  };
+
+  closeForm = async (req) => {
+    try {
+      let { id: formId } = req.body;
+      let form = await Form.findOne({
+        where: { id: formId },
+      });
+      if (!form) {
+        return new Error("FORM IS NOT EXISTED!");
+      }
+
+      if (form.status === this.formSatus.CLOSED) {
+        return new Error("FORM IS CLOSED CAN'T DO IT AGAIN!");
+      }
+      await form.update({
+        status: this.formSatus.CLOSED,
+      });
+
+      return `CLOSE FORM SUCCESSFULLY`;
+    } catch (error) {
+      return error;
+    }
   };
 };

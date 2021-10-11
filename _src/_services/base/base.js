@@ -49,6 +49,10 @@ module.exports = class BaseRouter extends Router {
         URL: "/api/form/checkDue",
         METHOD: "/patch",
       },
+      closeForm:{
+        URL: "/api/form/close",
+        METHOD: "/patch",
+      }
     },
     user: {
       ROUTER: "/user",

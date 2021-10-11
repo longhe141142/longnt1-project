@@ -88,12 +88,21 @@ module.exports = class FormRouter extends BaseRouter {
       ),
       this.checkDueDateForm
     );
+    this.put(
+      "/close",
+      Authorize(
+        this.authorize.form.ROUTER,
+        this.authorize.form.closeForm.METHOD,
+        this.authorize.form.closeForm.URL
+      ),
+      this.closeForm
+    );
   }
 
   createForm = async (req, res, next) => {
     let result = await this._service.addNewForm(req);
     if (!result || result instanceof Error) {
-      nextErr(new ErrorHandler(404, result.mes), req, res, next);
+      nextErr(new ErrorHandler(404, result.message), req, res, next);
       return;
     } else {
       CustomResponse.sendObject(res, 200, result);
@@ -236,6 +245,19 @@ module.exports = class FormRouter extends BaseRouter {
   };
 
   checkDueDateForm = async (req, res, next) => {
-    await this._service.checkDue(req);
+    let checkDue = await this._service.checkDue();
+    if (checkDue instanceof Error) {
+      nextErr(new ErrorHandler(400, checkDue.message), req, res, next);
+    }
+    CustomResponse.sendObject(res, 200, checkDue);
+  };
+
+  closeForm = async (req, res, next) => {
+    let checkClose = await this._service.closeForm(req);
+    if (checkClose instanceof Error) {
+      nextErr(new ErrorHandler(400, checkClose.message), req);
+    }
+
+    CustomResponse.sendObject(res, 200, checkClose);
   };
 };

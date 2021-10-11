@@ -51,7 +51,6 @@ module.exports.verifyToken = async (req, res, next) => {
   }
   try {
     const decoded = jwt.verify(token, config.token_secret);
-    console.log(decoded);
     let user = await User.findOne({
       where: {
         id: decoded.data.id,
