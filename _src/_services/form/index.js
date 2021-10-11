@@ -1,19 +1,10 @@
 const BaseRouter = require("../base/base");
 const FormService = require("./service");
-
-let { Promise } = require("bluebird");
 const User = require("../../_models/user");
-const Role = require("../../_models/role");
-const Role_permission = require("../../_models/role_permission");
-const UserRole = require("../../_models/userRole");
-const Employee = require("../../_models/employee");
-const FormDetail = require("../../_models/formDetail");
-const Form = require("../../_models/form");
 const CustomResponse = require("../../_middleware/response");
 const nextErr = require("../../_middleware/handerError");
 const { ErrorHandler } = require("../../_middleware/handling/ErrorHandle");
-const logger = require("../../_utils/logger");
-const { Authorize, verifyToken, IsAdmin } = require("../../_middleware/auth");
+const { Authorize } = require("../../_middleware/auth");
 module.exports = class FormRouter extends BaseRouter {
   constructor() {
     const form = new FormService();
@@ -28,10 +19,6 @@ module.exports = class FormRouter extends BaseRouter {
       this.createForm
     );
     this.put("/submit", this.submitForm);
-    // this.patch(
-    //   "/checkDueDate",
-    //   Authorize("/form", "/patch", "/api/form/checkDueDate")
-    // );
     this.patch("/modify/content", this.updateContent);
     this.patch(
       "/modify/comment",
@@ -210,39 +197,39 @@ module.exports = class FormRouter extends BaseRouter {
     CustomResponse.sendObject(res, 200, employeeForm);
   };
 
-  approve = async (req, res, next) => {
-    let managerAction = this._service.ManagerAction;
-    let approvedForm = await this._service.approveOrReject(
-      req,
-      managerAction.APPROVE
-    );
-    if (approvedForm instanceof Error) {
-      return nextErr(
-        new ErrorHandler(400, approvedForm.message),
-        req,
-        res,
-        next
-      );
-    }
-    CustomResponse.sendObject(res, 200, approvedForm);
-  };
+  // approve = async (req, res, next) => {
+  //   let managerAction = this._service.ManagerAction;
+  //   let approvedForm = await this._service.approveOrReject(
+  //     req,
+  //     managerAction.APPROVE
+  //   );
+  //   if (approvedForm instanceof Error) {
+  //     return nextErr(
+  //       new ErrorHandler(400, approvedForm.message),
+  //       req,
+  //       res,
+  //       next
+  //     );
+  //   }
+  //   CustomResponse.sendObject(res, 200, approvedForm);
+  // };
 
-  reject = async (req, res, next) => {
-    let managerAction = this._service.ManagerAction;
-    let approvedForm = await this._service.approveOrReject(
-      req,
-      managerAction.REJECT
-    );
-    if (approvedForm instanceof Error) {
-      return nextErr(
-        new ErrorHandler(400, approvedForm.message),
-        req,
-        res,
-        next
-      );
-    }
-    CustomResponse.sendObject(res, 200, approvedForm);
-  };
+  // reject = async (req, res, next) => {
+  //   let managerAction = this._service.ManagerAction;
+  //   let approvedForm = await this._service.approveOrReject(
+  //     req,
+  //     managerAction.REJECT
+  //   );
+  //   if (approvedForm instanceof Error) {
+  //     return nextErr(
+  //       new ErrorHandler(400, approvedForm.message),
+  //       req,
+  //       res,
+  //       next
+  //     );
+  //   }
+  //   CustomResponse.sendObject(res, 200, approvedForm);
+  // };
 
   checkDueDateForm = async (req, res, next) => {
     let checkDue = await this._service.checkDue();

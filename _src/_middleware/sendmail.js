@@ -7,9 +7,6 @@ const {
   TransporterOptions,
   mainOptions,
 } = require("../_config/nodemailer.config");
-const { ErrorHandler } = require("../_middleware/handling/ErrorHandle");
-const nextErr = require("../_middleware/handerError");
-const CustomResponse = require("../_middleware/response");
 const fs = require("fs");
 const logger = require("../_utils/logger");
 

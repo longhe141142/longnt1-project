@@ -106,7 +106,6 @@ module.exports = class User extends BaseModel {
   static verifyPassword = async (user, password) => {
     try {
       let cmp = await bcrypt.compare(password, user.password);
-
       console.log(cmp);
       return cmp;
     } catch (error) {

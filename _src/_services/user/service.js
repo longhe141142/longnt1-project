@@ -2,7 +2,6 @@ const BaseService = require("../base/base-services");
 const logger = require("../../_utils/logger");
 const User = require("../../_models/user");
 const Role = require("../../_models/role");
-const Role_permission = require("../../_models/role_permission");
 const UserRole = require("../../_models/userRole");
 const Employee = require("../../_models/employee");
 module.exports = class UserService extends BaseService {
@@ -12,7 +11,18 @@ module.exports = class UserService extends BaseService {
     super();
   }
 
-  viewProfile = () => {};
+  viewProfile = async (req) => {
+    try {
+      let user = await User.getDetailById(req.user.data.id, null, false, [
+        Employee,
+        Role,
+      ]);
+
+      return user;
+    } catch (error) {
+      return new Error(error);
+    }
+  };
 
   getOwnEmployee = async (manager) => {
     if (!manager) {
@@ -68,8 +78,8 @@ module.exports = class UserService extends BaseService {
       });
   };
 
-  canAdd =  (employeeRoleId, managerRoleId) => {
-    console.log(employeeRoleId,managerRoleId)
+  canAdd = (employeeRoleId, managerRoleId) => {
+    console.log(employeeRoleId, managerRoleId);
     return managerRoleId === 2 && employeeRoleId !== 4
       ? new Error(`can't add this employee because you have not enough permission.You are Director,can add Manager only
     (PERMISSION DENIED)`)
@@ -140,9 +150,9 @@ module.exports = class UserService extends BaseService {
         this.getHighestRole(managerId),
       ]);
 
-      let canAdd = this.canAdd(employeeRoleId,managerRoleId)
-      if(canAdd instanceof Error) {
-        return new Error(canAdd)
+      let canAdd = this.canAdd(employeeRoleId, managerRoleId);
+      if (canAdd instanceof Error) {
+        return new Error(canAdd);
       }
       let manager = await User.getDetailById(managerId, null, true);
       await manager.addOwnEmployee(employeeInfo);
@@ -156,6 +166,17 @@ module.exports = class UserService extends BaseService {
       //if st wrong,return error
       logger.error(err);
       return err;
+    }
+  };
+
+  updateProfile = async (req) => {
+    try {
+      let data = req.body;
+      let user = await User.getDetailById(req.user.data.id, null);
+      await user.update(data);
+      return user;
+    } catch (error) {
+      return error;
     }
   };
 };

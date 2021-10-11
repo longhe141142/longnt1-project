@@ -10,9 +10,6 @@ class AuthService extends BaseService {
     super();
   }
 
-  // coreService = () => {
-  //   return "hello world";
-  // };
 
   registerService = async (req) => {
     const { employee, ...user } = req.body;

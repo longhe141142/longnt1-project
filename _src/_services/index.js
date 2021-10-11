@@ -25,13 +25,10 @@ module.exports = class InitialService {
   }
 
   registerService = () => {
-    // this._router.use("/user", auth, this.user);
     this._router.use("/user", this.user);
     this._router.use("/", this.authRouter);
-    this._router.use("/", this.authRouter);
+    this._router.use("/admin", verifyToken, IsAdmin(), this.AdminRouter);
     // this._router.use("/admin", verifyToken, this.AdminRouter);
-    // this._router.use("/admin", verifyToken, IsAdmin(), this.AdminRouter);
-    this._router.use("/admin", verifyToken, this.AdminRouter);
     this._router.use("/form", verifyToken, this.FormRouter);
   };
 };

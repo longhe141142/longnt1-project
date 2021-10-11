@@ -5,7 +5,6 @@ const Employee = require("../../_models/employee");
 const CustomResponse = require("../../_middleware/response");
 const nextErr = require("../../_middleware/handerError");
 const { ErrorHandler } = require("../../_middleware/handling/ErrorHandle");
-const logger = require("../../_utils/logger");
 const { Authorize, verifyToken } = require("../../_middleware/auth");
 const { imageUpload } = require("../../_middleware/multerUpload");
 
@@ -52,6 +51,8 @@ module.exports = class UserRouter extends BaseRouter {
       imageUpload(User).single("image"),
       this.uploadAvatar
     );
+
+    this.get("/profile", verifyToken, this.viewProfile);
   }
 
   // simpleUserApi = (req, res) => {
@@ -104,19 +105,40 @@ module.exports = class UserRouter extends BaseRouter {
     //call service & input:null output:array of employee
     let employeeList = await this._service.getAllEmployeeOnly(req);
     if (employeeList instanceof Error || !employeeList) {
-      next(new Error(404, "Cant load site"), req, res, next);
+      return next(new Error(404, "Cant load site"), req, res, next);
     } else {
       ret["employee-list"] = employeeList;
       CustomResponse.sendObject(res, 201, ret);
     }
   };
   uploadAvatar = async (req, res, next) => {
-    const image = req.file;
-    let userData = req.user.data;
-    let user = await User.getDetailByWhere({
-      id: userData.id,
-    });
-    user.avatar = image.filename;
-    await user.save();
+    try {
+      const image = req.file;
+      let userData = req.user.data;
+      let user = await User.getDetailByWhere({
+        id: userData.id,
+      });
+      user.avatar = image.filename;
+      await user.save();
+      CustomResponse.sendObject(res, 200, `success`);
+    } catch (error) {
+      nextErr(new ErrorHandler(400, error.message), req, res, next);
+    }
+  };
+
+  viewProfile = async (req, res, next) => {
+    const info = await this._service.viewProfile(req);
+    if (info instanceof Error) {
+      return nextErr(new ErrorHandler(400, info.message), req, res, next);
+    }
+    CustomResponse.sendObject(res, 200, info);
+  };
+
+  updateProfile = async function (req, res, next) {
+    const inf4 = await this._service.updateProfile(req);
+    if (inf4 instanceof Error) {
+      return nextErr(new ErrorHandler(400, inf4.message), req, res, next);
+    }
+    CustomResponse.sendObject(res, 200, inf4);
   };
 };

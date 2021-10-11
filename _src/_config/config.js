@@ -46,6 +46,6 @@ const configs = {
   },
 };
 
-const config = Object.assign(configs.base, configs[env]);
+const config = Object.assign(configs.base);
 
 module.exports = config;

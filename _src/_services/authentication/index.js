@@ -5,29 +5,17 @@ const CustomResponse = require("../../_middleware/response");
 const nextErr = require("../../_middleware/handerError");
 const { ErrorHandler } = require("../../_middleware/handling/ErrorHandle");
 const { authJWT } = require("../../_middleware/auth");
-// const { body } = require("express-validator");
-// const {
-//   registerSchema,
-// } = require("../../_middleware/request-validator/validator");
-// const {
-//   registerValidation,
-// } = require("../../_middleware/request-validator/index");
-const{
-  authenValidation
-} = require("../../_middleware/request-validator/authentication")
+
+const {
+  authenValidation,
+} = require("../../_middleware/request-validator/authentication");
 class AuthRouter extends BaseRouter {
   constructor() {
     const authService = new AuthService();
     super(authService);
-    // this.post(
-    //   "/register",
-    //   validatorProcess(this._checkSchema, registrationSchema),
-    //   confirmValidation(this._validationResult),
-    //   this.register
-    // );
+
     this.post("/register", authenValidation.register, this.register);
 
-    // this.get("/login", this.login);
     this.get("/login", this.login);
   }
 
@@ -51,12 +39,7 @@ class AuthRouter extends BaseRouter {
         nextErr(new ErrorHandler(404, "system error"), req, res, next);
         return;
       } else {
-        nextErr(
-          new ErrorHandler(404, "User Not Found"),
-          req,
-          res,
-          next
-        );
+        nextErr(new ErrorHandler(404, "User Not Found"), req, res, next);
       }
       return;
     }

@@ -1,13 +1,16 @@
 const BaseService = require("../base/base-services");
 const logger = require("../../_utils/logger");
+
+//model
 const User = require("../../_models/user");
 const FormDetail = require("../../_models/formDetail");
 const Form = require("../../_models/form");
 const Employee = require("../../_models/employee");
+
+//event send mail
 var event = require("events").EventEmitter;
 const sendMail = require("../../_middleware/sendmail");
-const { report } = require("process");
-const { includes } = require("lodash");
+
 module.exports = class FormService extends BaseService {
   _model = Form;
   _include = [FormDetail];
@@ -50,14 +53,6 @@ module.exports = class FormService extends BaseService {
           transaction,
           req.user.userName
         );
-        // await formData.setUser(userInstance, {
-        //   transaction: transaction,
-        // });
-
-        // await userInstance.addForm(formData,{
-        //   transaction: transaction,
-        // })
-
         let formDetailData = await FormDetail.addNew(
           formDetail,
           transaction,
@@ -78,7 +73,6 @@ module.exports = class FormService extends BaseService {
               ? userInstance.email
               : "bigherodz54@gmail.com",
         };
-
         formObj.form = formData;
         formObj.formDetail = formDetailData;
         formArray.push(formObj);
@@ -525,16 +519,20 @@ module.exports = class FormService extends BaseService {
         where: { id: formId },
       });
       if (!form) {
+        logger.error("FORM IS NOT EXISTED");
         return new Error("FORM IS NOT EXISTED!");
       }
 
       if (form.status === this.formSatus.CLOSED) {
+        logger.error("FORM IS CLOSED");
         return new Error("FORM IS CLOSED CAN'T DO IT AGAIN!");
       }
+
       await form.update({
         status: this.formSatus.CLOSED,
       });
 
+      logger.info("CLOSE FORM SUCCESSFULLY");
       return `CLOSE FORM SUCCESSFULLY`;
     } catch (error) {
       return error;
