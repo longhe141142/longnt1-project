@@ -12,9 +12,30 @@ let payload = (req) => {
       // lastName: req.body.employee.lastName,
       // firstName: req.body.firstName,
     },
-    login:{
+    login: {
       userName: req.body.userName,
-      password: req.body.password
+      password: req.body.password,
+    },
+
+    createForm: {
+      userId:req.body.userId, 
+      type:req.body.type,
+      dueDate:req.body.dueDate,
+      formDetail: req.body.formDetail,
+    },
+    submitForm:{
+      id:req.body.id
+    },
+    comment:{
+      id:req.body.id,
+      comment:req.body.comment,
+    },
+    content:{
+      id:req.body.id,
+      content:req.body.content,
+    },
+    idRequire:{
+      id:req.body.id,
     }
   };
 };

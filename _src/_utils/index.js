@@ -47,9 +47,19 @@ class DataUtils {
     return reg.test(string);
   }
 
-  isAlphaOnly(string){
-    const reg = /^([a-zA-Z]+\s{0,1})+[a-zA-Z]$/g
+  isAlphaOnly(string) {
+    const reg = /^([a-zA-Z]+\s{0,1})+[a-zA-Z]$/g;
     return reg.test(string);
+  }
+  isZeroOrOne(number) {
+    if (number === 0 || number === 1) {
+      return true;
+    }
+    return false;
+  }
+  isValidDAte(date){
+    const reg = /([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/;
+    return reg.test(date)
   }
 }
 

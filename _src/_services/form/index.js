@@ -5,6 +5,7 @@ const CustomResponse = require("../../_middleware/response");
 const nextErr = require("../../_middleware/handerError");
 const { ErrorHandler } = require("../../_middleware/handling/ErrorHandle");
 const { Authorize } = require("../../_middleware/auth");
+const { formValidation } = require("../../_middleware/request-validator/form");
 module.exports = class FormRouter extends BaseRouter {
   constructor() {
     const form = new FormService();
@@ -16,10 +17,11 @@ module.exports = class FormRouter extends BaseRouter {
         this.authorize.form.createForm.METHOD,
         this.authorize.form.createForm.URL
       ),
+      formValidation.createForm,
       this.createForm
     );
-    this.put("/submit", this.submitForm);
-    this.patch("/modify/content", this.updateContent);
+    this.put("/submit", formValidation.submit, this.submitForm);
+    this.patch("/modify/content", formValidation.content, this.updateContent);
     this.patch(
       "/modify/comment",
       Authorize(
@@ -27,6 +29,7 @@ module.exports = class FormRouter extends BaseRouter {
         this.authorize.form.managerComment.METHOD,
         this.authorize.form.managerComment.URL
       ),
+      formValidation.comment,
       this.updateComment
     );
     this.get(
@@ -55,6 +58,7 @@ module.exports = class FormRouter extends BaseRouter {
         this.authorize.form.approveAction.METHOD,
         this.authorize.form.approveAction.URL
       ),
+      formValidation.idRequire,
       this.approve
     );
     this.put(
@@ -64,6 +68,7 @@ module.exports = class FormRouter extends BaseRouter {
         this.authorize.form.rejectAction.METHOD,
         this.authorize.form.rejectAction.URL
       ),
+      formValidation.idRequire,
       this.reject
     );
     this.patch(
@@ -82,6 +87,7 @@ module.exports = class FormRouter extends BaseRouter {
         this.authorize.form.closeForm.METHOD,
         this.authorize.form.closeForm.URL
       ),
+      formValidation.idRequire,
       this.closeForm
     );
   }
@@ -197,40 +203,6 @@ module.exports = class FormRouter extends BaseRouter {
     CustomResponse.sendObject(res, 200, employeeForm);
   };
 
-  // approve = async (req, res, next) => {
-  //   let managerAction = this._service.ManagerAction;
-  //   let approvedForm = await this._service.approveOrReject(
-  //     req,
-  //     managerAction.APPROVE
-  //   );
-  //   if (approvedForm instanceof Error) {
-  //     return nextErr(
-  //       new ErrorHandler(400, approvedForm.message),
-  //       req,
-  //       res,
-  //       next
-  //     );
-  //   }
-  //   CustomResponse.sendObject(res, 200, approvedForm);
-  // };
-
-  // reject = async (req, res, next) => {
-  //   let managerAction = this._service.ManagerAction;
-  //   let approvedForm = await this._service.approveOrReject(
-  //     req,
-  //     managerAction.REJECT
-  //   );
-  //   if (approvedForm instanceof Error) {
-  //     return nextErr(
-  //       new ErrorHandler(400, approvedForm.message),
-  //       req,
-  //       res,
-  //       next
-  //     );
-  //   }
-  //   CustomResponse.sendObject(res, 200, approvedForm);
-  // };
-
   checkDueDateForm = async (req, res, next) => {
     let checkDue = await this._service.checkDue();
     if (checkDue instanceof Error) {
@@ -242,9 +214,42 @@ module.exports = class FormRouter extends BaseRouter {
   closeForm = async (req, res, next) => {
     let checkClose = await this._service.closeForm(req);
     if (checkClose instanceof Error) {
-      nextErr(new ErrorHandler(400, checkClose.message), req);
+      return nextErr(new ErrorHandler(400, checkClose.message), req, res, next);
     }
 
     CustomResponse.sendObject(res, 200, checkClose);
+  };
+  approve = async (req, res, next) => {
+    let managerAction = this._service.ManagerAction;
+    let approvedForm = await this._service.approveOrReject(
+      req,
+      managerAction.APPROVE
+    );
+    if (approvedForm instanceof Error) {
+      return nextErr(
+        new ErrorHandler(400, approvedForm.message),
+        req,
+        res,
+        next
+      );
+    }
+    CustomResponse.sendObject(res, 200, approvedForm);
+  };
+
+  reject = async (req, res, next) => {
+    let managerAction = this._service.ManagerAction;
+    let approvedForm = await this._service.approveOrReject(
+      req,
+      managerAction.REJECT
+    );
+    if (approvedForm instanceof Error) {
+      return nextErr(
+        new ErrorHandler(400, approvedForm.message),
+        req,
+        res,
+        next
+      );
+    }
+    CustomResponse.sendObject(res, 200, approvedForm);
   };
 };

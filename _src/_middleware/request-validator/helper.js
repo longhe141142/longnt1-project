@@ -25,25 +25,50 @@ let checkIdentity = () => {
       return value;
     }
     return helper.message("Invalid identity number");
-
   };
 };
 
-let checkSocialInsurance=()=>{
+let checkSocialInsurance = () => {
   return (value, helper) => {
-    if(dataUtils.socialInsuranceChecker(value)) {
+    if (dataUtils.socialInsuranceChecker(value)) {
       return value;
     }
     return helper.message("Invalid social insurance number");
-  }
-}
+  };
+};
 
-let alphaCharacterOnly = (filedName) =>{
+let alphaCharacterOnly = (filedName) => {
   return (value, helper) => {
-    if(dataUtils.isAlphaOnly(value)) {
+    if (dataUtils.isAlphaOnly(value)) {
       return value;
     }
     return helper.message(`${filedName} must contain character only`);
-  }
+  };
+};
+
+let isZeroOrOne = (filedName) => {
+  return (value, helper) => {
+    if (dataUtils.isZeroOrOne(value)) {
+      return value;
+    }
+    return helper.message(`${filedName} must be 0 or 1`);
+  };
+};
+
+let isValidDAte = (filedName)=>{
+  return (value, helper) => {
+    if (dataUtils.isValidDAte(value)) {
+      return value;
+    }
+    return helper.message(`${filedName} must follow YYYY-MM-DD format`);
+  };
 }
-module.exports = { alphaCharacterOnly,checkWhiteSpace, checkPhoneNumber,checkIdentity,checkSocialInsurance };
+module.exports = {
+  alphaCharacterOnly,
+  checkWhiteSpace,
+  checkPhoneNumber,
+  checkIdentity,
+  checkSocialInsurance,
+  isZeroOrOne,
+  isValidDAte
+};
