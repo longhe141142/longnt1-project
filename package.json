@@ -5,8 +5,9 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js",
-    "migrate": "./_seeder/index.js"
+    "start": "node ./_src/server.js",
+    "migrate": "./_seeder/index.js",
+    "dev": "node ./_src/server.js"
   },
   "author": "longnt1",
   "license": "MIT",
