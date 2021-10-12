@@ -36,6 +36,14 @@ let payload = (req) => {
     },
     idRequire:{
       id:req.body.id,
+    },
+    promoteUser:{
+      userId:req.query.userId,
+      roleId:req.query.roleId
+    },
+    createAdmin:{
+      userName:req.body.userName,
+      password:req.body.password,
     }
   };
 };

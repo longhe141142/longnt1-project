@@ -17,7 +17,7 @@ const sendMail = (options) => {
   const templatePath =
     type === 1
       ? path.resolve(__dirname, "../../_public/_views/form.html")
-      : path.resolve(_dirname, "../../_public/_views/form2.html");
+      : path.resolve(__dirname, "../../_public/_views/form2.html");
 
   const templateVars = {
     content: options.content,

@@ -56,8 +56,8 @@ module.exports.verifyToken = async (req, res, next) => {
         id: decoded.data.id,
       },
     });
-    if(!user){
-     return res.status(400).send(`User Not Found,Failed Verify`);
+    if (!user) {
+      return res.status(400).send(`User Not Found,Failed Verify`);
     }
     req.user = decoded;
     next();

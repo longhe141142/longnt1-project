@@ -16,7 +16,7 @@ class AuthRouter extends BaseRouter {
 
     this.post("/register", authenValidation.register, this.register);
 
-    this.get("/login", this.login);
+    this.get("/login",authenValidation.login, this.login);
   }
 
   register = async (req, res, next) => {

@@ -87,6 +87,15 @@ module.exports = class FormService extends BaseService {
     }
   };
 
+  updateFormDetail = async (formId, data) => {
+    let formDetail = await FormDetail.findOne({
+      where: {
+        id: formId,
+      },
+    });
+    await formDetail.update(data);
+  };
+
   submit = async (req) => {
     let { id } = req.body;
     let user = req.user.data;
@@ -493,7 +502,7 @@ module.exports = class FormService extends BaseService {
         forms.map(async (form) => {
           let formInstance = await form;
           let dueDAte = Date.parse(formInstance.dueDate);
-          if (now - dueDAte > 0) {
+          if (now - dueDAte > 0 && formInstance.status!==this.formSatus.CLOSED) {
             formChanged++;
             return formInstance.update(
               {

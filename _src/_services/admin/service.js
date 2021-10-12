@@ -8,12 +8,17 @@ module.exports = class AdminService extends BaseService {
   //admin seeders
   createAdmin = async (data) => {
     //data : req
-    console.log("entry")
+    console.log("entry");
 
-    const { employee, ...user } = data;
+    const { ...user } = data;
     // employee.createdBy = "user.id";
     // employee.updatedBy = "user.id";
-    console.log("entry")
+    const admin = await User.findOne({
+      userName: data.userName,
+    });
+
+    if (admin) return new Error("UserName already existed");
+    console.log("entry");
     let transaction = await User.sequelize.transaction();
     try {
       //add admin
@@ -21,7 +26,6 @@ module.exports = class AdminService extends BaseService {
       if (!admin) {
         return false;
       }
-
 
       //after add admins then setRole for it
 
@@ -84,10 +88,10 @@ module.exports = class AdminService extends BaseService {
         UserRole,
         Employee,
       ]);
-      if(!userRecord) return new Error("User not existed")
+      if (!userRecord) return new Error("User not existed");
       //find role by roleId [roleId<----(1)]
       let role = await Role.getDetailById(roleId, transaction, true);
-      if(!role) return new Error("Role not true")
+      if (!role) return new Error("Role not true");
       //add role to user from override method of User model
       userRecord = await User.addNewRole(
         userRecord,

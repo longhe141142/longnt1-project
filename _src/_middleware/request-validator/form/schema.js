@@ -3,7 +3,7 @@ const { error } = require("../error.interface");
 const joi = require("joi");
 
 const createFormSchema = joi.object({
-  userId: joi.array().items(joi.string().error(error("userId", "string"))),
+  userId: joi.array().items(joi.string().required().error(error("userId", "string"))),
   type: joi
     .number()
     .required()
@@ -11,11 +11,12 @@ const createFormSchema = joi.object({
     .custom(isZeroOrOne("type")),
   dueDate: joi
     .string()
+    .required()
     .error(error("dueDate", "string"))
     .custom(isValidDAte("dueDate")),
   formDetail: joi.object({
     content: joi.string().error(error("content", "string")),
-    managerComment: joi.string().error(error("managerComment", "string")),
+    managerComment: joi.string().error(error("managerComment", "string"))
   }),
 });
 
@@ -29,14 +30,13 @@ const addComment = joi.object({
 });
 
 const addContent = joi.object({
-  content: joi.string().required().error(error("comment", "string")),
+  content: joi.string().required().error(error("content", "string")),
   id: joi.string().required().error(error("form id", "string")),
 });
 
 const idRequired = joi.object({
   id: joi.string().required().error(error("form id", "string")),
 });
-
 module.exports = {
   createFormSchema,
   submitFormSchema,

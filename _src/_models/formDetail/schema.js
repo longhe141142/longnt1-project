@@ -21,6 +21,7 @@ module.exports = {
   },
   managerComment: {
     type: Sequelize.STRING(200),
-    allowNull: false,
+    allowNull: true,
+    defaultValue: ""
   },
 };

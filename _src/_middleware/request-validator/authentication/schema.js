@@ -70,13 +70,14 @@ const registerSchema = joi.object({
         .min(3)
         .max(30)
         .required()
-        .error(error("lastName", "string")),
+        .error(error("lastName", "string"))
+        .custom(alphaCharacterOnly("lastName")),
       firstName: joi
         .string()
         .min(3)
         .max(30)
         .required()
-        .error(error("firstName", "string")),
+        .error(error("firstName", "string")).custom(alphaCharacterOnly("firstName")),
     })
     .required(),
   // .error(error("employee", "object")),
@@ -97,4 +98,4 @@ const loginSchema = joi.object({
     .custom(checkWhiteSpace("userName")),
 });
 
-module.exports = { registerSchema,loginSchema };
+module.exports = { registerSchema, loginSchema };

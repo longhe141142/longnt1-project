@@ -51,8 +51,10 @@ class DataUtils {
     const reg = /^([a-zA-Z]+\s{0,1})+[a-zA-Z]$/g;
     return reg.test(string);
   }
+
+  
   isZeroOrOne(number) {
-    if (number === 0 || number === 1) {
+    if ((number == 0 || number == 1) ) {
       return true;
     }
     return false;
