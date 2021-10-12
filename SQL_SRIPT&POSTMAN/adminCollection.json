@@ -1,0 +1,242 @@
+{
+	"info": {
+		"_postman_id": "e3519c9b-db5f-495b-8368-b17ca092f5ec",
+		"name": "project_admin",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "createAdmin",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "AuthenticateToken",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MzQyOTU5OTQsImRhdGEiOnsiaWQiOiJjMDk0ZTMyMC0yYTYxLTExZWMtOGU2MS0xMzMwZDMyYjY3NjYiLCJ1c2VyTmFtZSI6ImxvbmdudDEiLCJwYXNzd29yZCI6IiQyYiQxMCRFU0xyUXNXNjhuN04wZlVwVFouU1NPNG9NUGtHaHRDUFI3MHliYnR3ZEZlOGlXNFhMQy5kMiIsImFnZSI6MTksImVtYWlsIjoibG9uZ250MUBmcHQuZWR1LnZuIiwicGhvbmUiOiIrODQgODY2IDg0MTcwMCIsImFkZHJlc3MiOm51bGwsImlzQWN0aXZlIjpudWxsLCJpZGVudGl0eU51bWJlciI6IjAyMTUyMzI1MSIsInNvY2lhbEluc3VyYW5jZSI6IjAwMjEwIiwiYXZhdGFyIjpudWxsLCJpc0RlbGV0ZWQiOmZhbHNlLCJjcmVhdGVkQnkiOiJsb25nbnQxIiwidXBkYXRlZEJ5IjoibG9uZ250MSIsImNyZWF0ZWRBdCI6IjIwMjEtMTAtMTFUMDc6MDY6MjcuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMjEtMTAtMTFUMDc6MDY6MjcuMDAwWiIsImVtcGxveWVlIjp7ImlkIjoiYzA5NjY5YzAtMmE2MS0xMWVjLThlNjEtMTMzMGQzMmI2NzY2IiwibGFzdE5hbWUiOiJHdGJ1bnlvIiwiZmlyc3ROYW1lIjoiPz8_IiwiZnVsbE5hbWUiOiI_Pz9HdGJ1bnlvIiwidXNlcklkIjoiYzA5NGUzMjAtMmE2MS0xMWVjLThlNjEtMTMzMGQzMmI2NzY2IiwibWFuYWdlcklkIjpudWxsLCJpc0RlbGV0ZWQiOmZhbHNlLCJjcmVhdGVkQnkiOiJsb25nbnQxIiwidXBkYXRlZEJ5IjoibG9uZ250MSIsImNyZWF0ZWRBdCI6IjIwMjEtMTAtMTFUMDc6MDY6MjcuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMjEtMTAtMTFUMDc6MDY6MjcuMDAwWiJ9LCJyb2xlcyI6W3siaWQiOjUsIm5hbWUiOiJlbXBsb3llZSIsImRlc2NyaXB0aW9uIjoieHh4IiwiaXNEZWxldGVkIjpmYWxzZSwiY3JlYXRlZEJ5IjoiYWRtaW4iLCJ1cGRhdGVkQnkiOiJhZG1pbiIsImNyZWF0ZWRBdCI6IjIwMjEtMTAtMDdUMDc6NTU6MDcuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMjEtMTAtMDdUMDc6NTU6MDcuMDAwWiIsInVzZXJSb2xlIjp7ImlkIjoiYzA5NmRlZjAtMmE2MS0xMWVjLThlNjEtMTMzMGQzMmI2NzY2IiwidXNlcklkIjoiYzA5NGUzMjAtMmE2MS0xMWVjLThlNjEtMTMzMGQzMmI2NzY2Iiwicm9sZUlkIjo1LCJpc0RlbGV0ZWQiOmZhbHNlLCJjcmVhdGVkQnkiOiJhZG1pbiIsInVwZGF0ZWRCeSI6ImFkbWluIiwiY3JlYXRlZEF0IjoiMjAyMS0xMC0xMVQwNzowNjoyNy4wMDBaIiwidXBkYXRlZEF0IjoiMjAyMS0xMC0xMVQwNzowNjoyNy4wMDBaIn19XSwidXNlclJvbGVzIjpbeyJpZCI6ImMwOTZkZWYwLTJhNjEtMTFlYy04ZTYxLTEzMzBkMzJiNjc2NiIsInVzZXJJZCI6ImMwOTRlMzIwLTJhNjEtMTFlYy04ZTYxLTEzMzBkMzJiNjc2NiIsInJvbGVJZCI6NSwiaXNEZWxldGVkIjpmYWxzZSwiY3JlYXRlZEJ5IjoiYWRtaW4iLCJ1cGRhdGVkQnkiOiJhZG1pbiIsImNyZWF0ZWRBdCI6IjIwMjEtMTAtMTFUMDc6MDY6MjcuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMjEtMTAtMTFUMDc6MDY6MjcuMDAwWiJ9XX0sImlhdCI6MTYzMzkzNTk5NH0.w4BgoltAR4TwoFywujY__Y2GBGUJHHF3nYAEIaBH8Iw",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"userName\":\"admindeptrai\",\n    \"password\": \"admin123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/admin/add",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"admin",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getUser",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"userName\":\"long\",\n    \"password\": \"123\",\n    \"employee\":{\n        \"lastName\": \"Long\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/admin/c44df910-2346-11ec-916b-b3187a1164df",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"admin",
+						"c44df910-2346-11ec-916b-b3187a1164df"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"userName\":\"longnt45\",\n    \"password\": \"12345678\",\n    \"email\":\"longnt45@fpt.edu.vn\",\n    \"phone\":\"+84 866 841700\",\n    \"age\":\"19\",\n    \"socialInsurance\":\"00210\",\n    \"identityNumber\":\"021523251\",\n    \"employee\":{\n        \"lastName\":\"longnt4\",\n        \"firstName\":\"nguyen\"\n    }\n    \n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "promote user",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "AuthenticateToken",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MzQxOTcyNTcsImRhdGEiOnsiaWQiOiI3Y2YyNDExMC0yODNkLTExZWMtYWFjOC1jZjVmOGE3NDc0NDQiLCJ1c2VyTmFtZSI6ImFkbWluZGVwdHJhaSIsInBhc3N3b3JkIjoiJDJiJDEwJEM5WFdOTWpYN0lVVzhlQ2liVzh2Z3VDN2s1b0JVMjBnazNGdmlKeC5KUk03WkFjTkJvem1DIiwiYWdlIjpudWxsLCJlbWFpbCI6bnVsbCwicGhvbmUiOm51bGwsImFkZHJlc3MiOm51bGwsImlzQWN0aXZlIjpudWxsLCJpZGVudGl0eU51bWJlciI6bnVsbCwic29jaWFsSW5zdXJhbmNlIjpudWxsLCJhdmF0YXIiOm51bGwsImlzRGVsZXRlZCI6ZmFsc2UsImNyZWF0ZWRCeSI6ImFkbWluIiwidXBkYXRlZEJ5IjoiYWRtaW4iLCJjcmVhdGVkQXQiOiIyMDIxLTEwLTA4VDEzOjQxOjQ5LjAwMFoiLCJ1cGRhdGVkQXQiOiIyMDIxLTEwLTA4VDEzOjQxOjQ5LjAwMFoiLCJlbXBsb3llZSI6bnVsbCwicm9sZXMiOlt7ImlkIjoxLCJuYW1lIjoiYWRtaW4iLCJkZXNjcmlwdGlvbiI6Inh4eCIsImlzRGVsZXRlZCI6ZmFsc2UsImNyZWF0ZWRCeSI6ImFkbWluIiwidXBkYXRlZEJ5IjoiYWRtaW4iLCJjcmVhdGVkQXQiOiIyMDIxLTEwLTA3VDA3OjU1OjA3LjAwMFoiLCJ1cGRhdGVkQXQiOiIyMDIxLTEwLTA3VDA3OjU1OjA3LjAwMFoiLCJ1c2VyUm9sZSI6eyJpZCI6IjdjZjJiNjQwLTI4M2QtMTFlYy1hYWM4LWNmNWY4YTc0NzQ0NCIsInVzZXJJZCI6IjdjZjI0MTEwLTI4M2QtMTFlYy1hYWM4LWNmNWY4YTc0NzQ0NCIsInJvbGVJZCI6MSwiaXNEZWxldGVkIjpmYWxzZSwiY3JlYXRlZEJ5IjoiYWRtaW4iLCJ1cGRhdGVkQnkiOiJhZG1pbiIsImNyZWF0ZWRBdCI6IjIwMjEtMTAtMDhUMTM6NDE6NDkuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMjEtMTAtMDhUMTM6NDE6NDkuMDAwWiJ9fSx7ImlkIjoyLCJuYW1lIjoiZGlyZWN0b3IiLCJkZXNjcmlwdGlvbiI6Inh4eCIsImlzRGVsZXRlZCI6ZmFsc2UsImNyZWF0ZWRCeSI6ImFkbWluIiwidXBkYXRlZEJ5IjoiYWRtaW4iLCJjcmVhdGVkQXQiOiIyMDIxLTEwLTA3VDA3OjU1OjA3LjAwMFoiLCJ1cGRhdGVkQXQiOiIyMDIxLTEwLTA3VDA3OjU1OjA3LjAwMFoiLCJ1c2VyUm9sZSI6eyJpZCI6IjdjZjJiNjQxLTI4M2QtMTFlYy1hYWM4LWNmNWY4YTc0NzQ0NCIsInVzZXJJZCI6IjdjZjI0MTEwLTI4M2QtMTFlYy1hYWM4LWNmNWY4YTc0NzQ0NCIsInJvbGVJZCI6MiwiaXNEZWxldGVkIjpmYWxzZSwiY3JlYXRlZEJ5IjoiYWRtaW4iLCJ1cGRhdGVkQnkiOiJhZG1pbiIsImNyZWF0ZWRBdCI6IjIwMjEtMTAtMDhUMTM6NDE6NDkuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMjEtMTAtMDhUMTM6NDE6NDkuMDAwWiJ9fSx7ImlkIjozLCJuYW1lIjoiaHIiLCJkZXNjcmlwdGlvbiI6Inh4eCIsImlzRGVsZXRlZCI6ZmFsc2UsImNyZWF0ZWRCeSI6ImFkbWluIiwidXBkYXRlZEJ5IjoiYWRtaW4iLCJjcmVhdGVkQXQiOiIyMDIxLTEwLTA3VDA3OjU1OjA3LjAwMFoiLCJ1cGRhdGVkQXQiOiIyMDIxLTEwLTA3VDA3OjU1OjA3LjAwMFoiLCJ1c2VyUm9sZSI6eyJpZCI6IjdjZjJiNjQyLTI4M2QtMTFlYy1hYWM4LWNmNWY4YTc0NzQ0NCIsInVzZXJJZCI6IjdjZjI0MTEwLTI4M2QtMTFlYy1hYWM4LWNmNWY4YTc0NzQ0NCIsInJvbGVJZCI6MywiaXNEZWxldGVkIjpmYWxzZSwiY3JlYXRlZEJ5IjoiYWRtaW4iLCJ1cGRhdGVkQnkiOiJhZG1pbiIsImNyZWF0ZWRBdCI6IjIwMjEtMTAtMDhUMTM6NDE6NDkuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMjEtMTAtMDhUMTM6NDE6NDkuMDAwWiJ9fSx7ImlkIjo0LCJuYW1lIjoibWFuYWdlciIsImRlc2NyaXB0aW9uIjoieHh4IiwiaXNEZWxldGVkIjpmYWxzZSwiY3JlYXRlZEJ5IjoiYWRtaW4iLCJ1cGRhdGVkQnkiOiJhZG1pbiIsImNyZWF0ZWRBdCI6IjIwMjEtMTAtMDdUMDc6NTU6MDcuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMjEtMTAtMDdUMDc6NTU6MDcuMDAwWiIsInVzZXJSb2xlIjp7ImlkIjoiN2NmMmI2NDMtMjgzZC0xMWVjLWFhYzgtY2Y1ZjhhNzQ3NDQ0IiwidXNlcklkIjoiN2NmMjQxMTAtMjgzZC0xMWVjLWFhYzgtY2Y1ZjhhNzQ3NDQ0Iiwicm9sZUlkIjo0LCJpc0RlbGV0ZWQiOmZhbHNlLCJjcmVhdGVkQnkiOiJhZG1pbiIsInVwZGF0ZWRCeSI6ImFkbWluIiwiY3JlYXRlZEF0IjoiMjAyMS0xMC0wOFQxMzo0MTo0OS4wMDBaIiwidXBkYXRlZEF0IjoiMjAyMS0xMC0wOFQxMzo0MTo0OS4wMDBaIn19LHsiaWQiOjUsIm5hbWUiOiJlbXBsb3llZSIsImRlc2NyaXB0aW9uIjoieHh4IiwiaXNEZWxldGVkIjpmYWxzZSwiY3JlYXRlZEJ5IjoiYWRtaW4iLCJ1cGRhdGVkQnkiOiJhZG1pbiIsImNyZWF0ZWRBdCI6IjIwMjEtMTAtMDdUMDc6NTU6MDcuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMjEtMTAtMDdUMDc6NTU6MDcuMDAwWiIsInVzZXJSb2xlIjp7ImlkIjoiN2NmMmI2NDQtMjgzZC0xMWVjLWFhYzgtY2Y1ZjhhNzQ3NDQ0IiwidXNlcklkIjoiN2NmMjQxMTAtMjgzZC0xMWVjLWFhYzgtY2Y1ZjhhNzQ3NDQ0Iiwicm9sZUlkIjo1LCJpc0RlbGV0ZWQiOmZhbHNlLCJjcmVhdGVkQnkiOiJhZG1pbiIsInVwZGF0ZWRCeSI6ImFkbWluIiwiY3JlYXRlZEF0IjoiMjAyMS0xMC0wOFQxMzo0MTo0OS4wMDBaIiwidXBkYXRlZEF0IjoiMjAyMS0xMC0wOFQxMzo0MTo0OS4wMDBaIn19XSwidXNlclJvbGVzIjpbeyJpZCI6IjdjZjJiNjQwLTI4M2QtMTFlYy1hYWM4LWNmNWY4YTc0NzQ0NCIsInVzZXJJZCI6IjdjZjI0MTEwLTI4M2QtMTFlYy1hYWM4LWNmNWY4YTc0NzQ0NCIsInJvbGVJZCI6MSwiaXNEZWxldGVkIjpmYWxzZSwiY3JlYXRlZEJ5IjoiYWRtaW4iLCJ1cGRhdGVkQnkiOiJhZG1pbiIsImNyZWF0ZWRBdCI6IjIwMjEtMTAtMDhUMTM6NDE6NDkuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMjEtMTAtMDhUMTM6NDE6NDkuMDAwWiJ9LHsiaWQiOiI3Y2YyYjY0MS0yODNkLTExZWMtYWFjOC1jZjVmOGE3NDc0NDQiLCJ1c2VySWQiOiI3Y2YyNDExMC0yODNkLTExZWMtYWFjOC1jZjVmOGE3NDc0NDQiLCJyb2xlSWQiOjIsImlzRGVsZXRlZCI6ZmFsc2UsImNyZWF0ZWRCeSI6ImFkbWluIiwidXBkYXRlZEJ5IjoiYWRtaW4iLCJjcmVhdGVkQXQiOiIyMDIxLTEwLTA4VDEzOjQxOjQ5LjAwMFoiLCJ1cGRhdGVkQXQiOiIyMDIxLTEwLTA4VDEzOjQxOjQ5LjAwMFoifSx7ImlkIjoiN2NmMmI2NDItMjgzZC0xMWVjLWFhYzgtY2Y1ZjhhNzQ3NDQ0IiwidXNlcklkIjoiN2NmMjQxMTAtMjgzZC0xMWVjLWFhYzgtY2Y1ZjhhNzQ3NDQ0Iiwicm9sZUlkIjozLCJpc0RlbGV0ZWQiOmZhbHNlLCJjcmVhdGVkQnkiOiJhZG1pbiIsInVwZGF0ZWRCeSI6ImFkbWluIiwiY3JlYXRlZEF0IjoiMjAyMS0xMC0wOFQxMzo0MTo0OS4wMDBaIiwidXBkYXRlZEF0IjoiMjAyMS0xMC0wOFQxMzo0MTo0OS4wMDBaIn0seyJpZCI6IjdjZjJiNjQzLTI4M2QtMTFlYy1hYWM4LWNmNWY4YTc0NzQ0NCIsInVzZXJJZCI6IjdjZjI0MTEwLTI4M2QtMTFlYy1hYWM4LWNmNWY4YTc0NzQ0NCIsInJvbGVJZCI6NCwiaXNEZWxldGVkIjpmYWxzZSwiY3JlYXRlZEJ5IjoiYWRtaW4iLCJ1cGRhdGVkQnkiOiJhZG1pbiIsImNyZWF0ZWRBdCI6IjIwMjEtMTAtMDhUMTM6NDE6NDkuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMjEtMTAtMDhUMTM6NDE6NDkuMDAwWiJ9LHsiaWQiOiI3Y2YyYjY0NC0yODNkLTExZWMtYWFjOC1jZjVmOGE3NDc0NDQiLCJ1c2VySWQiOiI3Y2YyNDExMC0yODNkLTExZWMtYWFjOC1jZjVmOGE3NDc0NDQiLCJyb2xlSWQiOjUsImlzRGVsZXRlZCI6ZmFsc2UsImNyZWF0ZWRCeSI6ImFkbWluIiwidXBkYXRlZEJ5IjoiYWRtaW4iLCJjcmVhdGVkQXQiOiIyMDIxLTEwLTA4VDEzOjQxOjQ5LjAwMFoiLCJ1cGRhdGVkQXQiOiIyMDIxLTEwLTA4VDEzOjQxOjQ5LjAwMFoifV19LCJpYXQiOjE2MzM4MzcyNTd9.yAoYeWStOdbjtJcygwI2sSyrovvkYk0ad5NTMKWWZN0",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api/admin/upgrade?userId=d93f3240-2976-11ec-8eb3-b7e20c10867e&roleId=4",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"admin",
+						"upgrade"
+					],
+					"query": [
+						{
+							"key": "userId",
+							"value": "d93f3240-2976-11ec-8eb3-b7e20c10867e"
+						},
+						{
+							"key": "roleId",
+							"value": "4"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user login",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"userName\":\"longnt4\",\n    \"password\":\"12345678\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "admin login",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"userName\":\"admindeptrai\",\n    \"password\":\"admin123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "view profile",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "AuthenticateToken",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MzQxOTU1MTksImRhdGEiOnsiaWQiOiJkOTNmMzI0MC0yOTc2LTExZWMtOGViMy1iN2UyMGMxMDg2N2UiLCJ1c2VyTmFtZSI6ImxvbmcxIiwicGFzc3dvcmQiOiIkMmIkMTAkUkNjLzJ3ck1ORzJzZHZWMWc1YVcxZXpjbXR3S3d6aElXWE93YUZCZ3lnTnluMHNnMTg0NXUiLCJhZ2UiOjE5LCJlbWFpbCI6InRwdDI0ODhAZ21haWwuY29tIiwicGhvbmUiOiIrODQgODY2IDg0MTcwMCIsImFkZHJlc3MiOm51bGwsImlzQWN0aXZlIjpudWxsLCJpZGVudGl0eU51bWJlciI6IjAyMTUyMzI1MSIsInNvY2lhbEluc3VyYW5jZSI6IjAwMjEwIiwiYXZhdGFyIjpudWxsLCJpc0RlbGV0ZWQiOmZhbHNlLCJjcmVhdGVkQnkiOiJsb25nMSIsInVwZGF0ZWRCeSI6ImxvbmcxIiwiY3JlYXRlZEF0IjoiMjAyMS0xMC0xMFQwMzowNDo1Ni4wMDBaIiwidXBkYXRlZEF0IjoiMjAyMS0xMC0xMFQwMzowNDo1Ni4wMDBaIiwiZW1wbG95ZWUiOnsiaWQiOiJkOTQxNTUyMC0yOTc2LTExZWMtOGViMy1iN2UyMGMxMDg2N2UiLCJsYXN0TmFtZSI6Im1ha2UiLCJmaXJzdE5hbWUiOiJpdCBkb25lIiwiZnVsbE5hbWUiOiJpdCBkb25lbWFrZSIsInVzZXJJZCI6ImQ5M2YzMjQwLTI5NzYtMTFlYy04ZWIzLWI3ZTIwYzEwODY3ZSIsIm1hbmFnZXJJZCI6IjZlNmU2ZjEwLTI4M2QtMTFlYy1hYWM4LWNmNWY4YTc0NzQ0NCIsImlzRGVsZXRlZCI6ZmFsc2UsImNyZWF0ZWRCeSI6ImxvbmcxIiwidXBkYXRlZEJ5IjoibG9uZzEiLCJjcmVhdGVkQXQiOiIyMDIxLTEwLTEwVDAzOjA0OjU2LjAwMFoiLCJ1cGRhdGVkQXQiOiIyMDIxLTEwLTEwVDAzOjA4OjM5LjAwMFoifSwicm9sZXMiOlt7ImlkIjo1LCJuYW1lIjoiZW1wbG95ZWUiLCJkZXNjcmlwdGlvbiI6Inh4eCIsImlzRGVsZXRlZCI6ZmFsc2UsImNyZWF0ZWRCeSI6ImFkbWluIiwidXBkYXRlZEJ5IjoiYWRtaW4iLCJjcmVhdGVkQXQiOiIyMDIxLTEwLTA3VDA3OjU1OjA3LjAwMFoiLCJ1cGRhdGVkQXQiOiIyMDIxLTEwLTA3VDA3OjU1OjA3LjAwMFoiLCJ1c2VyUm9sZSI6eyJpZCI6ImQ5NDIxODcwLTI5NzYtMTFlYy04ZWIzLWI3ZTIwYzEwODY3ZSIsInVzZXJJZCI6ImQ5M2YzMjQwLTI5NzYtMTFlYy04ZWIzLWI3ZTIwYzEwODY3ZSIsInJvbGVJZCI6NSwiaXNEZWxldGVkIjpmYWxzZSwiY3JlYXRlZEJ5IjoiYWRtaW4iLCJ1cGRhdGVkQnkiOiJhZG1pbiIsImNyZWF0ZWRBdCI6IjIwMjEtMTAtMTBUMDM6MDQ6NTYuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMjEtMTAtMTBUMDM6MDQ6NTYuMDAwWiJ9fV0sInVzZXJSb2xlcyI6W3siaWQiOiJkOTQyMTg3MC0yOTc2LTExZWMtOGViMy1iN2UyMGMxMDg2N2UiLCJ1c2VySWQiOiJkOTNmMzI0MC0yOTc2LTExZWMtOGViMy1iN2UyMGMxMDg2N2UiLCJyb2xlSWQiOjUsImlzRGVsZXRlZCI6ZmFsc2UsImNyZWF0ZWRCeSI6ImFkbWluIiwidXBkYXRlZEJ5IjoiYWRtaW4iLCJjcmVhdGVkQXQiOiIyMDIxLTEwLTEwVDAzOjA0OjU2LjAwMFoiLCJ1cGRhdGVkQXQiOiIyMDIxLTEwLTEwVDAzOjA0OjU2LjAwMFoifV19LCJpYXQiOjE2MzM4MzU1MTl9.LnTmA2kR3VGvKyf66wQVYU9WNPQmpOfagqcKo0aKmlE",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/user/ViewProfile",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"user",
+						"ViewProfile"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
