@@ -33,15 +33,10 @@ class AuthRouter extends BaseRouter {
   login = async (req, res, next) => {
     let user = await this._service.loginService(req);
 
-    if (user instanceof Error || !user) {
-      if (user instanceof Error) {
+    if (user instanceof Error ) {
         logger.error(user);
-        nextErr(new ErrorHandler(404, "system error"), req, res, next);
+        nextErr(new ErrorHandler(404, user.message), req, res, next);
         return;
-      } else {
-        nextErr(new ErrorHandler(404, "User Not Found"), req, res, next);
-      }
-      return;
     }
     // CustomResponse.sendObject(res, 200, user);
     authJWT(req, res, user);

@@ -7,28 +7,39 @@ const nextErr = require("../../_middleware/handerError");
 const { ErrorHandler } = require("../../_middleware/handling/ErrorHandle");
 // const Role = require("../../_models/role");
 // const UserRole = require("../../_models/userRole");
-const {adminValidation} = require("../../_middleware/request-validator/admin");
+const {
+  adminValidation,
+} = require("../../_middleware/request-validator/admin");
 
 module.exports = class AdminRouter extends BaseRouter {
   constructor() {
     let adService = new AdminService();
     super(adService);
-    this.post("/add",adminValidation.createAdmin, this.createAdmin);
+    this.post("/add", adminValidation.createAdmin, this.createAdmin);
     this.get("/:id", this.getAdminDetail);
     // this.get("/upgrade/test", this.testSetRole);
-    this.post("/upgrade",adminValidation.upgradeUser, this.upgradeUser);
+    this.post("/upgrade", adminValidation.upgradeUser, this.upgradeUser);
+    this.get("/list/all", this.listAllUser);
 
     // this.patch("/upgrade/:id", this.addPermission);
   }
 
   createAdmin = async (req, res, next) => {
     let log = await this._service.createAdmin(req.body);
-    if ( log instanceof Error) {
+    if (log instanceof Error) {
       logger.error(log.message);
       res.status(400).send(log.message);
     } else {
       res.status(200).send("Create successfully");
     }
+  };
+
+  listAllUser = async (req, res, next) => {
+    let users = await this._service.listAll(req);
+    if (users instanceof Error) {
+      return nextErr(new ErrorHandler(400, users.message), req, res, next);
+    }
+    CustomResponse.sendObject(res, 200, users);
   };
 
   // addPermission = async (req, res, next) => {

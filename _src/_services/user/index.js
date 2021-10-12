@@ -7,6 +7,9 @@ const nextErr = require("../../_middleware/handerError");
 const { ErrorHandler } = require("../../_middleware/handling/ErrorHandle");
 const { Authorize, verifyToken } = require("../../_middleware/auth");
 const { imageUpload } = require("../../_middleware/multerUpload");
+const {
+  userValidation,
+} = require("../../_middleware/request-validator/user/index");
 
 module.exports = class UserRouter extends BaseRouter {
   constructor() {
@@ -22,6 +25,7 @@ module.exports = class UserRouter extends BaseRouter {
         this.authorize.user.addEmployee.METHOD,
         this.authorize.user.addEmployee.URL
       ),
+      userValidation.addEmployee,
       this.addUserToManage
     );
     this.get("/ViewProfile", verifyToken, this.getUserDetail);
@@ -53,7 +57,17 @@ module.exports = class UserRouter extends BaseRouter {
     );
 
     this.get("/profile", verifyToken, this.viewProfile);
+    this.put(
+      "/update/profile",
+      verifyToken,
+      userValidation.updateProfile,
+      this.updateProfile
+    );
+
+    this.get("/list/all")
   }
+
+  
 
   // simpleUserApi = (req, res) => {
   //   res.send(this._service.getModel());
@@ -114,6 +128,14 @@ module.exports = class UserRouter extends BaseRouter {
   uploadAvatar = async (req, res, next) => {
     try {
       const image = req.file;
+      if (!image) {
+        return nextErr(
+          new ErrorHandler(400, "UPLOAD IMAGE FIRST"),
+          req,
+          res,
+          next
+        );
+      }
       let userData = req.user.data;
       let user = await User.getDetailByWhere({
         id: userData.id,
@@ -134,7 +156,7 @@ module.exports = class UserRouter extends BaseRouter {
     CustomResponse.sendObject(res, 200, info);
   };
 
-  updateProfile = async function (req, res, next) {
+  updateProfile = async (req, res, next) => {
     const inf4 = await this._service.updateProfile(req);
     if (inf4 instanceof Error) {
       return nextErr(new ErrorHandler(400, inf4.message), req, res, next);

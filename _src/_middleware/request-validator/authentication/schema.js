@@ -56,13 +56,7 @@ const registerSchema = joi.object({
 
   age: joi.number().integer().min(18).max(60).error(error("age", "number")),
 
-  // lastName: joi
-  //   .string()
-  //   .min(3)
-  //   .max(30)
-  //   .error(error("lastName", "string"))
-  //   .required(),
-  // firstName: joi.string().min(3).max(30).error(error("firstName", "string")),
+
   employee: joi
     .object({
       lastName: joi
@@ -80,8 +74,7 @@ const registerSchema = joi.object({
         .error(error("firstName", "string")).custom(alphaCharacterOnly("firstName")),
     })
     .required(),
-  // .error(error("employee", "object")),
-  // .required(),
+
 });
 
 const loginSchema = joi.object({

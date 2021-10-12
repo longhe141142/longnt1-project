@@ -5,7 +5,7 @@ const logger = require("../_utils/logger");
 //create folder if not exist
 const mkdirSync = function (path) {
   try {
-    if (!fs.existsSync(path)) fs.mkdirSync(path);
+    if (!fs.existsSync(path)) fs.mkdirSync(path,{recursive: true});
   } catch (err) {
     throw err;
   }

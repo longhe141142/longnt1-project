@@ -120,4 +120,31 @@ module.exports = class AdminService extends BaseService {
     });
     return role;
   };
+
+  listAll = async (req) => {
+    try {
+      let pagingOPtion = this.preparePaging(req);
+      logger.info(pagingOPtion)
+      let users = await User.findAll({
+        offset: pagingOPtion.offset,
+        limit: pagingOPtion.limit,
+        order: [
+          // Will escape full_name and validate DESC against a list of valid direction parameters
+          [pagingOPtion.orderBy, pagingOPtion.orderType],
+        ],
+        include:[
+          {
+            model:Employee,
+          },{
+            model:Role,
+          }
+        ]
+      });
+
+      return users;
+    } catch (error) {
+      logger.error(error);
+      return error;
+    }
+  };
 };

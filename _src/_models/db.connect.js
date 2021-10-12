@@ -4,7 +4,6 @@ const logger = require("../_utils/logger");
 const _ = require("lodash");
 const { sequelize } = require("../_config/db.config");
 const config = require("../_config/config")
-const _dirname = path.resolve();
 class DB {
   constructor() {
     //storage all Sequelize.Model : [User,Api,UserRole,....]

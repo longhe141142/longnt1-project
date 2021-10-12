@@ -118,7 +118,7 @@ module.exports = class User extends BaseModel {
   static addNewRole = async (user, role, transaction, who) => {
     let options = {};
     options.through = {
-      createdBy: who,//set  createdBy for UserRole
+      createdBy: who, //set  createdBy for UserRole
       updatedBy: who,
     };
     if (transaction) {
@@ -129,5 +129,24 @@ module.exports = class User extends BaseModel {
     return this.getDetailById(user.id, transaction, false, [Employee, Role]);
   };
 
- 
+  static updateUser = async (data, user, transaction) => {
+    if (data.password) {
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(data.password, salt);
+      data.password = hashedPassword;
+    }
+
+    const options = {
+      returning: true,
+    };
+
+    if (transaction) {
+      options.transaction = transaction;
+    }
+
+    data.createdBy = data.userName;
+    data.updatedBy = data.userName;
+
+    return user.update(data, options);
+  };
 };

@@ -1,11 +1,11 @@
 const BaseValidate = require("../base/base-validate");
-const { registerSchema, loginSchema } = require("./schema");
+const { addEmployeeSchema,updateProfileSchema } = require("./schema");
 
 let userValidation = {
-  register: new BaseValidate(registerSchema, "register").validateMiddleWare(),
-  login: new BaseValidate(loginSchema, "login").validateMiddleWare(),
+  addEmployee: new BaseValidate(addEmployeeSchema, "addEmployee").validateMiddleWare(),
+  updateProfile:new BaseValidate(updateProfileSchema,"updateProfile").validateMiddleWare(),
 };
 
 module.exports = {
-    userValidation,
+    userValidation
 };

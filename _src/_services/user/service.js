@@ -169,13 +169,48 @@ module.exports = class UserService extends BaseService {
     }
   };
 
+  updateEmployee = async (firstName, lastName, userId, transaction) => {
+    let employee = await Employee.getDetailByWhere(
+      {
+        userId: userId,
+      },
+      transaction
+    );
+    await employee.update(
+      {
+        lastName: lastName,
+        firstName: firstName,
+        fullName: firstName + " " + lastName,
+      },
+      {
+        transaction: transaction,
+      }
+    );
+  };
+
   updateProfile = async (req) => {
+    let transaction = await User.sequelize.transaction();
     try {
-      let data = req.body;
-      let user = await User.getDetailById(req.user.data.id, null);
-      await user.update(data);
+      let { firstName, lastName, ...userData } = req.body;
+      if(userData.userName){
+        return new Error(`Can't update userName`)
+      }
+      let user = await User.getDetailById(req.user.data.id, transaction);
+      await User.updateUser(userData, user, transaction);
+
+      if (req.body.firstName || req.body.lastName) {
+        await this.updateEmployee(firstName, lastName, user.id, transaction);
+      }
+      user = await User.getDetailById(req.user.data.id, transaction, false, [
+        Employee,
+      ]);
+
+      await transaction.commit();
+      logger.info("update successfully");
       return user;
     } catch (error) {
+      logger.error(error);
+      await transaction.rollback();
       return error;
     }
   };

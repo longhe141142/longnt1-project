@@ -10,7 +10,6 @@ class AuthService extends BaseService {
     super();
   }
 
-
   registerService = async (req) => {
     const { employee, ...user } = req.body;
 
@@ -45,7 +44,7 @@ class AuthService extends BaseService {
         {
           ...employee,
           userId: userData.id,
-          fullName: employee.firstName + employee.lastName,
+          fullName: employee.firstName + " " + employee.lastName,
         },
         { transaction: transaction }
       );
@@ -88,12 +87,12 @@ class AuthService extends BaseService {
         userName: userName,
       },
       false,
-      [Employee, Role, UserRole]
+      [Employee, Role]
     );
 
     //if no useName found return false
     if (!user) {
-      return false;
+      return new Error(`Inccorect UserName or Password`);
     }
 
     let isValidPassword = await User.verifyPassword(user, password);
@@ -104,7 +103,7 @@ class AuthService extends BaseService {
     if (!(isValidPassword instanceof Error) && user && isValidPassword) {
       return user;
     } else {
-      return false;
+      return new Error(`Inccorect UserName or Password`);
     }
   };
 }
