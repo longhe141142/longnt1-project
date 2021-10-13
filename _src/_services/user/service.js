@@ -84,11 +84,13 @@ module.exports = class UserService extends BaseService {
       employeeRoleId !== 4 &&
       managerRoleId === 2 &&
       employeeRoleId !== 3
-      ? new Error(`can't add this employee because you have not enough permission.You are Director,can add Manager or HR only
-    (PERMISSION DENIED)`)
+      ? new Error(
+          `can't add this employee because you have not enough permission.You are Director,can add Manager or HR only(PERMISSION DENIED)`
+        )
       : managerRoleId === 4 && employeeRoleId !== 5
-      ? new Error(`can't add this employee because you have not enough permission.You are Manager,can add Employee only
-      (PERMISSION DENIED)`)
+      ? new Error(
+          `can't add this employee because you have not enough permission.You are Manager,can add Employee only(PERMISSION DENIED)`
+        )
       : true;
   };
 
@@ -142,6 +144,12 @@ module.exports = class UserService extends BaseService {
       const { id: managerId } = ManagerData;
       //req.body is a array of employee id
       let { employee } = req.body;
+      if (!employee) {
+        return new Error("Employee Required");
+      }
+      if (!employee.id) {
+        return new Error("Employee Required");
+      }
       //push employee to array
       let employeeInfo = await Employee.getDetailById(employee.id, null);
       if (!employeeInfo) {

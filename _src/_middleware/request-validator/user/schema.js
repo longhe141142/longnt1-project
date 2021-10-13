@@ -10,7 +10,7 @@ const { error } = require("../error.interface");
 const addEmployeeSchema = joi.object({
   employee: joi.object({
     id: joi.string().required().error(error("id", "string")),
-  }),
+  }).required().error(error("employee", "object")),
 });
 
 const updateProfileSchema = joi.object({

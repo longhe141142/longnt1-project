@@ -51,4 +51,15 @@ const mainMenu = () => {
           `;
   };
 
+  const formMenu = () => {
+    return `
+     ===================CHOOSE FUNCTION TO TEST==============================
+      1.add form
+      2.view employee list
+      3.view own employee
+      4.add employee
+      5.view profile
+          `;
+  };
+
 module.exports = { InputSelection, GetUserText,UserMenu,mainMenu };

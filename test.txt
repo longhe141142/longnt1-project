@@ -1,0 +1,11 @@
+*** Daily Report - Nguyễn Thành Long - 2021/10/13***
+==========================
+■ Today:
+ - Unit test combine with Modify code
+■ Actual:
+  - Unit test : Done user api testing
+  (form and admin testing wil be done in today)
+■ Tomorrow:
+  - Api docs writting
+■ Issues:
+  - N/A
