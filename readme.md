@@ -148,7 +148,5 @@ npm run test  #run in test mode
 You can use the ```db.sql``` from ```SQL_SRIPT&POSTMAN ``` folder to create table or seed data
 
 # Postman
-```bash
-Impost postman from ```SQL_SRIPT&POSTMAN```
-```
+Import postman from ```SQL_SRIPT&POSTMAN```
 
