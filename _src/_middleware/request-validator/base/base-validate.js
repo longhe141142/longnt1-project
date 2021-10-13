@@ -13,9 +13,9 @@ module.exports = class BaseValidate {
     // console.log("==========>",this._payload)
     return async (req, res, next) => {
       const error = this._validateSchema.validate(payload(req)[this._payload], {
-        abortEarly: true,
+        abortEarly: false,
       });
-      return responseValidate(error, res, next);
+      return responseValidate(error, req,res, next);
     };
   };
 };

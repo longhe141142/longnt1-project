@@ -1,8 +1,8 @@
-module.exports = responeValidate = (error, res, next) => {
+const { ErrorHandler }  = require('../handling/ErrorHandle')
+const nextErr = require('../handerError')
+
+module.exports = responeValidate = (error, req,res, next) => {
   return error.error
-    ? res.status(406).json({
-        message: "oops",
-        err: error.error.message,
-      })
+    ? nextErr(new ErrorHandler(404,error.error),req, res, next)
     : next();
 };

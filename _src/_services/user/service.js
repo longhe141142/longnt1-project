@@ -80,8 +80,11 @@ module.exports = class UserService extends BaseService {
 
   canAdd = (employeeRoleId, managerRoleId) => {
     console.log(employeeRoleId, managerRoleId);
-    return managerRoleId === 2 && employeeRoleId !== 4
-      ? new Error(`can't add this employee because you have not enough permission.You are Director,can add Manager only
+    return managerRoleId === 2 &&
+      employeeRoleId !== 4 &&
+      managerRoleId === 2 &&
+      employeeRoleId !== 3
+      ? new Error(`can't add this employee because you have not enough permission.You are Director,can add Manager or HR only
     (PERMISSION DENIED)`)
       : managerRoleId === 4 && employeeRoleId !== 5
       ? new Error(`can't add this employee because you have not enough permission.You are Manager,can add Employee only
@@ -110,7 +113,7 @@ module.exports = class UserService extends BaseService {
       } else if (highestRole === 2) {
         for (let val of employees) {
           let highestRole = await this.getHighestRole(val.id);
-          if (highestRole == 4) userList.push(val);
+          if (highestRole == 4 || highestRole == 3) userList.push(val);
         }
         // console.log(userList);
       }
@@ -176,6 +179,13 @@ module.exports = class UserService extends BaseService {
       },
       transaction
     );
+
+    if (!firstName) {
+      firstName = employee.firstName;
+    } else if (!lastName) {
+      lastName = employee.lastName;
+    }
+
     await employee.update(
       {
         lastName: lastName,
@@ -192,8 +202,11 @@ module.exports = class UserService extends BaseService {
     let transaction = await User.sequelize.transaction();
     try {
       let { firstName, lastName, ...userData } = req.body;
-      if(userData.userName){
-        return new Error(`Can't update userName`)
+      if (userData.userName) {
+        return new Error(`Can't update userName`);
+      }
+      if (userData.email) {
+        return new Error(`Can't update email`);
       }
       let user = await User.getDetailById(req.user.data.id, transaction);
       await User.updateUser(userData, user, transaction);

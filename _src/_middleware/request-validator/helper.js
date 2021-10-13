@@ -4,7 +4,7 @@ const dataUtils = require("../../_utils/index");
 let checkWhiteSpace = (filedName) => {
   return (value, helper) => {
     if (dataUtils.whiteSpaceChecker(value)) {
-      return helper.message(` ${filedName} not allow whitespace`);
+      return helper.message(`${filedName} not allow whitespace`);
     }
     return value;
   };
@@ -24,7 +24,7 @@ let checkIdentity = () => {
     if (dataUtils.identityNumberChecker(value)) {
       return value;
     }
-    return helper.message("Invalid identity number");
+    return helper.message("Invalid identity number(minium:9|maximum:12)");
   };
 };
 
@@ -33,7 +33,7 @@ let checkSocialInsurance = () => {
     if (dataUtils.socialInsuranceChecker(value)) {
       return value;
     }
-    return helper.message("Invalid social insurance number");
+    return helper.message("Invalid social insurance number,must be number length([minium]:->5:[maximum]:->12)");
   };
 };
 

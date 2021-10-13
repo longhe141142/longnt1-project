@@ -64,7 +64,7 @@ module.exports = class UserRouter extends BaseRouter {
       this.updateProfile
     );
 
-    this.get("/list/all")
+   
   }
 
   
@@ -161,6 +161,6 @@ module.exports = class UserRouter extends BaseRouter {
     if (inf4 instanceof Error) {
       return nextErr(new ErrorHandler(400, inf4.message), req, res, next);
     }
-    CustomResponse.sendObject(res, 200, inf4);
+    CustomResponse.sendObject(res, 202, inf4);
   };
 };

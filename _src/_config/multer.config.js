@@ -25,7 +25,7 @@ let StorageOptions = (User) => {
 
       //get absolute avatar folder path of that user
       const dir = path.resolve(
-        path.join(__dirname, `../_public/uploads/${userName}`)
+        path.join(__dirname, `../../_public/uploads/${userName}`)
       );
 
       //create folder if not exist
