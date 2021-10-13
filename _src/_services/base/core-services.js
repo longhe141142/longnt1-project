@@ -63,12 +63,16 @@ module.exports = class CoreService {
     };
   };
 
-  getHighestRole = async (userId) => {
+  getHighestRole = async (userId, transaction=null) => {
+    let options = {};
+    if (transaction) {
+      options.transaction = transaction;
+    }
     return await UserRole.findAll({
       where: {
         userId: userId,
       },
-    })
+    },options)
       .then((data) => {
         return data.map((val) => {
           return val.roleId;

@@ -4,8 +4,6 @@ let chaiHttp = require("chai-http");
 let server = require("../server");
 let should = chai.should();
 chai.use(chaiHttp);
-const { user } = require("./data/case");
-const { RESET_CONTENT } = require("http-status");
 let { E07, E02 } = userToken.employee;
 let { M01, M02 } = userToken.manager;
 let { D01 } = userToken.director;
@@ -592,7 +590,6 @@ let addEmployeeTest = () => {
         });
     });
   });
-
 
 };
 

@@ -56,9 +56,34 @@ let userTestData = {
     employeeId: {
       INVALID_ID: "123456",
       VALID_ID: "30ebf3e0-2b5f-11ec-8639-1b33c0b488b9",
-      HR02_ID:"f5f33640-2b5e-11ec-8639-1b33c0b488b9"
+      HR02_ID: "f5f33640-2b5e-11ec-8639-1b33c0b488b9",
     },
   },
 };
 
-module.exports = { userTestData };
+let formTestData = {
+  addForm: {
+    userId: {
+      INVALID_USERID: "1234",
+      VALID_USERID: {
+        EMPLOYEE_7: "30eb7eb0-2b5f-11ec-8639-1b33c0b488b9",
+        EMPLOYEE_5: "5fa82ce0-2b5e-11ec-8639-1b33c0b488b9",
+        MANAGER_1: "e11fb500-2b12-11ec-bc29-e58e0a69d32c",
+        HR_2: "f5f2e820-2b5e-11ec-8639-1b33c0b488b9",
+        DIRECTOR_1: "13cf9260-2b3e-11ec-9809-e7df574df18a",
+      },
+    },
+    type: {
+      NON_NUMBER: "ABC",
+      PERIODIC_TYPE: 0,
+      PROBATION_TYPE: 1,
+      OUT_RANGE_TYPE: 3,
+    },
+    dueDate: {
+      VALID_DUEDATE: "2021-09-07",
+      INVALID_DUEDATE: "ABC",
+    },
+  },
+};
+
+module.exports = { userTestData, formTestData };

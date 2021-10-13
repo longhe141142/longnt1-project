@@ -1,6 +1,7 @@
 const {
     InputSelection,
     UserMenu,
+    formMenu
    } = require("./helper");
   let {
     UpdateProfiletest,
@@ -9,6 +10,10 @@ const {
     viewOwnEmployee,
     addEmployeeTest,
   } = require("../user");
+
+  let {
+    addForm
+  } = require("../form")
   
   let userApi = () => {
     let option = InputSelection(
@@ -46,7 +51,7 @@ const {
     let option = InputSelection(
       "Enter input(0 to exit)->: ",
       "Invalid Value",
-      UserMenu(),
+      formMenu(),
       0,
       5
     );
@@ -55,19 +60,15 @@ const {
     }
     switch (option) {
       case 1:
-        UpdateProfiletest();
+        addForm();
         break;
       case 2:
-        viewEmployeeList();
         break;
       case 3:
-        viewOwnEmployee();
         break;
       case 4:
-        addEmployeeTest();
         break;
       case 5:
-        viewProfileTest();
       default:
         break;
     }
@@ -76,5 +77,5 @@ const {
   
 
   module.exports ={
-    userApi
+    userApi,formApi
   }

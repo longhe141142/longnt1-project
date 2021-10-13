@@ -1,10 +1,6 @@
-const {
-  InputSelection,
+const { InputSelection, mainMenu } = require("./helper/helper");
 
-  mainMenu,
-} = require("./helper/helper");
-
-const { userApi } = require("./helper/functionInterface");
+const { userApi, formApi } = require("./helper/functionInterface");
 
 let main = () => {
   //  let option =
@@ -23,6 +19,7 @@ let main = () => {
       userApi();
       break;
     case 2:
+      formApi();
       break;
     case 3:
     default:

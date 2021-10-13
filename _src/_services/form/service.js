@@ -20,6 +20,15 @@ module.exports = class FormService extends BaseService {
     this._eventEmitter.on("sendmail", sendMail);
   }
 
+  checkPermission = async (currentUserId, userIdToAdd, transaction) => {
+    let currentUsr_Role = await this.getHighestRole(currentUserId, transaction);
+    let userToAdd_Role = await this.getHighestRole(userIdToAdd, transaction);
+    if (currentUsr_Role >= userToAdd_Role) {
+      return new Error(`You do not have permission to add form to this user`);
+    }
+    return true;
+  };
+
   addNewForm = async (req) => {
     let { formDetail, userId, ...form } = req.body;
     const transaction = await User.sequelize.transaction();
@@ -41,6 +50,15 @@ module.exports = class FormService extends BaseService {
         if (!userInstance) {
           await transaction.rollback();
           return new Error("User not existed");
+        }
+
+        let checkPermission = await this.checkPermission(
+          req.user.data.id,
+          userInstance.id
+        );
+
+        if (checkPermission instanceof Error) {
+          return checkPermission;
         }
 
         form.isRejected = 0;
@@ -502,7 +520,10 @@ module.exports = class FormService extends BaseService {
         forms.map(async (form) => {
           let formInstance = await form;
           let dueDAte = Date.parse(formInstance.dueDate);
-          if (now - dueDAte > 0 && formInstance.status!==this.formSatus.CLOSED) {
+          if (
+            now - dueDAte > 0 &&
+            formInstance.status !== this.formSatus.CLOSED
+          ) {
             formChanged++;
             return formInstance.update(
               {
