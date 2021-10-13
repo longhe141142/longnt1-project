@@ -51,9 +51,6 @@ let user = {
               USING_STRING:"huy"
           }
       }
-
-
-
   }
 };
 

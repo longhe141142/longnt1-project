@@ -5,10 +5,9 @@ let server = require("../server");
 let should = chai.should();
 chai.use(chaiHttp);
 const { user } = require("./data/case");
-let { E07, E02 } = userToken.employee;
+let { E07, E02,M01 } = userToken.employee;
 
-let UpdateProfiletest = () => {
-
+let viewProfileTest = () => {
   /*===================================test view user profile=========================================*/
   describe("/GET view user profile[EMPLOYEE07] with valid token", () => {
     it("it should DISPLAY user profile", (done) => {
@@ -67,7 +66,9 @@ let UpdateProfiletest = () => {
         });
     });
   });
+};
 
+let UpdateProfiletest = () => {
   /*============================TEST UPDATE PROFILE=================================== */
   //api:"/api/user/update/profile"
 
@@ -399,8 +400,44 @@ let UpdateProfiletest = () => {
     });
   });
 
-  console.log("entry")
   /*=================check register===================*/
 };
 
-module.exports = { UpdateProfiletest };
+let viewEmployeeList = () => {
+  describe(`/GET ALL USER WHO IS EMPLOYEE WITH EMPLOYEE07(ROLE EMPLOYEE),CHECK IF CAN ACCESS)`, () => {
+    it("it should UNAUTHORIZE", (done) => {
+      chai
+        .request(server)
+        .get("/api/user/displayEmployeeList")
+        .set("AuthenticateToken", E07)
+        .send(user)
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.have.property("error");
+          // res.body.error.message["details"].should.have.length(4);
+          done();
+        });
+    });
+  });
+};
+
+
+let viewEmployeeList = () => {
+  describe(`/GET ALL USER WHO IS MANAGER WITH MANAGER01(ROLE EMPLOYEE),CHECK IF CAN ACCESS AND VIEW EMPLOYEE)`, () => {
+    it("it should UNAUTHORIZE", (done) => {
+      chai
+        .request(server)
+        .get("/api/user/displayEmployeeList")
+        .set("AuthenticateToken", M01)
+        .send(user)
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.have.property("error");
+          // res.body.error.message["details"].should.have.length(4);
+          done();
+        });
+    });
+  });
+};
+
+module.exports = { UpdateProfiletest, viewProfileTest,viewEmployeeList };

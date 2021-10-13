@@ -1,31 +1,18 @@
-const { InputSelection, GetUserText } = require("./helper/helper");
-let { UpdateProfiletest } = require("./user");
-
-const mainMenu = () => {
-  return `
-===================CHOOSE API TO TEST==============================
-    1.USER
-    2.FORM
-    3.AUTHENTICATION
-    4.ADMIN
-    `;
-};
-
-const UserMenu = () => {
-  return `
-    ===================CHOOSE FUNCTION TO TEST==============================
-        1.update profile
-        2.view employee list
-        3.view own employee
-        4.add employee
-        `;
-};
+const {
+  InputSelection,
+  GetUserText,
+  UserMenu,
+  mainMenu,
+} = require("./helper/helper");
+let { UpdateProfiletest, viewProfileTest,viewEmployeeList } = require("./user");
 
 let userApi = () => {
   let option = InputSelection(
     "Enter input(0 to exit)->: ",
     "Invalid Value",
-    UserMenu()
+    UserMenu(),
+    0,
+    5
   );
   if (option === 0) {
     return;
@@ -35,8 +22,12 @@ let userApi = () => {
       UpdateProfiletest();
       break;
     case 2:
+      viewEmployeeList();
       break;
     case 3:
+    case 4:
+    case 5:
+      viewProfileTest();
     default:
       break;
   }
@@ -48,7 +39,9 @@ let main = () => {
   let option = InputSelection(
     "Enter input(0 to exit)->: ",
     "Invalid Value",
-    mainMenu()
+    mainMenu(),
+    0,
+    4
   );
   if (option === 0) {
     return;

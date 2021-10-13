@@ -102,7 +102,7 @@ module.exports = class UserService extends BaseService {
       //array to store employeeId of for each user provided in array userList
       let employeeList = [];
       //only user is emloyee
-      let employees = await User.getAllWithDetail({}, null, false, Role);
+      let employees = await User.getAllWithDetail({}, null, false, [Role]);
       if (highestRole === 4) {
         //find all user whose role is employee
         userList = employees.filter((val) => {

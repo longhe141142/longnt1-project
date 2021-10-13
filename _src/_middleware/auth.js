@@ -9,26 +9,16 @@ const Api = require("../_models/api");
 const logger = require("../_utils/logger");
 const User = require("../_models/user");
 
-// module.exports.auth = (req, res, next) => {
-//   req.user = {
-//     name: "long",
-//     age: 12,
-//   };
-
-//   next();
-// };
-
-// const GET
-//  = (user) => {
-//   return jwt.sign(
-//     {
-//       exp: Math.floor(Date.now() / 1000) + 6000 * 60,
-//       data: user,
-//       // algorithm: 'RS256'
-//     },
-//     config.token_secret
-//   );
-// };
+const generateAccessToken = (user) => {
+  return jwt.sign(
+    {
+      // exp: Math.floor(Date.now() / 1000) + 6000 * 60,
+      data: user,
+      // algorithm: 'RS256'
+    },
+    config.token_secret
+  );
+};
 
 module.exports.authJWT = (req, res, User) => {
   try {
@@ -48,7 +38,12 @@ module.exports.verifyToken = async (req, res, next) => {
   const token = req.header("AuthenticateToken");
 
   if (!token) {
-    return nextErr(new ErrorHandler(403,"A token is required for authentication"),req, res, next);
+    return nextErr(
+      new ErrorHandler(403, "A token is required for authentication"),
+      req,
+      res,
+      next
+    );
   }
   try {
     const decoded = jwt.verify(token, config.token_secret);
@@ -59,7 +54,12 @@ module.exports.verifyToken = async (req, res, next) => {
     });
     if (!user) {
       // return res.status(400).send(`User Not Found,Failed Verify`);
-      return nextErr(new ErrorHandler(403,`User Not Found,Failed Verify`),req, res, next);
+      return nextErr(
+        new ErrorHandler(403, `User Not Found,Failed Verify`),
+        req,
+        res,
+        next
+      );
     }
     req.user = decoded;
     next();
@@ -105,7 +105,7 @@ module.exports.Authorize = (router, method, url) => {
           logger.info("Authorized");
           return;
         } else {
-          res.send("cant access");
+          nextErr(new ErrorHandler(400, "cant access"), req, res, next);
           logger.error("UnAuthorized");
           return;
         }
