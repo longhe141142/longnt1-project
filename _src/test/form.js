@@ -17,7 +17,6 @@ const logger = require("../_utils/logger");
 const { data } = require("../_utils/logger");
 
 let addForm = () => {
-  /*===================================test add form =========================================*/
   describe("/POST add form with user [EMPLOYEE02] to entry", () => {
     it("it should not allow this user(UNAUTHORIZE) ", (done) => {
       chai
@@ -145,7 +144,6 @@ let submitForm = () => {
             id: formTestData.submitForm.FORM_EMPLOYEE_05.FORM_NEW,
           },
         });
-        // console.log("form", form);
         await form.update({
           status: "NEW",
         });
@@ -212,7 +210,6 @@ let viewEmployeeProbateForm = () => {
       res.should.have.status(200);
       res.body.should.have.property("data");
       res.body.data.should.have.lengthOf(2);
-      // res.body.error.message.should.eql("No Form submitted yet!");
     });
     beforeEach(async () => {
       let employee07 = await User.findOne({

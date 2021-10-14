@@ -305,150 +305,7 @@ module.exports = class FormService extends BaseService {
     }
   };
 
-  viewInterFormList = async (req, yourRole) => {
-    try {
-      let ret = [];
-      let checkNoForm = false;
-      if (yourRole === 2 || yourRole === 3) {
-        let users = await User.findAll({});
-        for (let user of users) {
-          let forms = await Form.getAllWithDetail(
-            {
-              userId: user.id,
-              status: this.formSatus.SUBMITTED,
-              type: 1,
-            },
-            null,
-            false,
-            ["FormDetail"]
-          );
-          checkNoForm = forms.length > 0 ? true : checkNoForm;
-          let dataObj = {
-            user: user,
-            forms: forms,
-          };
-          ret.push(dataObj);
-        }
 
-        return checkNoForm ? ret : new Error("No Form submitted yet!");
-      } else {
-        let ret = [];
-        let managerData = req.user.data;
-        let manager = await User.getDetailById(managerData.id, null);
-        let employees = await manager.getOwnEmployee();
-        if (employees.length === 0) {
-          return new Error("YOU HAVE NO EMPLOYEE");
-        }
-        let userList = await Promise.all(
-          employees.map((emp) => {
-            return User.findOne({
-              where: {
-                id: emp.userId,
-              },
-            });
-          })
-        );
-
-        for (let user of userList) {
-          let forms = await Form.getAllWithDetail(
-            {
-              userId: user.id,
-              status: this.formSatus.SUBMITTED,
-              type: 1,
-            },
-            null,
-            false,
-            ["FormDetail"]
-          );
-          // logger.error(forms)
-          // logger.info(userList)
-          checkNoForm = forms.length > 0 ? true : checkNoForm;
-          let dataObj = {
-            user: user,
-            forms: forms,
-          };
-          ret.push(dataObj);
-        }
-
-        // console.log(ret);
-        return checkNoForm ? ret : new Error("No Form submitted yet!");
-      }
-    } catch (error) {
-      return error;
-    }
-  };
-
-  viewEvalFormList = async (req, yourRole) => {
-    try {
-      let ret = [];
-      let checkNoForm = false;
-      if (yourRole === 2 || yourRole === 3) {
-        let users = await User.findAll({});
-        for (let user of users) {
-          let forms = await Form.getAllWithDetail(
-            {
-              userId: user.id,
-              status: this.formSatus.SUBMITTED,
-              type: 0,
-            },
-            null,
-            false,
-            ["FormDetail"]
-          );
-          checkNoForm = forms.length > 0 ? true : checkNoForm;
-          let dataObj = {
-            user: user,
-            forms: forms,
-          };
-          ret.push(dataObj);
-        }
-
-        return checkNoForm ? ret : new Error("No Form submitted yet!");
-      } else {
-        let ret = [];
-        let managerData = req.user.data;
-        let manager = await User.getDetailById(managerData.id, null);
-        let employees = await manager.getOwnEmployee();
-        if (employees.length === 0) {
-          return new Error("YOU HAVE NO EMPLOYEE");
-        }
-        let userList = await Promise.all(
-          employees.map((emp) => {
-            return User.findOne({
-              where: {
-                id: emp.userId,
-              },
-            });
-          })
-        );
-
-        for (let user of userList) {
-          let forms = await Form.getAllWithDetail(
-            {
-              userId: user.id,
-              status: this.formSatus.SUBMITTED,
-              type: 0,
-            },
-            null,
-            false,
-            ["FormDetail"]
-          );
-          checkNoForm = forms.length > 0 ? true : checkNoForm;
-          let dataObj = {
-            user: user,
-            forms: forms,
-          };
-          ret.push(dataObj);
-          
-        }
-
-        
-        return checkNoForm ? ret : new Error("No Form submitted yet!");
-      }
-    } catch (error) {
-      return error;
-    }
-  };
 
   viewYourForm = async (req) => {
     try {
@@ -469,13 +326,83 @@ module.exports = class FormService extends BaseService {
     }
   };
 
+  viewListBaseOnType = async (req, yourRole, formType) => {
+    try {
+      let ret = [];
+      let checkNoForm = false;
+      if (yourRole === 2 || yourRole === 3) {
+        let users = await User.findAll({});
+        for (let user of users) {
+          let forms = await Form.getAllWithDetail(
+            {
+              userId: user.id,
+              status: this.formSatus.SUBMITTED,
+              type: formType,
+            },
+            null,
+            false,
+            ["FormDetail"]
+          );
+          checkNoForm = forms.length > 0 ? true : checkNoForm;
+          let dataObj = {
+            user: user,
+            forms: forms,
+          };
+          ret.push(dataObj);
+        }
+
+        return checkNoForm ? ret : new Error("No Form submitted yet!");
+      } else {
+        let ret = [];
+        let managerData = req.user.data;
+        let manager = await User.getDetailById(managerData.id, null);
+        let employees = await manager.getOwnEmployee();
+        if (employees.length === 0) {
+          return new Error("YOU HAVE NO EMPLOYEE");
+        }
+        let userList = await Promise.all(
+          employees.map((emp) => {
+            return User.findOne({
+              where: {
+                id: emp.userId,
+              },
+            });
+          })
+        );
+
+        for (let user of userList) {
+          let forms = await Form.getAllWithDetail(
+            {
+              userId: user.id,
+              status: this.formSatus.SUBMITTED,
+              type: formType,
+            },
+            null,
+            false,
+            ["FormDetail"]
+          );
+          checkNoForm = forms.length > 0 ? true : checkNoForm;
+          let dataObj = {
+            user: user,
+            forms: forms,
+          };
+          ret.push(dataObj);
+        }
+
+        return checkNoForm ? ret : new Error("No Form submitted yet!");
+      }
+    } catch (error) {
+      return error;
+    }
+  };
+
   viewForm = async (req, type) => {
     let yourRole = await this.getHighestRole(req.user.data.id);
     switch (type) {
       case 1:
-        return await this.viewInterFormList(req, yourRole);
+        return await this.viewListBaseOnType(req, yourRole,1);
       case 2:
-        return await this.viewEvalFormList(req, yourRole);
+        return await this.viewListBaseOnType(req, yourRole,0);
       case 3:
         return await this.viewYourForm(req);
     }
