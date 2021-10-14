@@ -102,11 +102,11 @@ module.exports.Authorize = (router, method, url) => {
 
         if (canAccess) {
           next();
-          logger.info("Authorized");
+          // logger.info("Authorized");
           return;
         } else {
           nextErr(new ErrorHandler(400, "cant access"), req, res, next);
-          logger.error("UnAuthorized");
+          // logger.error("UnAuthorized");
           return;
         }
       }

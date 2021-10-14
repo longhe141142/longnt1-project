@@ -69,12 +69,12 @@ module.exports = class FormService extends BaseService {
         let formData = await Form.addNew(
           { ...form, userId: id },
           transaction,
-          req.user.userName
+          req.user.data.userName
         );
         let formDetailData = await FormDetail.addNew(
           formDetail,
           transaction,
-          req.user.userName
+          req.user.data.userName
         );
 
         await formDetailData.setForm(formData, {
@@ -129,17 +129,18 @@ module.exports = class FormService extends BaseService {
       if (form.userId !== user.id) {
         return new Error("YOU DONT HAVE PERMISSION TO SUBMIT THIS FORM!");
       }
-      let now = new Date().getTime();
-      let dueDAte = Date.parse(form.dueDate);
-      let isDue = now - dueDAte < 0 ? false : true;
-      if (isDue) {
-        return new Error("You can't submit because form is overdue");
-      }
+
+      let checkDueDAte = this.checkFormDue(form, "submit");
+      if (checkDueDAte instanceof Error) return checkDueDAte;
       if (form.status === this.formSatus.CLOSED)
         return new Error("FORM CLOSED,CAN'T SUBMIT");
 
       if (form.status === "SUBMITTED") {
         return new Error("CANT SUBMIT TWICE");
+      }
+
+      if (form.isDeleted === 1) {
+        return new Error("You can't submit because form is deleted!");
       }
       await form.update({
         status: "SUBMITTED",
@@ -152,11 +153,19 @@ module.exports = class FormService extends BaseService {
     }
   };
 
+  checkFormDue = (form, action) => {
+    let now = new Date().getTime();
+    let dueDAte = Date.parse(form.dueDate);
+    let isDue = now - dueDAte < 0 ? false : true;
+    if (isDue || form.isDue) {
+      return new Error(`You can't ${action} because form is overdue`);
+    }
+  };
+
   update = async (req, feature) => {
     if (feature === 0) {
       let { content, id } = req.body;
       let user = req.user.data;
-      console.log(id);
       let formObj = {};
       let transaction = await Form.sequelize.transaction();
       try {
@@ -177,11 +186,19 @@ module.exports = class FormService extends BaseService {
           return new Error("YOU DONT HAVE PERMISSION TO EDIT THIS FORM!");
         }
 
-        let isSubmitted = form.status === "SUBMITTED" ? true : false;
-
+        let isSubmitted =
+          form.status === this.formSatus.SUBMITTED ? true : false;
+        let isDeleted = form.isDeleted === 1 ? true : false;
         if (isSubmitted) {
           return new Error("You can't update because form is submitted");
         }
+        if (isDeleted) {
+          return new Error("You can't update because form is deleted");
+        }
+
+        let checkDueDAte = this.checkFormDue(form, "update");
+        if (checkDueDAte instanceof Error) return checkDueDAte;
+
         await form.update(
           {
             updatedBy: user.userName,
@@ -214,7 +231,6 @@ module.exports = class FormService extends BaseService {
     } else {
       let { comment, id } = req.body;
       let manager = req.user.data;
-      console.log(id);
       let formObj = {};
       let transaction = await Form.sequelize.transaction();
       try {
@@ -228,7 +244,6 @@ module.exports = class FormService extends BaseService {
             transaction: transaction,
           }
         );
-        console.log("entry here");
         if (!form) {
           return new Error("FORM IS NOT EXISTED!");
         }
@@ -277,8 +292,8 @@ module.exports = class FormService extends BaseService {
         await transaction.commit();
         return formObj;
       } catch (error) {
+        logger.error(error);
         await transaction.rollback();
-        console.error(error);
         return error;
       }
     }
@@ -339,7 +354,9 @@ module.exports = class FormService extends BaseService {
             false,
             ["FormDetail"]
           );
+          // logger.error(forms)
           // logger.info(userList)
+          checkNoForm = forms.length > 0 ? true : checkNoForm;
           let dataObj = {
             user: user,
             forms: forms,
@@ -347,7 +364,7 @@ module.exports = class FormService extends BaseService {
           ret.push(dataObj);
         }
 
-        console.log(ret);
+        // console.log(ret);
         return checkNoForm ? ret : new Error("No Form submitted yet!");
       }
     } catch (error) {
@@ -528,6 +545,7 @@ module.exports = class FormService extends BaseService {
             return formInstance.update(
               {
                 isDue: 1,
+                isDeleted: 1,
               },
               { transaction: transaction }
             );

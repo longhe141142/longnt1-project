@@ -194,7 +194,7 @@ module.exports = class FormRouter extends BaseRouter {
     let employeeForm = await this._service.viewForm(req, 3);
     if (employeeForm instanceof Error) {
       return nextErr(
-        new ErrorHandler(400, employeeForms.message),
+        new ErrorHandler(400, employeeForm.message),
         req,
         res,
         next

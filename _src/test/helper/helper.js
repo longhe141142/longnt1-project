@@ -55,17 +55,16 @@ const mainMenu = () => {
     return `
      ===================CHOOSE FUNCTION TO TEST==============================
       1.add form
-      2.view employee form
-      3.submit form
-      4.add comment
-      5.update content
-      6.view probate form
-      7.view your form
-      8.view evaluate form
-      9.approve form
-      10.reject form
-      11.check dueDAte
-      12.close form
+      2.submit form
+      3.add comment
+      4.update content
+      5.view probate form
+      6.view your form
+      7.view evaluate form
+      8.approve form
+      9.reject form
+      10.check dueDAte
+      11.close form
           `;
   };
 

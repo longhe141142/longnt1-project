@@ -16,10 +16,9 @@ module.exports = class AdminRouter extends BaseRouter {
     let adService = new AdminService();
     super(adService);
     this.post("/add", adminValidation.createAdmin, this.createAdmin);
-    this.get("/:id", this.getAdminDetail);
-    // this.get("/upgrade/test", this.testSetRole);
     this.post("/upgrade", adminValidation.upgradeUser, this.upgradeUser);
-    this.get("/list/all", this.listAllUser);
+    this.get("/list/all/user", this.listAllUser);
+    this.get("/list/all/form", this.listAllForm);
 
     // this.patch("/upgrade/:id", this.addPermission);
   }
@@ -35,106 +34,12 @@ module.exports = class AdminRouter extends BaseRouter {
   };
 
   listAllUser = async (req, res, next) => {
-    let users = await this._service.listAll(req);
+    let users = await this._service.listAllUsr(req);
     if (users instanceof Error) {
       return nextErr(new ErrorHandler(400, users.message), req, res, next);
     }
     CustomResponse.sendObject(res, 200, users);
   };
-
-  // addPermission = async (req, res, next) => {
-  //   let user = await this._service.setRoleUser(req.params.id, req);
-  //   if (!user || user instanceof Error) {
-  //     nextErr(new ErrorHandler(404, "can't set permission!"), req, res, next);
-  //     return;
-  //   }
-
-  //   CustomResponse.sendObject(res, 200, user);
-  // };
-
-  getAdminDetail = async (req, res, next) => {
-    let log = await this._service.getDetail(req.params.id);
-    if (!log || log instanceof Error) {
-      logger.error(log);
-      res.end("Error occured!");
-      return;
-    }
-
-    res.send(log);
-  };
-
-  //use this only for testing
-  // testSetRole = async (req, res, next) => {
-  //   let transaction = await User.sequelize.transaction();
-  //   try {
-  //     let user = await User.findOne({
-  //       where: {
-  //         userName: "admindeptrai",
-  //       },
-  //       transaction: transaction,
-  //     });
-
-  //     // let role = await Role.create(
-  //     //   {
-  //     //     name: "superAdmin",
-  //     //     description: "sss",
-  //     //     createdBy: "super",
-  //     //     updatedBy: "super",
-  //     //   },
-  //     //   { transaction: transaction }
-  //     // );
-
-  //     let role = await Role.findOne({
-  //       where: {
-  //         name: "superAdmin",
-  //       },
-  //       transaction: transaction,
-  //     });
-  //     if(!role &&!role instanceof Error){
-  //       role = await Role.create(
-  //         {
-  //           name: "superAdmin",
-  //           description: "sss",
-  //           createdBy: "super",
-  //           updatedBy: "super",
-  //         },
-  //         { transaction: transaction }
-  //       );
-  //     }
-  //     // let userRole = await UserRole.create(
-  //     //   {
-  //     //     createdBy: "admin",
-  //     //     updatedBy: "admin",
-  //     //   },
-  //     //   { transaction: transaction }
-  //     // );
-
-  //     // await user.setRoles([role.id,...arr], {
-  //     //   transaction: transaction,
-  //     // });
-
-  //     await user.addRole(role, {
-  //       transaction: transaction,
-  //       through: {
-  //         createdBy: "admin",
-  //         updatedBy: "admin",
-  //       },
-  //     });
-
-  //     let rel = await user.getRoles({}, { transaction: transaction });
-  //     let arr = rel.map((val) => {
-  //       return val.id;
-  //     });
-  //     console.log(arr);
-
-  //     console.log(rel);
-  //     res.send(rel);
-  //     transaction.commit();
-  //   } catch (err) {
-  //     console.log(err);
-  //     transaction.rollback();
-  //   }
-  // };
 
   upgradeUser = async (req, res, next) => {
     //input : request,output: instance of User model or error
@@ -148,5 +53,12 @@ module.exports = class AdminRouter extends BaseRouter {
 
     //aww,everything is ok!
     CustomResponse.SendStatus_WithMessage(res, 200, userRecord);
+  };
+  listAllForm = async (req, res, next) => {
+    let forms = await this._service.listAllForm(req);
+    if (forms instanceof Error) {
+      return nextErr(new ErrorHandler(400, forms.message), req, res, next);
+    }
+    CustomResponse.sendObject(res, 200, forms);
   };
 };

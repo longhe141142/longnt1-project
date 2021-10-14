@@ -24,8 +24,8 @@ module.exports = class CoreService {
     "descend",
   ];
 
-  FIELD_ENUM = ["userName", "age", "age", "id", "email"];
-
+  FIELD_USER_ENUM = ["userName", "age", "age", "id", "email"];
+  FIELD_FORM_ENUM = ["id", "status", "userId", "dueDate"];
   simpleFunction = () => {
     console.log("simple function from core!");
     return {
@@ -43,11 +43,11 @@ module.exports = class CoreService {
     };
   };
 
-  preparePaging = (req) => {
+  preparePaging = (req, type = 1) => {
     const query = req.query;
     let pageIndex = query.pageIndex || query.page || query.currentPage;
     const size = config.pageLimit;
-    let orderBy = query.orderBy || "userName";
+    let orderBy = query.orderBy || "id";
     let orderType = query.orderType || config.defautltSort;
     if (!dataUtils.isNumber(pageIndex)) {
       pageIndex = dataUtils.toNumber(pageIndex);
@@ -56,23 +56,26 @@ module.exports = class CoreService {
     logger.warn(`order type: ${this.getOrderType(orderType)}`);
 
     return {
-      orderBy: this.getFieldName(orderBy),
+      orderBy: this.getFieldName(orderBy,type),
       orderType: this.getOrderType(orderType),
       limit: size,
       offset: size * (pageIndex - 1),
     };
   };
 
-  getHighestRole = async (userId, transaction=null) => {
+  getHighestRole = async (userId, transaction = null) => {
     let options = {};
     if (transaction) {
       options.transaction = transaction;
     }
-    return await UserRole.findAll({
-      where: {
-        userId: userId,
+    return await UserRole.findAll(
+      {
+        where: {
+          userId: userId,
+        },
       },
-    },options)
+      options
+    )
       .then((data) => {
         return data.map((val) => {
           return val.roleId;
@@ -102,11 +105,14 @@ module.exports = class CoreService {
     }
   };
 
-  getFieldName = (orderBy) => {
-    if (!this.FIELD_ENUM.includes(orderBy)) {
-      return "id";
-    } else {
+  getFieldName = (orderBy, type) => {
+    if (type === 1 && this.FIELD_USER_ENUM.includes(orderBy)) {
+      console.log("hiii")
       return orderBy;
+    } else if (type == 0 && this.FIELD_FORM_ENUM.includes(orderBy)) {
+      return orderBy;
+    } else {
+      return "id";
     }
   };
 };

@@ -84,6 +84,15 @@ let formTestData = {
       INVALID_DUEDATE: "ABC",
     },
   },
+  submitForm:{
+    NON_EXISTED:"XXXXX",
+    FORM_EMPLOYEE_05:{
+      FORM_CLOSED:"336e2550-2c38-11ec-bb51-2b9b10bb6c90",
+      FORM_NEW:"b16db330-2c38-11ec-bb51-2b9b10bb6c90",
+      FORM_SUBMITTED:"c28e0200-2c38-11ec-bb51-2b9b10bb6c90",
+      FORM_OVERDUE:"64cc2060-2c39-11ec-bb51-2b9b10bb6c90"
+    },
+  }
 };
 
 module.exports = { userTestData, formTestData };

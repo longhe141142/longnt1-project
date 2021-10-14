@@ -3,6 +3,8 @@ const Role = require("../../_models/role");
 const User = require("../../_models/user");
 const Employee = require("../../_models/employee");
 const UserRole = require("../../_models/userRole");
+const FormDetail = require("../../_models/formDetail");
+const Form = require("../../_models/form");
 const logger = require("../../_utils/logger");
 module.exports = class AdminService extends BaseService {
   //admin seeders
@@ -121,10 +123,10 @@ module.exports = class AdminService extends BaseService {
     return role;
   };
 
-  listAll = async (req) => {
+  listAllUsr = async (req) => {
     try {
       let pagingOPtion = this.preparePaging(req);
-      logger.info(pagingOPtion)
+      logger.info(pagingOPtion);
       let users = await User.findAll({
         offset: pagingOPtion.offset,
         limit: pagingOPtion.limit,
@@ -132,16 +134,43 @@ module.exports = class AdminService extends BaseService {
           // Will escape full_name and validate DESC against a list of valid direction parameters
           [pagingOPtion.orderBy, pagingOPtion.orderType],
         ],
-        include:[
+        include: [
           {
-            model:Employee,
-          },{
-            model:Role,
-          }
-        ]
+            model: Employee,
+          },
+          {
+            model: Role,
+          },
+        ],
       });
 
       return users;
+    } catch (error) {
+      logger.error(error);
+      return error;
+    }
+  };
+
+  listAllForm = async (req) => {
+    try {
+      let pagingOPtion = this.preparePaging(req,0);
+      logger.info(pagingOPtion);
+      let forms = await Form.findAll({
+        offset: pagingOPtion.offset,
+        limit: pagingOPtion.limit,
+        order: [
+          // Will escape full_name and validate DESC against a list of valid direction parameters
+          [pagingOPtion.orderBy, pagingOPtion.orderType],
+        ],
+        include: [
+          {
+            model: FormDetail,
+            as:"FormDetail"
+          },
+        ],
+      });
+
+      return forms;
     } catch (error) {
       logger.error(error);
       return error;

@@ -22,11 +22,9 @@ const initService = (app) => {
 
 const initSequelize = async () => {
   const db = require("./_models/db.connect");
-  db.connect()
+  await db.connect()
     .then(async () => {
       logger.info(`Establish connection successfully:--->`);
-      // await InitAssociationData();
-
       return true;
     })
     .catch((err) => {
