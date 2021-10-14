@@ -139,7 +139,7 @@ module.exports = class FormService extends BaseService {
         return new Error("CANT SUBMIT TWICE");
       }
 
-      if (form.isDeleted === 1) {
+      if (form.isDeleted === true) {
         return new Error("You can't submit because form is deleted!");
       }
       await form.update({
@@ -188,7 +188,7 @@ module.exports = class FormService extends BaseService {
 
         let isSubmitted =
           form.status === this.formSatus.SUBMITTED ? true : false;
-        let isDeleted = form.isDeleted === 1 ? true : false;
+        let isDeleted = form.isDeleted === true ? true : false;
         if (isSubmitted) {
           return new Error("You can't update because form is submitted");
         }
@@ -266,6 +266,10 @@ module.exports = class FormService extends BaseService {
           return new Error(
             "FORM HASN'T BEEN SUBMITTED YET, CAN'T COMMENT(PERMISSION DENIED)"
           );
+        }
+        let isDeleted = form.isDeleted === true ? true : false;
+        if (isDeleted) {
+          return new Error("You can't update because form is deleted");
         }
         await form.update(
           {

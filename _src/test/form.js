@@ -169,35 +169,33 @@ let viewEmployeeProbateForm = () => {
   describe("/GET view Employee view probate form list with [MANAGER2]", () => {
     it(`it should not display form,
         with error message:No Form submitted yet`, async () => {
-      afterEach(async () => {
-        let form = await Form.findOne({
-          where: {
-            id: "c28e0200-2c38-11ec-bb51-2b9b10bb6c90",
-          },
-        });
-        await form.update({
-          status: "NEW",
-        });
-      });
-      afterEach(async () => {
-        let res = await chai
-          .request(server)
-          .get("/api/form/list/intern")
-          .set("AuthenticateToken", M02);
+      let res = await chai
+        .request(server)
+        .get("/api/form/list/intern")
+        .set("AuthenticateToken", M02);
 
-        res.should.have.status(400);
-        res.body.should.have.property("error");
-        res.body.error.message.should.eql("No Form submitted yet!");
+      res.should.have.status(400);
+      res.body.should.have.property("error");
+      res.body.error.message.should.eql("No Form submitted yet!");
+    });
+    beforeEach(async () => {
+      let form = await Form.findOne({
+        where: {
+          id: "c28e0200-2c38-11ec-bb51-2b9b10bb6c90",
+        },
       });
-      afterEach(async () => {
-        let form = await Form.findOne({
-          where: {
-            id: "c28e0200-2c38-11ec-bb51-2b9b10bb6c90",
-          },
-        });
-        await form.update({
-          status: "SUBMITTED",
-        });
+      await form.update({
+        status: "NEW",
+      });
+    });
+    afterEach(async () => {
+      let form = await Form.findOne({
+        where: {
+          id: "c28e0200-2c38-11ec-bb51-2b9b10bb6c90",
+        },
+      });
+      await form.update({
+        status: "SUBMITTED",
       });
     });
   });
@@ -205,49 +203,47 @@ let viewEmployeeProbateForm = () => {
   describe("/GET view Employee view probate form list with [MANAGER2] when one employee submit form", () => {
     it(`it should DISPLAY forms which ARE SUBMITTED
         with data of length:2`, async () => {
-      afterEach(async () => {
-        let employee07 = await User.findOne({
-          where: {
-            id: "30eb7eb0-2b5f-11ec-8639-1b33c0b488b9",
-          },
-        });
-        let form = await Form.findOne({
-          where: {
-            userId: employee07.id,
-          },
-        });
+      let res = await chai
+        .request(server)
+        .get("/api/form/list/intern")
+        .set("AuthenticateToken", M02);
 
-        await form.update({
-          status: "SUBMITTED",
-        });
+      res.should.have.status(200);
+      res.body.should.have.property("data");
+      res.body.data.should.have.lengthOf(2);
+      // res.body.error.message.should.eql("No Form submitted yet!");
+    });
+    beforeEach(async () => {
+      let employee07 = await User.findOne({
+        where: {
+          id: "30eb7eb0-2b5f-11ec-8639-1b33c0b488b9",
+        },
       });
-      afterEach(async () => {
-        let res = await chai
-          .request(server)
-          .get("/api/form/list/intern")
-          .set("AuthenticateToken", M02);
-
-        res.should.have.status(200);
-        res.body.should.have.property("data");
-        res.body.data.should.have.lengthOf(2);
-        // res.body.error.message.should.eql("No Form submitted yet!");
+      let form = await Form.findOne({
+        where: {
+          userId: employee07.id,
+        },
       });
 
-      afterEach(async () => {
-        let employee07 = await User.findOne({
-          where: {
-            id: "30eb7eb0-2b5f-11ec-8639-1b33c0b488b9",
-          },
-        });
-        let form = await Form.findOne({
-          where: {
-            userId: employee07.id,
-          },
-        });
+      await form.update({
+        status: "SUBMITTED",
+      });
+    });
 
-        await form.update({
-          status: "NEW",
-        });
+    afterEach(async () => {
+      let employee07 = await User.findOne({
+        where: {
+          id: "30eb7eb0-2b5f-11ec-8639-1b33c0b488b9",
+        },
+      });
+      let form = await Form.findOne({
+        where: {
+          userId: employee07.id,
+        },
+      });
+
+      await form.update({
+        status: "NEW",
       });
     });
   });
@@ -293,77 +289,75 @@ let updateComment = () => {
   });
 
   describe("/PATCH Update comment in form which isn't belong to your employee", () => {
+    let tmp = {};
     it(`it should DISPLAY ERROR(YOU HAVE NO PERMISSION TO COMMENT)
         status code:404`, async () => {
-      let tmp = {};
-      afterEach(async () => {
-        let transaction = await User.sequelize.transaction();
+      let res = await chai
+        .request(server)
+        .patch("/api/form/modify/comment")
+        .set("AuthenticateToken", M02)
+        .send(data);
+      res.should.have.status(404);
+      res.body.should.have.property("error");
+      res.body.error.message.should.eql("YOU HAVE NO PERMISSION TO COMMENT");
+    });
 
-        try {
-          let user = await User.create(
-            {
-              userName: "temporaryUser",
-              password: "abc",
-            },
-            {
-              transaction: transaction,
-            }
-          );
+    beforeEach(async () => {
+      let transaction = await User.sequelize.transaction();
 
-          let employee = await Employee.create(
-            {
-              userId: user.id,
-              firstName: "Nguyen",
-              lastName: "Long",
-            },
-            {
-              transaction: transaction,
-            }
-          );
+      try {
+        let user = await User.create(
+          {
+            userName: "temporaryUser",
+            password: "abc",
+          },
+          {
+            transaction: transaction,
+          }
+        );
 
-          let form = await Form.create(
-            {
-              type: "1",
-              status: "NEW",
-              dueDate: new Date(),
-              userId: user.id,
-            },
-            {
-              transaction: transaction,
-            }
-          );
-          await transaction.commit();
-          tmp.form = form;
-          tmp.user = user;
-          tmp.employee = employee;
+        let employee = await Employee.create(
+          {
+            userId: user.id,
+            firstName: "Nguyen",
+            lastName: "Long",
+          },
+          {
+            transaction: transaction,
+          }
+        );
 
-          let data = {
-            id: form.id,
-            comment: "update comment",
-          };
-          let res = await chai
-            .request(server)
-            .patch("/api/form/modify/comment")
-            .set("AuthenticateToken", M02)
-            .send(data);
-          res.should.have.status(404);
-          res.body.should.have.property("error");
-          res.body.error.message.should.eql(
-            "YOU HAVE NO PERMISSION TO COMMENT"
-          );
-        } catch (error) {
-          transaction.rollback();
-          console.log(error);
-        }
-      });
+        let form = await Form.create(
+          {
+            type: "1",
+            status: "NEW",
+            dueDate: new Date(),
+            userId: user.id,
+          },
+          {
+            transaction: transaction,
+          }
+        );
+        await transaction.commit();
+        tmp.form = form;
+        tmp.user = user;
+        tmp.employee = employee;
 
-      afterEach(async () => {
-        if (tmp.form) {
-          await tmp.form.destroy();
-          await tmp.employee.destroy();
-          await tmp.user.destroy();
-        }
-      });
+        let data = {
+          id: form.id,
+          comment: "update comment",
+        };
+      } catch (error) {
+        transaction.rollback();
+        console.log(error);
+      }
+    });
+    afterEach(async () => {
+      if (tmp.form) {
+        await tmp.form.destroy();
+        await tmp.employee.destroy();
+        await tmp.user.destroy();
+      }
     });
   });
 };
@@ -400,228 +394,254 @@ let viewYourForm = () => {
 
 let updateContent = () => {
   describe(`/PATCH update content form 
-             status = NEW 
-             dueDate is NOT OVERDUE
-             isDeleted=0
-             with EMPLOYEE05`, () => {
-    it(`it should not DISPLAY data)
-        data contain form and form detail
-        content must updated to value "new content"
-        status code: 200`, async () => {
-      let data = {};
-
-      afterEach(async () => {
-        let transaction = await User.sequelize.transaction();
-        try {
-          let dueDate = Date.parse("2021-12-19");
-          let form = await Form.create(
-            {
-              dueDate: dueDate,
-              status: "NEW",
-              userId: formTestData.addForm.userId.VALID_USERID.EMPLOYEE_5,
-              type: 1,
-            },
-            { transaction: transaction }
-          );
-
-          let formDetail = await FormDetail.create(
-            {
-              formId: form.id,
-              content: "abc",
-            },
-            { transaction: transaction }
-          );
-          data.form = form;
-          data.formDetail = formDetail;
-          await transaction.commit();
-        } catch (error) {
-          await transaction.rollback();
-          logger.error(error);
-        }
-      });
-      afterEach(async () => {
-        let dataSend = {
-          id: data.form.id,
-          content: "new content",
-        };
-        let res = await chai
-          .request(server)
-          .patch("/api/form/modify/content")
-          .set("AuthenticateToken", E05)
-          .send(dataSend);
-        res.should.have.status(200);
-        // res.body.should.have.property("data");
-        res.body.should.have.property("data");
-        res.body.data.form.id.should.eql(data.form.id);
-        res.body.data.formDetail.content.should.eql("new content");
-      });
-
-      afterEach(async () => {
-        let transaction = await User.sequelize.transaction();
-        try {
-          await data.form.destroy({
-            transaction: transaction,
-          });
-          await data.formDetail.destroy({
-            transaction: transaction,
-          });
-          await transaction.commit();
-        } catch (error) {
-          logger.error(error);
-          await transaction.rollback();
-        }
-      });
-    });
-  });
-
-
-  describe(`/PATCH update content form 
              status = SUBMITTED 
              dueDate is NOT OVERDUE
              isDeleted=0
              with EMPLOYEE05`, () => {
+    let data = {};
     it(`it should DISPLAY ERROR)
         with message(You can't update because form is submitted)
         update content MUST BE FAILED
         status code: 404`, async () => {
-      let data = {};
-
-      afterEach(async () => {
-        let transaction = await User.sequelize.transaction();
-        try {
-          let dueDate = Date.parse("2021-12-19");
-          let form = await Form.create(
-            {
-              dueDate: dueDate,
-              status: "SUBMITTED",
-              userId: formTestData.addForm.userId.VALID_USERID.EMPLOYEE_5,
-              type: 1,
-            },
-            { transaction: transaction }
-          );
-
-          let formDetail = await FormDetail.create(
-            {
-              formId: form.id,
-              content: "abc",
-            },
-            { transaction: transaction }
-          );
-          data.form = form;
-          data.formDetail = formDetail;
-          await transaction.commit();
-        } catch (error) {
-          await transaction.rollback();
-          logger.error(error);
-        }
-      });
-      afterEach(async () => {
-        let dataSend = {
-          id: data.form.id,
-          content: "new content",
-        };
-        let res = await chai
-          .request(server)
-          .patch("/api/form/modify/content")
-          .set("AuthenticateToken", E05)
-          .send(dataSend);
-        res.should.have.status(404);
-        res.body.should.have.property("error");
-        res.body.error.message.should.equal(
-          "You can't update because form is submitted"
+      let dataSend = {
+        id: data.form.id,
+        content: "new content",
+      };
+      let res = await chai
+        .request(server)
+        .patch("/api/form/modify/content")
+        .set("AuthenticateToken", E05)
+        .send(dataSend);
+      res.should.have.status(404);
+      res.body.should.have.property("error");
+      res.body.error.message.should.equal(
+        "You can't update because form is submitted"
+      );
+    });
+    beforeEach(async () => {
+      let transaction = await User.sequelize.transaction();
+      try {
+        let dueDate = Date.parse("2021-12-19");
+        let form = await Form.create(
+          {
+            dueDate: dueDate,
+            status: "SUBMITTED",
+            userId: formTestData.addForm.userId.VALID_USERID.EMPLOYEE_5,
+            type: 1,
+          },
+          { transaction: transaction }
         );
-      });
 
-      afterEach(async () => {
-        let transaction = await User.sequelize.transaction();
-        try {
-          await data.form.destroy({
-            transaction: transaction,
-          });
-          await data.formDetail.destroy({
-            transaction: transaction,
-          });
-          await transaction.commit();
-        } catch (error) {
-          logger.error(error);
-          await transaction.rollback();
-        }
-      });
+        let formDetail = await FormDetail.create(
+          {
+            formId: form.id,
+            content: "abc",
+          },
+          { transaction: transaction }
+        );
+        data.form = form;
+        data.formDetail = formDetail;
+        await transaction.commit();
+      } catch (error) {
+        await transaction.rollback();
+        logger.error(error);
+      }
+    });
+    afterEach(async () => {
+      let transaction = await User.sequelize.transaction();
+      try {
+        await data.form.destroy({
+          transaction: transaction,
+        });
+        await data.formDetail.destroy({
+          transaction: transaction,
+        });
+        await transaction.commit();
+      } catch (error) {
+        logger.error(error);
+        await transaction.rollback();
+      }
     });
   });
 
-  describe(`/PATCH update content form 
-             status = NEW 
+  describe(`/PATCH update content form
+             status = NEW
              dueDate is OVERDUE
              isDeleted=0
              with EMPLOYEE05`, () => {
+    let data = {};
+
     it(`it should DISPLAY ERROR)
         with message(You can't update because form is overdue)
         update content MUST BE FAILED
         status code: 404`, async () => {
-      let data = {};
-
-      afterEach(async () => {
-        let transaction = await User.sequelize.transaction();
-        try {
-          let dueDate = Date.parse("2021-05-19");
-          let form = await Form.create(
-            {
-              dueDate: dueDate,
-              status: "NEW",
-              userId: formTestData.addForm.userId.VALID_USERID.EMPLOYEE_5,
-              type: 1,
-            },
-            { transaction: transaction }
-          );
-
-          let formDetail = await FormDetail.create(
-            {
-              formId: form.id,
-              content: "abc",
-            },
-            { transaction: transaction }
-          );
-          data.form = form;
-          data.formDetail = formDetail;
-          await transaction.commit();
-        } catch (error) {
-          await transaction.rollback();
-          logger.error(error);
-        }
-      });
-      afterEach(async () => {
-        let dataSend = {
-          id: data.form.id,
-          content: "new content",
-        };
-        let res = await chai
-          .request(server)
-          .patch("/api/form/modify/content")
-          .set("AuthenticateToken", E05)
-          .send(dataSend);
-        res.should.have.status(404);
-        res.body.should.have.property("error");
-        res.body.error.message.should.equal(
-          "You can't update because form is overdue"
+      let dataSend = {
+        id: data.form.id,
+        content: "new content",
+      };
+      let res = await chai
+        .request(server)
+        .patch("/api/form/modify/content")
+        .set("AuthenticateToken", E05)
+        .send(dataSend);
+      res.should.have.status(404);
+      res.body.should.have.property("error");
+      res.body.error.message.should.equal(
+        "You can't update because form is overdue"
+      );
+    });
+    beforeEach(async () => {
+      let transaction = await User.sequelize.transaction();
+      try {
+        let dueDate = Date.parse("2021-05-19");
+        let form = await Form.create(
+          {
+            dueDate: dueDate,
+            status: "NEW",
+            userId: formTestData.addForm.userId.VALID_USERID.EMPLOYEE_5,
+            type: 1,
+          },
+          { transaction: transaction }
         );
-      });
 
-      afterEach(async () => {
-        let transaction = await User.sequelize.transaction();
-        try {
-          await data.form.destroy({
-            transaction: transaction,
-          });
-          await data.formDetail.destroy({
-            transaction: transaction,
-          });
-          await transaction.commit();
-        } catch (error) {
-          logger.error(error);
-          await transaction.rollback();
-        }
-      });
+        let formDetail = await FormDetail.create(
+          {
+            formId: form.id,
+            content: "abc",
+          },
+          { transaction: transaction }
+        );
+        data.form = form;
+        data.formDetail = formDetail;
+        await transaction.commit();
+      } catch (error) {
+        await transaction.rollback();
+        logger.error(error);
+      }
+    });
+    afterEach(async () => {
+      let transaction = await User.sequelize.transaction();
+      try {
+        await data.form.destroy({
+          transaction: transaction,
+        });
+        await data.formDetail.destroy({
+          transaction: transaction,
+        });
+        await transaction.commit();
+      } catch (error) {
+        logger.error(error);
+        await transaction.rollback();
+      }
+    });
+  });
+
+  describe(`/PATCH update content form
+             status = NEW
+             dueDate is NOT OVERDUE AND
+             isDeleted=1
+             with EMPLOYEE05`, () => {
+    let data = {};
+
+    it(`it should DISPLAY ERROR)
+        with message(You can't update because form is deleted)
+        update content MUST BE FAILED
+        status code: 404`, async () => {
+      let dataSend = {
+        id: data.form.id,
+        content: "new content",
+      };
+      let res = await chai
+        .request(server)
+        .patch("/api/form/modify/content")
+        .set("AuthenticateToken", E05)
+        .send(dataSend);
+      res.should.have.status(404);
+      res.body.should.have.property("error");
+      res.body.error.message.should.equal(
+        "You can't update because form is deleted"
+      );
+    });
+    beforeEach(async () => {
+      let transaction = await User.sequelize.transaction();
+      try {
+        let dueDate = Date.parse("2021-12-19");
+        let form = await Form.create(
+          {
+            dueDate: dueDate,
+            status: "NEW",
+            userId: formTestData.addForm.userId.VALID_USERID.EMPLOYEE_5,
+            type: 1,
+            isDeleted: 1,
+          },
+          { transaction: transaction }
+        );
+
+        let formDetail = await FormDetail.create(
+          {
+            formId: form.id,
+            content: "abc",
+          },
+          { transaction: transaction }
+        );
+        data.form = form;
+        data.formDetail = formDetail;
+        await transaction.commit();
+      } catch (error) {
+        await transaction.rollback();
+        logger.error(error);
+      }
+    });
+    afterEach(async () => {
+      let transaction = await User.sequelize.transaction();
+      try {
+        await data.form.destroy({
+          transaction: transaction,
+        });
+        await data.formDetail.destroy({
+          transaction: transaction,
+        });
+        await transaction.commit();
+      } catch (error) {
+        logger.error(error);
+        await transaction.rollback();
+      }
+    });
+  });
+
+  describe("/PATCH update form content which form id is invalid", () => {
+    it(`it should display error
+        with error message:FORM IS NOT EXISTED!`, async () => {
+      let formData1 = {
+        id: formTestData.addContentToForm.NON_EXISTED,
+        content: "abc",
+      };
+      let res = await chai
+        .request(server)
+        .patch("/api/form/modify/content")
+        .set("AuthenticateToken", E05)
+        .send(formData1);
+
+      res.should.have.status(404);
+      res.body.should.have.property("error"),
+        res.body.error.message.should.eql("FORM IS NOT EXISTED!");
+    });
+  });
+
+  describe("/PATCH update form content which form id is invalid", () => {
+    it(`it should display error
+        with error message:FORM IS NOT EXISTED!`, async () => {
+      let formData1 = {
+        id: formTestData.addContentToForm.NON_EXISTED,
+        content: "abc",
+      };
+      let res = await chai
+        .request(server)
+        .patch("/api/form/modify/content")
+        .set("AuthenticateToken", E05)
+        .send(formData1);
+
+      res.should.have.status(404);
     });
   });
 };
