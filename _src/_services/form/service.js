@@ -195,6 +195,8 @@ module.exports = class FormService extends BaseService {
         if (isDeleted) {
           return new Error("You can't update because form is deleted");
         }
+        if (form.status === this.formSatus.CLOSED)
+          return new Error("You can't update because form is closed");
 
         let checkDueDAte = this.checkFormDue(form, "update");
         if (checkDueDAte instanceof Error) return checkDueDAte;
@@ -431,13 +433,16 @@ module.exports = class FormService extends BaseService {
             false,
             ["FormDetail"]
           );
+          checkNoForm = forms.length > 0 ? true : checkNoForm;
           let dataObj = {
             user: user,
             forms: forms,
           };
           ret.push(dataObj);
+          
         }
 
+        
         return checkNoForm ? ret : new Error("No Form submitted yet!");
       }
     } catch (error) {

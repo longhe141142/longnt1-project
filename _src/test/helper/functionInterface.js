@@ -13,7 +13,10 @@ let {
   viewEmployeeProbateForm,
   updateComment,
   updateContent,
-  viewYourForm
+  viewYourForm,
+  viewEvalForm,
+  approveForm,
+  rejectForm
 } = require("../form");
 
 let userApi = () => {
@@ -54,7 +57,7 @@ let formApi = () => {
     "Invalid Value",
     formMenu(),
     0,
-    11
+    9
   );
   if (option === 0) {
     return;
@@ -78,6 +81,15 @@ let formApi = () => {
     case 6:
       viewYourForm();
       break;
+    case 7:
+      viewEvalForm();
+      break;  
+    case 8:
+      approveForm();
+      break;  
+    case 9:
+      rejectForm();
+      break;  
     default:
       break;
   }

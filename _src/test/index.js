@@ -9,7 +9,7 @@ let main = () => {
     "Invalid Value",
     mainMenu(),
     0,
-    4
+    2
   );
   if (option === 0) {
     return;
@@ -21,7 +21,6 @@ let main = () => {
     case 2:
       formApi();
       break;
-    case 3:
     default:
       break;
   }

@@ -35,8 +35,6 @@ const mainMenu = () => {
      ===================CHOOSE API TO TEST==============================
       1.USER
       2.FORM
-      3.AUTHENTICATION
-      4.ADMIN
       `;
   };
   
@@ -63,8 +61,6 @@ const mainMenu = () => {
       7.view evaluate form
       8.approve form
       9.reject form
-      10.check dueDAte
-      11.close form
           `;
   };
 

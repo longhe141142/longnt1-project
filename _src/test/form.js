@@ -5,7 +5,7 @@ let server = require("../server");
 let should = chai.should();
 chai.use(chaiHttp);
 let { E07, E02, E05, E03 } = userToken.employee;
-let { M01, M02 } = userToken.manager;
+let { M01, M02, M03 } = userToken.manager;
 let { D01 } = userToken.director;
 let { HR02 } = userToken.hr;
 let { formTestData } = require("./data/case");
@@ -14,6 +14,7 @@ let User = require("../_models/user");
 let Employee = require("../_models/employee");
 let FormDetail = require("../_models/formDetail");
 const logger = require("../_utils/logger");
+const { data } = require("../_utils/logger");
 
 let addForm = () => {
   /*===================================test add form =========================================*/
@@ -290,6 +291,7 @@ let updateComment = () => {
 
   describe("/PATCH Update comment in form which isn't belong to your employee", () => {
     let tmp = {};
+    let data = {};
     it(`it should DISPLAY ERROR(YOU HAVE NO PERMISSION TO COMMENT)
         status code:404`, async () => {
       let res = await chai
@@ -343,10 +345,8 @@ let updateComment = () => {
         tmp.user = user;
         tmp.employee = employee;
 
-        let data = {
-          id: form.id,
-          comment: "update comment",
-        };
+        data.id = form.id;
+        data.comment = "update comment";
       } catch (error) {
         transaction.rollback();
         console.log(error);
@@ -360,6 +360,8 @@ let updateComment = () => {
       }
     });
   });
+
+  describe(`/PATCH update comment in form which is CLOSED`);
 };
 
 let viewYourForm = () => {
@@ -593,18 +595,11 @@ let updateContent = () => {
       }
     });
     afterEach(async () => {
-      let transaction = await User.sequelize.transaction();
       try {
-        await data.form.destroy({
-          transaction: transaction,
-        });
-        await data.formDetail.destroy({
-          transaction: transaction,
-        });
-        await transaction.commit();
+        await data.form.destroy({});
+        await data.formDetail.destroy({});
       } catch (error) {
         logger.error(error);
-        await transaction.rollback();
       }
     });
   });
@@ -628,12 +623,13 @@ let updateContent = () => {
     });
   });
 
-  describe("/PATCH update form content which form id is invalid", () => {
+  describe("/PATCH update form content which no content provide", () => {
     it(`it should display error
-        with error message:FORM IS NOT EXISTED!`, async () => {
+        with error message:content is required
+        and against go to controller
+        status code:404`, async () => {
       let formData1 = {
         id: formTestData.addContentToForm.NON_EXISTED,
-        content: "abc",
       };
       let res = await chai
         .request(server)
@@ -642,6 +638,172 @@ let updateContent = () => {
         .send(formData1);
 
       res.should.have.status(404);
+      res.body.should.have.property("error");
+      res.body.error.message.details[0].message.should.eql(
+        "content is required"
+      );
+    });
+  });
+};
+
+let viewEvalForm = () => {
+  describe(`/GET LIST PERIODIC EVALUATE FORM OF ALL EMPLOYEE OF MANAGER03
+            LOGIN AS MANAGER3`, () => {
+    it(`Should display all user and form of user((2 record)) who is managed by MANAGER03
+        status code:200`, async () => {
+      let res = await await chai
+        .request(server)
+        .get("/api/form/list/evaluate")
+        .set("AuthenticateToken", M03);
+      res.should.have.status(200);
+      res.body.data.should.have.lengthOf(2);
+    });
+  });
+
+  describe(`/GET LIST PERIODIC EVALUATE FORM OF ALL EMPLOYEE OF MANAGER02
+            LOGIN AS MANAGER2`, () => {
+    it(`Should display error(No Form submitted yet!)
+        because EMPLOYEE07 AND EMPLOYEE05 have no evaluate form submitted
+        status code:404`, async () => {
+      let res = await await chai
+        .request(server)
+        .get("/api/form/list/evaluate")
+        .set("AuthenticateToken", M02);
+      res.should.have.status(400);
+      res.body.should.have.property("error");
+      res.body.error.message.should.equal("No Form submitted yet!");
+    });
+  });
+
+  describe(`/GET LIST PERIODIC EVALUATE FORM OF ALL EMPLOYEE AND MANAGER
+            LOGIN AS HR02`, () => {
+    it(`Should display all form of employee and manager(which is submitted)
+        status code:200`, async () => {
+      let res = await await chai
+        .request(server)
+        .get("/api/form/list/evaluate")
+        .set("AuthenticateToken", HR02);
+      res.should.have.status(200);
+    });
+  });
+};
+
+let approveForm = () => {
+  describe(`/PUT APPROVE FORM WITH FORM WHICH FORM IS NOT EMPLOYEE OF MANAGER02
+            LOGIN AS MANAGER2`, () => {
+    it(`Should display error(YOU HAVE NOT PERMISSION IN THIS FORM)
+        because FORM IS BELONG TO EMPLOYEE4 WHICH IS EMPLOYEE OF MANAGER03
+        status code:400`, async () => {
+      let data = {
+        id: "6f3e9650-2cdd-11ec-8520-2bd7c9d982df",
+      };
+      let res = await await chai
+        .request(server)
+        .put("/api/form/approve")
+        .set("AuthenticateToken", M02)
+        .send(data);
+      res.should.have.status(400);
+      res.body.should.have.property("error");
+      res.body.error.message.should.equal(
+        "YOU HAVE NOT PERMISSION IN THIS FORM"
+      );
+    });
+  });
+
+  describe(`/PUT APPROVE FORM WITH FORM WHICH FORM IS NOT SUBMITTED(FORM OF EMPLOYEE05
+           WHO IS EMPLOYEE OF MANAGER02)
+            LOGIN AS MANAGER2`, () => {
+    it(`Should display error(FORM IS PENDING FOR SUBMISSION)
+        because FORM IS IN STATUS NEW
+        status code:400`, async () => {
+      let data = {
+        id: "c08351c0-2ce4-11ec-a8f7-658730940118",
+      };
+      let res = await await chai
+        .request(server)
+        .put("/api/form/approve")
+        .set("AuthenticateToken", M02)
+        .send(data);
+      res.should.have.status(400);
+      res.body.should.have.property("error");
+      res.body.error.message.should.equal("FORM IS PENDING FOR SUBMISSION");
+    });
+  });
+
+  describe(`/PUT APPROVE FORM WITH FORM WHICH FORM IS SUBMITTED(FORM OF EMPLOYEE04
+           WHO IS EMPLOYEE OF MANAGER03)
+           LOGIN AS MANAGER3`, () => {
+    it(`Should approve the form)
+        status code:400`, async () => {
+      let data = {
+        id: "d0f80600-2cde-11ec-bc3e-db15a81a0069",
+      };
+      let res = await await chai
+        .request(server)
+        .put("/api/form/approve")
+        .set("AuthenticateToken", M03)
+        .send(data);
+      res.should.have.status(200);
+    });
+  });
+};
+
+let rejectForm = () => {
+  describe(`/PUT APPROVE FORM WITH FORM WHICH FORM IS NOT EMPLOYEE OF MANAGER02
+            LOGIN AS MANAGER2`, () => {
+    it(`Should display error(YOU HAVE NOT PERMISSION IN THIS FORM)
+        because FORM IS BELONG TO EMPLOYEE4 WHICH IS EMPLOYEE OF MANAGER03
+        status code:400`, async () => {
+      let data = {
+        id: "6f3e9650-2cdd-11ec-8520-2bd7c9d982df",
+      };
+      let res = await await chai
+        .request(server)
+        .put("/api/form/approve")
+        .set("AuthenticateToken", M02)
+        .send(data);
+      res.should.have.status(400);
+      res.body.should.have.property("error");
+      res.body.error.message.should.equal(
+        "YOU HAVE NOT PERMISSION IN THIS FORM"
+      );
+    });
+  });
+
+  describe(`/PUT APPROVE FORM WITH FORM WHICH FORM IS NOT SUBMITTED(FORM OF EMPLOYEE05
+           WHO IS EMPLOYEE OF MANAGER02)
+            LOGIN AS MANAGER2`, () => {
+    it(`Should display error(FORM IS PENDING FOR SUBMISSION)
+        because FORM IS IN STATUS NEW
+        status code:400`, async () => {
+      let data = {
+        id: "c08351c0-2ce4-11ec-a8f7-658730940118",
+      };
+      let res = await await chai
+        .request(server)
+        .put("/api/form/reject")
+        .set("AuthenticateToken", M02)
+        .send(data);
+      res.should.have.status(400);
+      res.body.should.have.property("error");
+      res.body.error.message.should.equal("FORM IS PENDING FOR SUBMISSION");
+    });
+  });
+
+  describe(`/PUT APPROVE FORM WITH FORM WHICH FORM IS SUBMITTED(FORM OF EMPLOYEE04
+           WHO IS EMPLOYEE OF MANAGER03)
+           LOGIN AS MANAGER3`, () => {
+    it(`Should approve the form)
+        status code:400`, async () => {
+      let data = {
+        id: "d0f80600-2cde-11ec-bc3e-db15a81a0069",
+      };
+      let res = await await chai
+        .request(server)
+        .put("/api/form/approve")
+        .set("AuthenticateToken", M03)
+        .send(data);
+      res.should.have.status(200);
     });
   });
 };
@@ -653,4 +815,7 @@ module.exports = {
   updateComment,
   viewYourForm,
   updateContent,
+  viewEvalForm,
+  approveForm,
+  rejectForm
 };
