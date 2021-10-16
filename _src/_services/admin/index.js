@@ -19,6 +19,8 @@ module.exports = class AdminRouter extends BaseRouter {
     this.post("/upgrade", adminValidation.upgradeUser, this.upgradeUser);
     this.get("/list/all/user", this.listAllUser);
     this.get("/list/all/form", this.listAllForm);
+    this.get("/view/profile/:id", this.getUserDetail);
+
 
     // this.patch("/upgrade/:id", this.addPermission);
   }
@@ -60,5 +62,13 @@ module.exports = class AdminRouter extends BaseRouter {
       return nextErr(new ErrorHandler(400, forms.message), req, res, next);
     }
     CustomResponse.sendObject(res, 200, forms);
+  };
+
+  getUserDetail = async (req, res, next) => {
+    let profileData = await this._service.getOneUSer(req);
+    if (profileData instanceof Error) {
+      return nextErr(new ErrorHandler(400, profileData.message), req, res, next);
+    }
+    CustomResponse.sendObject(res, 200, profileData);
   };
 };

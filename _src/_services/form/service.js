@@ -20,6 +20,7 @@ module.exports = class FormService extends BaseService {
     this._eventEmitter.on("sendmail", sendMail);
   }
 
+
   checkPermission = async (currentUserId, userIdToAdd, transaction) => {
     let currentUsr_Role = await this.getHighestRole(currentUserId, transaction);
     let userToAdd_Role = await this.getHighestRole(userIdToAdd, transaction);
@@ -29,14 +30,16 @@ module.exports = class FormService extends BaseService {
     return true;
   };
 
+
   addNewForm = async (req) => {
     let { formDetail, userId, ...form } = req.body;
     const transaction = await User.sequelize.transaction();
     try {
+      //repair object for pushing to formArray
       let formObj = {};
 
       let formArray = [];
-
+      //get list userId from request
       for (let id of userId) {
         let userInstance = await User.getDetailByWhere(
           {
@@ -46,58 +49,62 @@ module.exports = class FormService extends BaseService {
           false,
           [Employee]
         );
-
+        //if no record found
         if (!userInstance) {
           await transaction.rollback();
           return new Error("User not existed");
         }
-
+        //higher role can add form to lower 
         let checkPermission = await this.checkPermission(
           req.user.data.id,
           userInstance.id
         );
-
+        //if some error occur
         if (checkPermission instanceof Error) {
           return checkPermission;
         }
-
+        //default value
         form.isRejected = 0;
         form.isApproved = 0;
         form.status = "NEW";
         form.dueDate = new Date(form.dueDate);
-
+        
         let formData = await Form.addNew(
           { ...form, userId: id },
           transaction,
           req.user.data.userName
         );
+        //add form detail with form
         let formDetailData = await FormDetail.addNew(
           formDetail,
           transaction,
           req.user.data.userName
         );
-
+        //set id of form to form detail
         await formDetailData.setForm(formData, {
           transaction: transaction,
         });
-
+        //preparation for send email
         let options = {
           type: formData.type,
           content: formData.content,
           from: null,
           content: "",
-          mailReceiver:
+          
+          mailReceiver://config the mail to receiver
             userInstance.email !== null
               ? userInstance.email
               : "bigherodz54@gmail.com",
         };
         formObj.form = formData;
         formObj.formDetail = formDetailData;
+        
         formArray.push(formObj);
-        this._eventEmitter.emit("sendmail", options);
+        
+        this._eventEmitter.emit("sendmail", options);//event send mail fired
       }
       await transaction.commit();
-      return formArray;
+      return formArray;//return array of object
     } catch (error) {
       logger.error(error);
       await transaction.rollback();
@@ -105,6 +112,7 @@ module.exports = class FormService extends BaseService {
     }
   };
 
+  //update content or managerComment
   updateFormDetail = async (formId, data) => {
     let formDetail = await FormDetail.findOne({
       where: {
@@ -114,38 +122,44 @@ module.exports = class FormService extends BaseService {
     await formDetail.update(data);
   };
 
+
   submit = async (req) => {
-    let { id } = req.body;
-    let user = req.user.data;
+    let { id } = req.body;//get id of form to submit
+    let user = req.user.data;//get current user info
     try {
       let form = await Form.findOne({
         where: {
           id: id,
         },
       });
+      //oops,form is not existed
       if (!form) {
         return new Error("FORM IS NOT EXISTED!");
       }
+      //mean that this form is not belong to current user
       if (form.userId !== user.id) {
         return new Error("YOU DONT HAVE PERMISSION TO SUBMIT THIS FORM!");
       }
-
+      //check due date
       let checkDueDAte = this.checkFormDue(form, "submit");
       if (checkDueDAte instanceof Error) return checkDueDAte;
+      //check if form is closed or not
       if (form.status === this.formSatus.CLOSED)
         return new Error("FORM CLOSED,CAN'T SUBMIT");
-
-      if (form.status === "SUBMITTED") {
+      //check if form is submitted
+      if (form.status === this.formSatus.SUBMITTED) {
         return new Error("CANT SUBMIT TWICE");
       }
-
+      //check if form is deleted
       if (form.isDeleted === true) {
         return new Error("You can't submit because form is deleted!");
       }
+      //after overcome all test,form will update status to submitted
       await form.update({
-        status: "SUBMITTED",
+        status: this.formSatus.SUBMITTED,
       });
 
+      //return
       return form;
     } catch (error) {
       console.error(error);
@@ -153,6 +167,7 @@ module.exports = class FormService extends BaseService {
     }
   };
 
+  //check if form is overDUe
   checkFormDue = (form, action) => {
     let now = new Date().getTime();
     let dueDAte = Date.parse(form.dueDate);
@@ -163,10 +178,12 @@ module.exports = class FormService extends BaseService {
   };
 
   update = async (req, feature) => {
+    //feature:0-->update content
+    //feature:1-->update manager comment
     if (feature === 0) {
       let { content, id } = req.body;
       let user = req.user.data;
-      let formObj = {};
+      let formObj = {};//prepare for returning data
       let transaction = await Form.sequelize.transaction();
       try {
         let form = await Form.findOne(
@@ -179,15 +196,18 @@ module.exports = class FormService extends BaseService {
             transaction: transaction,
           }
         );
+        //no record
         if (!form) {
           return new Error("FORM IS NOT EXISTED!");
         }
+        //form is not of yours
         if (form.userId !== user.id) {
           return new Error("YOU DONT HAVE PERMISSION TO EDIT THIS FORM!");
         }
-
+        //if form is submitted,can't modify
         let isSubmitted =
           form.status === this.formSatus.SUBMITTED ? true : false;
+        //if form is deleted,can't modify  
         let isDeleted = form.isDeleted === true ? true : false;
         if (isSubmitted) {
           return new Error("You can't update because form is submitted");
@@ -195,31 +215,33 @@ module.exports = class FormService extends BaseService {
         if (isDeleted) {
           return new Error("You can't update because form is deleted");
         }
+        //form closed can't modify
         if (form.status === this.formSatus.CLOSED)
           return new Error("You can't update because form is closed");
-
+        //form overDue,can't modify
         let checkDueDAte = this.checkFormDue(form, "update");
         if (checkDueDAte instanceof Error) return checkDueDAte;
-
+        //update content
+        //find form to update
         await form.update(
           {
             updatedBy: user.userName,
           },
           { transaction: transaction }
         );
-
+        //content actually in form detail so must take more step
         let formDetail = await FormDetail.getDetailByWhere(
           {
             formId: form.id,
           },
           transaction
         );
-
+        //then update the content
         await formDetail.update({
           content: content,
           updatedBy: user.userName,
         });
-
+        //prepare data returning
         formObj.form = form;
         formObj.formDetail = formDetail;
 
@@ -227,10 +249,10 @@ module.exports = class FormService extends BaseService {
         return formObj;
       } catch (error) {
         await transaction.rollback();
-        console.error(error);
+        logger.error(error);
         return error;
       }
-    } else {
+    } else {//for update manager comment (for manager and director)
       let { comment, id } = req.body;
       let manager = req.user.data;
       let formObj = {};
@@ -249,7 +271,7 @@ module.exports = class FormService extends BaseService {
         if (!form) {
           return new Error("FORM IS NOT EXISTED!");
         }
-
+        //get user who is form owner
         let user = await User.getDetailById(form.userId, transaction);
         let employee = await Employee.getDetailByWhere(
           {
@@ -257,29 +279,32 @@ module.exports = class FormService extends BaseService {
           },
           transaction
         );
-
+        //get employee(purpose: find manager of this employee)
+        //if current user is not manager of this employee
         if (employee.managerId !== manager.id) {
-          return new Error("YOU HAVE NO PERMISSION TO COMMENT");
+          return new Error("YOU HAVE NO PERMISSION TO COMMENT");//return no permission
         }
-
-        let isSubmitted = form.status === "SUBMITTED" ? true : false;
+        //check form is submitted or not? | if submitted can add comment otherwise will throw error
+        let isSubmitted = form.status === this.formSatus.SUBMITTED ? true : false;
 
         if (!isSubmitted) {
           return new Error(
             "FORM HASN'T BEEN SUBMITTED YET, CAN'T COMMENT(PERMISSION DENIED)"
           );
         }
+        //check if form is deleted
         let isDeleted = form.isDeleted === true ? true : false;
         if (isDeleted) {
           return new Error("You can't update because form is deleted");
         }
+        //start update comment
         await form.update(
           {
             updatedBy: manager.userName,
           },
           { transaction: transaction }
         );
-
+        
         let formDetail = await FormDetail.getDetailByWhere(
           {
             formId: form.id,
@@ -306,7 +331,7 @@ module.exports = class FormService extends BaseService {
   };
 
 
-
+  //view current user forms
   viewYourForm = async (req) => {
     try {
       let userData = req.user.data;
@@ -318,6 +343,7 @@ module.exports = class FormService extends BaseService {
         false,
         "FormDetail"
       );
+      //if no form found return error
       if (forms.length === 0)
         return new Error("You have no form,wait in the future");
       return forms;
@@ -326,10 +352,15 @@ module.exports = class FormService extends BaseService {
     }
   };
 
+  //type 1:probate form
+  //type 0:periodic evaluate form
   viewListBaseOnType = async (req, yourRole, formType) => {
     try {
       let ret = [];
+      //check if form available
       let checkNoForm = false;
+      //if manager role:can only view own employee forms which are submitted
+      //if hr or director: can view all user form
       if (yourRole === 2 || yourRole === 3) {
         let users = await User.findAll({});
         for (let user of users) {
@@ -350,16 +381,18 @@ module.exports = class FormService extends BaseService {
           };
           ret.push(dataObj);
         }
-
+        //if array ret is empty return error
         return checkNoForm ? ret : new Error("No Form submitted yet!");
       } else {
+
         let ret = [];
         let managerData = req.user.data;
         let manager = await User.getDetailById(managerData.id, null);
         let employees = await manager.getOwnEmployee();
-        if (employees.length === 0) {
+        if (employees.length === 0) { //this current user have no employees
           return new Error("YOU HAVE NO EMPLOYEE");
         }
+        //from employee,find all corresponding user 
         let userList = await Promise.all(
           employees.map((emp) => {
             return User.findOne({
@@ -369,7 +402,7 @@ module.exports = class FormService extends BaseService {
             });
           })
         );
-
+        
         for (let user of userList) {
           let forms = await Form.getAllWithDetail(
             {
@@ -379,7 +412,7 @@ module.exports = class FormService extends BaseService {
             },
             null,
             false,
-            ["FormDetail"]
+            ["FormDetail"]//include formDetail to view content and manager comment
           );
           checkNoForm = forms.length > 0 ? true : checkNoForm;
           let dataObj = {
@@ -388,7 +421,6 @@ module.exports = class FormService extends BaseService {
           };
           ret.push(dataObj);
         }
-
         return checkNoForm ? ret : new Error("No Form submitted yet!");
       }
     } catch (error) {
@@ -396,6 +428,7 @@ module.exports = class FormService extends BaseService {
     }
   };
 
+  
   viewForm = async (req, type) => {
     let yourRole = await this.getHighestRole(req.user.data.id);
     switch (type) {

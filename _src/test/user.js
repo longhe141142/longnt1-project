@@ -495,7 +495,6 @@ let viewOwnEmployee = () => {
           res.should.have.status(200);
           res.body.should.have.property("data");
           res.body.data.should.be.a("array");
-          res.body.data.should.have.length(1);
           // res.body.error.message["details"].should.have.length(4);
           done();
         });

@@ -126,7 +126,7 @@ module.exports = class AdminService extends BaseService {
   listAllUsr = async (req) => {
     try {
       let pagingOPtion = this.preparePaging(req);
-      logger.info(pagingOPtion);
+      let ret = {...pagingOPtion};
       let users = await User.findAll({
         offset: pagingOPtion.offset,
         limit: pagingOPtion.limit,
@@ -143,8 +143,9 @@ module.exports = class AdminService extends BaseService {
           },
         ],
       });
+      ret.users = users
 
-      return users;
+      return ret;
     } catch (error) {
       logger.error(error);
       return error;
@@ -153,8 +154,9 @@ module.exports = class AdminService extends BaseService {
 
   listAllForm = async (req) => {
     try {
-      let pagingOPtion = this.preparePaging(req,0);
+      let pagingOPtion = this.preparePaging(req, 0);
       logger.info(pagingOPtion);
+      let ret = { ...pagingOPtion };
       let forms = await Form.findAll({
         offset: pagingOPtion.offset,
         limit: pagingOPtion.limit,
@@ -165,14 +167,27 @@ module.exports = class AdminService extends BaseService {
         include: [
           {
             model: FormDetail,
-            as:"FormDetail"
+            as: "FormDetail",
           },
         ],
       });
+      ret.forms = forms
 
-      return forms;
+      return ret;
     } catch (error) {
       logger.error(error);
+      return error;
+    }
+  };
+
+  getOneUSer = async (req) => {
+    try {
+      let id = req.params.id;
+      if (!id) return new Error("No id provided!");
+      let user = await User.getDetailById(id, null, false, [Employee, Role]);
+      if (!user) return new Error("User not exist!");
+      return user;
+    } catch (error) {
       return error;
     }
   };

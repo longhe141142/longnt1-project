@@ -15,7 +15,7 @@ module.exports = class UserRouter extends BaseRouter {
   constructor() {
     const user = new UserService();
     super(user);
-    // this.post("/getSimp", this.simpleUserApi);
+
     this.patch("/uploadAvt", this.uploadAvatar);
     this.post(
       "/addEmployee",
@@ -28,7 +28,8 @@ module.exports = class UserRouter extends BaseRouter {
       userValidation.addEmployee,
       this.addUserToManage
     );
-    this.get("/ViewProfile", verifyToken, this.getUserDetail);
+
+    
     this.get(
       "/viewOwnEmployees",
       verifyToken,
@@ -63,15 +64,8 @@ module.exports = class UserRouter extends BaseRouter {
       userValidation.updateProfile,
       this.updateProfile
     );
-
-   
   }
 
-  
-
-  // simpleUserApi = (req, res) => {
-  //   res.send(this._service.getModel());
-  // };
 
   addUserToManage = async (req, res, next) => {
     let employeeOfManager = await this._service.addEmployee(req);
@@ -88,20 +82,6 @@ module.exports = class UserRouter extends BaseRouter {
     }
   };
 
-  //view profile
-  getUserDetail = async (req, res, next) => {
-    let { userName } = req.user.data;
-
-    let user = await User.getDetailByWhere(
-      {
-        userName: userName,
-      },
-      null,
-      false,
-      [Employee]
-    );
-    res.send(user);
-  };
 
   //add employee to your team
   getEmployeeManage = async (req, res, next) => {

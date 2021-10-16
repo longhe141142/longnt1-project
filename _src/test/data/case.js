@@ -105,7 +105,84 @@ let formTestData = {
       FORM_IS_DELETED: "be707950-2cce-11ec-8cfb-b3851d127efe",
     },
   },
- 
 };
 
-module.exports = { userTestData, formTestData };
+let authTestData = {
+  register: {
+    userName: {
+      ALPHANUM: "longnt78",
+      NON_ALPHANUM: "long$98",
+      WHITESPACE: "   LONG NT 4",
+      EXISTED: "longnt1",
+    },
+    password: {
+      WITH_LENGTH3: "123",
+      WITH_LENGTH8: "12345678",
+      WITH_LENGTH8_AND_CONTAIN_WHITESPACE: "12345 78",
+      EMPTY01:"",
+      EMPTY02:"         ",
+      
+    },
+    email: {
+      EXISTED: "director2@gmail.com",
+      INVALID_ACCEPT_DOMAIN: "longnt75@gmail.msc",
+      WHITESPACE: "longnt1@  vmdev.com",
+      VALID_EMAIL:"nonExisted@gmail.com",
+    },
+    socialInsurance: {
+      WITH_LENGTH3: "123",
+      WITH_LENGTH5: "12345",
+      WITH_CHARACTER: "123cd45",
+      WITH_LENGTH13: "123456789451214",
+      VALID_VALUE:"1234567"
+    },
+    phone: {
+      VIETNAMESE_FORMAT01: "+84866841700",
+      VIETNAMESE_FORMAT02: "+84 866 841 700",
+      VIETNAMESE_FORMAT03: "0983264215",
+      FOREIGN_FORMAT: "+1 866 451 1214",
+      INVALID: "02114DS566",
+    },
+    age: {
+      AGE_50: 50,
+      AGE_STRING_NUMBER: "19",
+      AGE_80: 80,
+      AGE_12: 12,
+      NOT_NUMBER: "ABC",
+    },
+    identityNumber: {
+      WITH_LENGTH3: "123",
+      WITH_LENGTH9: "123456789",
+      WITH_CHARACTER: "123cd45",
+      WITH_LENGTH13: "123456789451214",
+    },
+    socialInsurance:{
+      WITH_LENGTH13:"1254125632145",
+      WITH_LENGTH3:"123",
+      WITH_LENGTH5:"84125",
+      CONTAIN_CHARACTER: "123D4",
+      CONTAIN_SPECIAL_CHARACTER:"12%12^&",
+      CONTAIN_WHITE_SPACE:"123 45",
+    },
+    employee: {
+      name: {
+        NON_ALPHA: "dung77",
+        EMPTY01: "  ",
+        EMPTY02: "",
+        USING_WHITESPACE: "nguyen long",
+        USING_STRING: "huy",
+        firstName:{
+           VALID:"tran",
+           INVALID:"@3tran"
+        },
+        lastName:{
+          VALID:"phuong thao",
+          INVALID:"@3trd$an"
+       }
+      },
+
+    },
+  },
+};
+
+module.exports = { userTestData, formTestData, authTestData };

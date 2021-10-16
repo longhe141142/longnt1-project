@@ -35,6 +35,7 @@ const mainMenu = () => {
      ===================CHOOSE API TO TEST==============================
       1.USER
       2.FORM
+      3.AUTHENTICATION
       `;
   };
   
@@ -65,4 +66,12 @@ const mainMenu = () => {
   };
 
 
-module.exports = { InputSelection, GetUserText,UserMenu,mainMenu,formMenu };
+  const authMenu = () =>{
+    return `
+     ===================CHOOSE FUNCTION TO TEST==============================
+      1.register 
+      2.login`
+  }
+
+
+module.exports = { InputSelection, GetUserText,UserMenu,mainMenu,formMenu,authMenu };

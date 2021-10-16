@@ -1,4 +1,4 @@
-const { InputSelection, UserMenu, formMenu } = require("./helper");
+const { InputSelection, UserMenu, formMenu,authMenu } = require("./helper");
 let {
   UpdateProfiletest,
   viewProfileTest,
@@ -16,8 +16,10 @@ let {
   viewYourForm,
   viewEvalForm,
   approveForm,
-  rejectForm
+  rejectForm,
 } = require("../form");
+
+let { testRegister,testLogin } = require("../auth");
 
 let userApi = () => {
   let option = InputSelection(
@@ -83,13 +85,37 @@ let formApi = () => {
       break;
     case 7:
       viewEvalForm();
-      break;  
+      break;
     case 8:
       approveForm();
-      break;  
+      break;
     case 9:
       rejectForm();
-      break;  
+      break;
+    default:
+      break;
+  }
+  return;
+};
+
+let authAPI = () => {
+  let option = InputSelection(
+    "Enter input(0 to exit)->: ",
+    "Invalid Value",
+    authMenu(),
+    0,
+    2
+  );
+  if (option === 0) {
+    return;
+  }
+  switch (option) {
+    case 1:
+      testRegister();
+      break;
+    case 2:
+      testLogin();
+      break;
     default:
       break;
   }
@@ -99,4 +125,5 @@ let formApi = () => {
 module.exports = {
   userApi,
   formApi,
+  authAPI,
 };

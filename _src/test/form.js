@@ -14,9 +14,31 @@ let User = require("../_models/user");
 let Employee = require("../_models/employee");
 let FormDetail = require("../_models/formDetail");
 const logger = require("../_utils/logger");
-const { data } = require("../_utils/logger");
 
 let addForm = () => {
+  describe("/POST entry add form with user role is manager or employee", () => {
+    it(`do not allow manager to entry with message(cant access)`, async () => {
+      let res = await chai
+        .request(server)
+        .post("/api/form/create")
+        .set("AuthenticateToken", M01);
+
+      res.should.have.status(400);
+      res.body.should.have.property("error");
+      res.body.error.message.should.eql("cant access");
+    });
+
+    it(`do not allow employee to entry with message(can't access)`, async () => {
+      let res = await chai
+        .request(server)
+        .post("/api/form/create")
+        .set("AuthenticateToken", E07);
+      res.should.have.status(400);
+      res.body.should.have.property("error");
+      res.body.error.message.should.eql("cant access");
+    });
+  });
+
   describe("/POST add form with user [EMPLOYEE02] to entry", () => {
     it("it should not allow this user(UNAUTHORIZE) ", (done) => {
       chai
@@ -358,7 +380,6 @@ let updateComment = () => {
     });
   });
 
-  describe(`/PATCH update comment in form which is CLOSED`);
 };
 
 let viewYourForm = () => {
@@ -372,7 +393,6 @@ let viewYourForm = () => {
         .set("AuthenticateToken", E05);
       res.should.have.status(200);
       res.body.should.have.property("data");
-      res.body.data.should.have.lengthOf(5);
     });
   });
 
@@ -686,6 +706,30 @@ let viewEvalForm = () => {
 };
 
 let approveForm = () => {
+
+  describe("/POST entry approve form with user role is hr or employee", () => {
+    it(`do not allow HR to entry with message(cant access)`, async () => {
+      let res = await chai
+        .request(server)
+        .put("/api/form/approve")
+        .set("AuthenticateToken", HR02);
+
+      res.should.have.status(400);
+      res.body.should.have.property("error");
+      res.body.error.message.should.eql("cant access");
+    });
+
+    it(`do not allow employee to entry with message(can't access)`, async () => {
+      let res = await chai
+        .request(server)
+        .put("/api/form/approve")
+        .set("AuthenticateToken", E07);
+      res.should.have.status(400);
+      res.body.should.have.property("error");
+      res.body.error.message.should.eql("cant access");
+    });
+  });
+
   describe(`/PUT APPROVE FORM WITH FORM WHICH FORM IS NOT EMPLOYEE OF MANAGER02
             LOGIN AS MANAGER2`, () => {
     it(`Should display error(YOU HAVE NOT PERMISSION IN THIS FORM)
@@ -746,6 +790,30 @@ let approveForm = () => {
 };
 
 let rejectForm = () => {
+  describe("/POST entry approve form with user role is hr or employee", () => {
+    it(`do not allow HR to entry with message(cant access)`, async () => {
+      let res = await chai
+        .request(server)
+        .put("/api/form/reject")
+        .set("AuthenticateToken", HR02);
+
+      res.should.have.status(400);
+      res.body.should.have.property("error");
+      res.body.error.message.should.eql("cant access");
+    });
+
+    it(`do not allow employee to entry with message(can't access)`, async () => {
+      let res = await chai
+        .request(server)
+        .put("/api/form/reject")
+        .set("AuthenticateToken", E07);
+      res.should.have.status(400);
+      res.body.should.have.property("error");
+      res.body.error.message.should.eql("cant access");
+    });
+  });
+
+
   describe(`/PUT APPROVE FORM WITH FORM WHICH FORM IS NOT EMPLOYEE OF MANAGER02
             LOGIN AS MANAGER2`, () => {
     it(`Should display error(YOU HAVE NOT PERMISSION IN THIS FORM)
@@ -814,5 +882,5 @@ module.exports = {
   updateContent,
   viewEvalForm,
   approveForm,
-  rejectForm
+  rejectForm,
 };

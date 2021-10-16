@@ -23,7 +23,6 @@ module.exports = class InitialService {
     this.AdminRouter = new AdminRouter();
     this.FormRouter = new FormRouter();
   }
-
   registerService = () => {
     this._router.use("/user", this.user);
     this._router.use("/", this.authRouter);

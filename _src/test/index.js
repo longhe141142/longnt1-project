@@ -1,6 +1,6 @@
 const { InputSelection, mainMenu } = require("./helper/helper");
 
-const { userApi, formApi } = require("./helper/functionInterface");
+const { userApi, formApi, authAPI } = require("./helper/functionInterface");
 
 let main = () => {
   //  let option =
@@ -9,7 +9,7 @@ let main = () => {
     "Invalid Value",
     mainMenu(),
     0,
-    2
+    3
   );
   if (option === 0) {
     return;
@@ -20,6 +20,9 @@ let main = () => {
       break;
     case 2:
       formApi();
+      break;
+    case 3:
+      authAPI();
       break;
     default:
       break;

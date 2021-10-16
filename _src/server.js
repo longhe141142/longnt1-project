@@ -5,11 +5,15 @@ const logger = require("./_utils/logger");
 const config = require("./_config/config");
 const InitialService = require("./_services/index");
 const { responseEnhancer } = require("express-response-formatter");
-let { InitAssociationData } = require("./_seeder/index");
+// let { InitAssociationData } = require("./_seeder/index");
+let { useSwagger } = require("../Api-Doc/index");
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(responseEnhancer());
 
+app.get("/getBook", (req, res, next) => {
+  res.send("haha");
+});
 
 app.get("/", (req, res) => res.send("App is working"));
 
@@ -22,28 +26,25 @@ const initService = (app) => {
 
 const initSequelize = async () => {
   const db = require("./_models/db.connect");
-  await db.connect()
-    .then(async () => {
-      logger.info(`Establish connection successfully:--->`);
-      return true;
-    })
-    .catch((err) => {
-      logger.error("Connection crashed!--->");
-      logger.error(err);
-    });
+  try {
+    await db.connect();
+    logger.info(`Establish connection successfully:--->`);
+  } catch (error) {
+    logger.error("Connection crashed!--->");
+    logger.error(err.message);
+  }
 };
 
 const startServer = async () => {
+  initService(app);
+  await initSequelize();
+  useSwagger(app, config.port);
   app.listen(config.port, config.host);
   logger.info(
     `Listening on host ${config.host} on port ${config.port} http://${config.host}:${config.port}`
   );
 };
 
-initService(app);
-initSequelize();
-startServer().then(async () => {
-  // await InitAssociationData();
-});
+startServer();
 
 module.exports = app;
