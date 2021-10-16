@@ -1,30 +1,37 @@
 # PROJECT STRUCTURE
 
 ```bash
-Project
+project
+├── Api-Doc
+│   └── index.js
 ├── package.json
 ├── package-lock.json
 ├── _public
 │   ├── uploads
 │   └── _views
-│       ├── form2.html #probate form
-│       ├── form.css 
-│       └── form.html  #evaluate form
-├── SQL_SRIPT&POSTMAN #postman and sql
-│   ├── adminCollection.json 
+│       ├── form2.html
+│       ├── form.css
+│       └── form.html
+├── readme.md
+├── SQL_SRIPT&POSTMAN
+│   ├── adminCollection.json
 │   ├── db.sql
 │   ├── form_Colections.json
 │   └── userCollections.json
 └── _src
     ├── _config
-    │   ├── config.js #main config
-    │   ├── db.config.js #config database for sequelize
-    │   ├── index.js 
-    │   ├── multer.config.js #config multer upload
+    │   ├── config.js
+    │   ├── db.config.js
+    │   ├── index.js
+    │   ├── multer.config.js
     │   ├── nodemailer.config.js
     │   ├── responseInterface.js
     │   └── validator
     │       └── payload.js
+    ├── database
+    │   ├── db.sql
+    │   ├── rowss
+    │   └── seeder.sql
     ├── _middleware
     │   ├── auth.js
     │   ├── handerError.js
@@ -100,6 +107,7 @@ Project
     │       ├── index.js
     │       └── service.js
     ├── test
+    │   ├── auth.js
     │   ├── data
     │   │   └── case.js
     │   ├── form.js
