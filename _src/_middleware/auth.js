@@ -35,7 +35,8 @@ module.exports.authJWT = (req, res, User) => {
 };
 
 module.exports.verifyToken = async (req, res, next) => {
-  const token = req.header("AuthenticateToken");
+  let BearerToken = req.header("Authorization");
+  const token = !BearerToken ? null : req.header("Authorization").split(" ")[1];
 
   if (!token) {
     return nextErr(
@@ -45,6 +46,7 @@ module.exports.verifyToken = async (req, res, next) => {
       next
     );
   }
+
   try {
     const decoded = jwt.verify(token, config.token_secret);
     let user = await User.findOne({
@@ -52,6 +54,7 @@ module.exports.verifyToken = async (req, res, next) => {
         id: decoded.data.id,
       },
     });
+
     if (!user) {
       // return res.status(400).send(`User Not Found,Failed Verify`);
       return nextErr(
@@ -65,7 +68,12 @@ module.exports.verifyToken = async (req, res, next) => {
     next();
     return;
   } catch (err) {
-    res.status(400).send(err);
+    return nextErr(
+      new ErrorHandler(403, err.message),
+      req,
+      res,
+      next
+    );
   }
 };
 

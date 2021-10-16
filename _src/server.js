@@ -5,11 +5,13 @@ const logger = require("./_utils/logger");
 const config = require("./_config/config");
 const InitialService = require("./_services/index");
 const { responseEnhancer } = require("express-response-formatter");
+var cors = require('cors')
 // let { InitAssociationData } = require("./_seeder/index");
 let { useSwagger } = require("../Api-Doc/index");
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(responseEnhancer());
+app.use(cors());
 
 app.get("/getBook", (req, res, next) => {
   res.send("haha");

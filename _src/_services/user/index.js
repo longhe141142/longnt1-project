@@ -29,7 +29,6 @@ module.exports = class UserRouter extends BaseRouter {
       this.addUserToManage
     );
 
-    
     this.get(
       "/viewOwnEmployees",
       verifyToken,
@@ -58,6 +57,7 @@ module.exports = class UserRouter extends BaseRouter {
     );
 
     this.get("/profile", verifyToken, this.viewProfile);
+
     this.put(
       "/update/profile",
       verifyToken,
@@ -65,7 +65,6 @@ module.exports = class UserRouter extends BaseRouter {
       this.updateProfile
     );
   }
-
 
   addUserToManage = async (req, res, next) => {
     let employeeOfManager = await this._service.addEmployee(req);
@@ -81,7 +80,6 @@ module.exports = class UserRouter extends BaseRouter {
       CustomResponse.sendObject(res, 200, employeeOfManager);
     }
   };
-
 
   //add employee to your team
   getEmployeeManage = async (req, res, next) => {
@@ -144,3 +142,149 @@ module.exports = class UserRouter extends BaseRouter {
     CustomResponse.sendObject(res, 202, inf4);
   };
 };
+
+/**
+ * @swagger
+ * /api/user/profile:
+ *   get:
+ *     tags:
+ *      - user api
+ *     summary: Retrieve a user profile
+ *     description: Retrieve profile of user by the token
+ *     security:
+ *      - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: return a user information,contain roles and employee info.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               $ref: '#/components/ViewProfile/success'
+ *       403:
+ *         description: No Token provided!
+ *         content:
+ *            application/json:
+ *             schema:
+ *               type: object
+ *               $ref: '#/components/ViewProfile/NoTokenProvided'
+ *       400:
+ *          description: Invalid token
+ *          content:
+ *            application/json:
+ *             schema:
+ *               type: object
+ *               $ref: '#/components/ViewProfile/invalidToken'
+ *
+ */
+
+/**
+ * @swagger
+ * /api/user/addEmployee:
+ *   post:
+ *     tags:
+ *      - user api
+ *     summary: add a employee available to your team
+ *     description: add a employee available to your team
+ *     security:
+ *      - bearerAuth: []
+ *     parameters:
+ *       - in: body
+ *         schema:
+ *          type: object
+ *          $ref: '#/components/addEmployee/request/addEmployeeRequest'
+ *     responses:
+ *       200:
+ *         description: return EMPLOYEE information.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               $ref: '#/components/addEmployee/response/success'
+ *       400:
+ *         description: Unauthorized with role doesn't permission
+ *         content:
+ *            application/json:
+ *             schema:
+ *               oneOf:
+ *                - $ref: '#/components/addEmployee/response/unAuthorize'
+ *                - $ref: '#/components/ViewProfile/invalidToken'
+ *       404:
+ *         description:  found employee provided by id
+ *         content:
+ *            application/json:
+ *             schema:
+ *               oneOf:
+ *                - $ref: '#/components/addEmployee/response/notFound'
+ *                - $ref: '#/components/addEmployee/response/ValidatorException'
+ */
+
+/**
+ * @swagger
+ * /api/user/uploadAvatar:
+ *   patch:
+ *     tags:
+ *      - user api
+ *     summary: add a avatar for current user
+ *     description: add a avatar for current user
+ *     security:
+ *      - bearerAuth: []
+ *     requestBody:
+ *       content:
+ *        multipart/form-data:
+ *         schema:
+ *          type: object
+ *          properties:
+ *           image:
+ *             type: string
+ *             format: binary
+ *     responses:
+ *       200:
+ *         description: return message success.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               $ref: '#/components/uploadAvatar/response/success'
+ *       400:
+ *         description: error while send empty body
+ *         content:
+ *            application/json:
+ *             schema:
+ *               type: object
+ *               $ref: '#/components/uploadAvatar/response/code400'
+ */
+
+/**
+ * @swagger
+ * /api/user/update/profile:
+ *   put:
+ *     tags:
+ *      - user api
+ *     summary: update profile for current user
+ *     description: update profile for current user
+ *     security:
+ *      - bearerAuth: []
+ *     requestBody:
+ *       content:
+ *        application/json:
+ *         schema:
+ *          type: object
+ *          $ref: '#/components/updateProfile/request'
+ *     responses:
+ *       202:
+ *         description: return message success.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               $ref: '#/components/updateProfile/response/success/data'
+ *       404:
+ *         description: error while send invalid format social insurance
+ *         content:
+ *            application/json:
+ *             schema:
+ *               type: object
+ *               $ref: '#/components/updateProfile/response/code404'
+ */
+

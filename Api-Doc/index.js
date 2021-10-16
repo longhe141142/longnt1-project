@@ -1,10 +1,10 @@
 const swaggerUI = require("swagger-ui-express");
 
 const swaggerJSDoc = require("swagger-jsdoc");
-
-let useSwagger = (app,port) => {
+let { userComponent } = require("./schema.component");
+let useSwagger = (app, port) => {
   const swaggerDefinition = {
-    openapi: "3.0.0",
+    openapi: "3.0.1",
     info: {
       title: "Express API for JSONPlaceholder",
       version: "1.0.0",
@@ -25,14 +25,32 @@ let useSwagger = (app,port) => {
         description: "Development server",
       },
     ],
+    components: {
+        securitySchemes: {
+          bearerAuth: {
+            type: "http",
+            scheme: "bearer",
+            bearerFormat: "JWT",
+          },
+        },
+
+      ...userComponent,
+    },
+    security: [
+      {
+        bearerAuth: [],
+      },
+    ],
   };
   const options = {
     swaggerDefinition,
     // Paths to files containing OpenAPI definitions
-    apis: ["./_src/_services/*/*.js", "./_src/server.js"],
+
+    apis: ["./_src/_services/*/*.js", "./_src/server.js", "./Api-Doc/*.js"],
   };
   const swaggerSpec = swaggerJSDoc(options);
   app.use("/docs", swaggerUI.serve, swaggerUI.setup(swaggerSpec));
+  console.log(options);
 };
 
 module.exports = { useSwagger };

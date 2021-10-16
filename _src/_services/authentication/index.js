@@ -14,7 +14,6 @@ class AuthRouter extends BaseRouter {
     const authService = new AuthService();
     super(authService);
 
-
     this.post("/register", authenValidation.register, this.register);
 
     this.get("/login", authenValidation.login, this.login);
@@ -45,24 +44,20 @@ class AuthRouter extends BaseRouter {
 
 module.exports = AuthRouter;
 //Api doc:
-    /**
-     * @swagger
-     * /api/register:
-     *   post:
-     *     tags:
-     *       - Fruits
-     *     description: Returns a single fruit
-     *     produces:
-     *       - application/json
-     *     parameters:
-     *       - name: _id
-     *         description: Particular Fruit Object's ID (Automatically assigned by MongoDB)
-     *         in: path
-     *         required: true
-     *         type: string
-     *     responses:
-     *       200:
-     *         description: A single fruit
-     *       500:
-     *         description: Server Error
-     */
+/**
+ * @swagger
+ * /api/register:
+ *   post:
+ *     security:              # <--- ADD THIS
+ *      - bearerAuth: []     # <--- ADD THIS
+ *     tags:
+ *       - Fruits
+ *     description: Returns a single fruit
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: A single fruit
+ *       500:
+ *         description: Server Error
+ */
