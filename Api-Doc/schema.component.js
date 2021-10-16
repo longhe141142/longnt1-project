@@ -1,5 +1,10 @@
-const { string } = require("joi");
-const { error: errorResponse, user, employee } = require("./utils/response");
+const {
+  error: errorResponse,
+  user,
+  employee,
+  form,
+  formDetail,
+} = require("./utils/response");
 
 let userComponent = {
   ViewProfile: {
@@ -234,7 +239,7 @@ let userComponent = {
         description: "return success message",
         properties: {
           data: {
-            type: string,
+            type: "string",
             example: "success",
           },
         },
@@ -653,46 +658,177 @@ let userComponent = {
 let formComponent = {
   addForm: {
     request: {
-      properties: {
-        data: {
-          type: "object",
-          properties: {
-            userId: {
-              type: "array",
-              items: {
+      data: {
+        type: "object",
+        properties: {
+          userId: {
+            type: "array",
+            items: {
+              type: "string",
+              example: "sample-id",
+            },
+          },
+          type: {
+            type: "number",
+            example: 1,
+          },
+          dueDate: {
+            type: "string",
+            example: "2021-12-21",
+          },
+          isDeleted: {
+            type: "number",
+            example: 0,
+          },
+          formDetail: {
+            type: "object",
+            properties: {
+              content: {
                 type: "string",
-                example: "sample-id",
+                example: "abc",
               },
             },
-            type: {
-              type: "number",
-              example: 1,
-            },
-            dueDate: {
-              type: "string",
-              example: "2021-12-21",
-            },
-            isDeleted: {
-              type: "number",
-              example: 0,
-            },
-            formDetail: {
-              type: "object",
-              properties: {
-                content: {
-                  type: "string",
-                  example: "abc",
+          },
+        },
+        example: {
+          userId: ["5fa82ce0-2b5e-11ec-8639-1b33c0b488b9"],
+          type: "0",
+          dueDate: "2021-12-07",
+          isDeleted: 0,
+          formDetail: {
+            content: "abc",
+          },
+        },
+      },
+    },
+    response: {
+      success: {
+        type: "object",
+        properties: {
+          data: {
+            type: "object",
+            properties: {
+              form: {
+                type: "object",
+                properties: {
+                  ...form,
+                },
+              },
+              formDetail: {
+                type: "object",
+                properties: {
+                  ...formDetail,
                 },
               },
             },
           },
-          example: {
-            userId: ["5fa82ce0-2b5e-11ec-8639-1b33c0b488b9"],
-            type: "0",
-            dueDate: "2021-12-07",
-            isDeleted: 0,
-            formDetail: {
-              content: "abc",
+        },
+      },
+      code404: {
+        type: "object",
+        properties: {
+          error: {
+            type: "object",
+            properties: {
+              ...errorResponse,
+            },
+            example: {
+              status: "error",
+              statusCode: 404,
+              message: {
+                _original: {
+                  userId: ["5fa82ce0-2b5e-11ec-8639-1b33c0b488b9"],
+                  dueDate: "2021-12-07",
+                  formDetail: {
+                    content: "abc",
+                  },
+                },
+                details: [
+                  {
+                    message: "type is required",
+                    path: ["type"],
+                    type: "any.required",
+                    context: {
+                      label: "type",
+                      key: "type",
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+
+  submitForm: {
+    response: {
+      success: {
+        properties: {
+          data: {
+            properties: {
+              ...form,
+            },
+            example: {
+              id: "cbb83300-2ea9-11ec-9089-df6da1bf74ab",
+              receiver: null,
+              type: 1,
+              userId: "30eb7eb0-2b5f-11ec-8639-1b33c0b488b9",
+              status: "SUBMITTED",
+              dueDate: "2021-12-07T00:00:00.000Z",
+              isApproved: 0,
+              isRejected: 0,
+              isDue: 0,
+              isDeleted: false,
+              createdBy: "bigherodz54",
+              updatedBy: "bigherodz54",
+              createdAt: "2021-10-16T17:52:14.000Z",
+              updatedAt: "2021-10-16T18:04:30.346Z",
+            },
+          },
+        },
+      },
+      code404: {
+        submitTwice: {
+          properties: {
+            error: {
+              properties: {
+                ...errorResponse,
+              },
+              example: {
+                status: "error",
+                statusCode: 404,
+                message: "CANT SUBMIT TWICE",
+              },
+            },
+          },
+        },
+        formNotExist: {
+          properties: {
+            error: {
+              properties: {
+                ...errorResponse,
+              },
+              example: {
+                status: "error",
+                statusCode: 404,
+                message: "FORM IS NOT EXISTED!",
+              },
+            },
+          },
+        },
+        noPermission: {
+          properties: {
+            error: {
+              properties: {
+                ...errorResponse,
+              },
+              example: {
+                status: "error",
+                statusCode: 404,
+                message: "YOU DONT HAVE PERMISSION TO SUBMIT THIS FORM!",
+              },
             },
           },
         },
@@ -701,4 +837,4 @@ let formComponent = {
   },
 };
 
-module.exports = { userComponent ,formComponent};
+module.exports = { userComponent, formComponent };

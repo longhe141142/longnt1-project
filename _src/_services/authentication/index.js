@@ -51,7 +51,7 @@ module.exports = AuthRouter;
  *     security:              # <--- ADD THIS
  *      - bearerAuth: []     # <--- ADD THIS
  *     tags:
- *       - Fruits
+ *       - Authenticate
  *     description: Returns a single fruit
  *     produces:
  *       - application/json

@@ -96,4 +96,60 @@ let user = {
   },
 };
 
-module.exports = { error,user,employee };
+let form = {
+  id: {
+    type: "string",
+  },
+  isDue: {
+    type: "number",
+    example: 0,
+  },
+  type: {
+    type: "number",
+    example: 1,
+  },
+  dueDate: {
+    type: "string",
+    example: "2021-11-12",
+  },
+  isDeleted: {
+    type: "number",
+    example: 1,
+  },
+  isRejected: {
+    type: "number",
+    example: 1,
+  },
+  isApproved: {
+    type: "number",
+    example: 1,
+  },
+  status: {
+    type: "string",
+    example: "NEW",
+  },
+  userId: {
+    type: "string",
+  },
+  ...common,
+};
+
+let formDetail = {
+  id: {
+    type: "string",
+  },
+  managerComment: {
+    type: "string",
+    example:"comment"
+  },
+  isDeleted: {
+    type: "boolean",
+  },
+  content: {
+    type: "string",
+    example: "abc"
+  },
+  ...common
+};
+
+module.exports = { error, user, employee, form ,formDetail};

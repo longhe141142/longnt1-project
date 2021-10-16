@@ -254,31 +254,79 @@ module.exports = class FormRouter extends BaseRouter {
   };
 };
 
-
-
 /**
  * @swagger
- * /api/user/displayEmployeeList:
- *   get:
+ * /api/form/create:
+ *   post:
  *     tags:
- *      - user api
- *     summary: view all whose role is avalable for current user to add
- *     description: view all whose role is avalable for current user to add(Example-> DIRECTOR can add MANAGER AND HR||MANAGER can add ONLY EMPLOYEE)
+ *      - form api
+ *     summary: create form for user
+ *     description: create form for user
  *     security:
  *      - bearerAuth: []
+ *     requestBody:
+ *       content:
+ *        application/json:
+ *         schema:
+ *          type: object
+ *          $ref: '#/components/formComponent/addForm/request/data'
  *     responses:
  *       200:
- *         description: return array of employee available.
+ *         description: return object of form and display formDetail.
  *         content:
  *           application/json:
  *             schema:
  *               type: object
- *               $ref: '#/components/viewEmployeeList/response/success'
- *       400:
- *         description: error if current user have no permission
+ *               $ref: '#/components/formComponent/addForm/response/success'
+ *       404:
+ *         description: error if failed in validate middleware
  *         content:
  *            application/json:
  *             schema:
  *               type: object
- *               $ref: '#/components/viewOwnEmployee/response/code404/unAuthorized'
+ *               $ref: '#/components/formComponent/addForm/response/code404'
+ */
+
+
+/**
+ * @swagger
+ * /api/form/submit:
+ *   put:
+ *     tags:
+ *      - form api
+ *     summary: submit form of current user
+ *     description: submit form of current user
+ *     security:
+ *      - bearerAuth: []
+ *     requestBody:
+ *       content:
+ *        application/json:
+ *         schema:
+ *          type: object
+ *          properties: 
+ *            id: 
+ *             type:string
+ *         example: 
+ *            id: d0f80600-2cde-11ec-bc3e-db15a81a0069
+ *     responses:
+ *       200:
+ *         description: return object of form submitted
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               $ref: '#/components/formComponent/submitForm/response/success'
+ *       404:
+ *         description: 
+ *            error if user try to re-submit,|
+ *            error if user have no permission to submit form,|
+ *            error if form is not existed
+ *         content:
+ *            application/json:
+ *             schema:
+ *               type: object
+ *               oneOf:
+ *                - $ref: '#/components/formComponent/submitForm/response/code404/submitTwice'
+ *                - $ref: '#/components/formComponent/submitForm/response/code404/formNotExist'
+ *                - $ref: '#/components/formComponent/submitForm/response/code404/noPermission'
  */
