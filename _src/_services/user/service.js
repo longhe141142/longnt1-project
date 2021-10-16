@@ -118,6 +118,15 @@ module.exports = class UserService extends BaseService {
           if (highestRole == 4 || highestRole == 3) userList.push(val);
         }
         // console.log(userList);
+      } else if (highestRole === 3) {
+        //find all user whose role is employee
+        userList = employees.filter((val) => {
+          // console.log(val.roles[0].id);
+          //if user have only one role and that roleid = 5,surely that's employee
+          return val.roles.length === 1 && val.roles[0].id === 5;
+        });
+      } else {//with role admin
+        userList = employees;
       }
 
       // console.log(userList);
@@ -236,5 +245,3 @@ module.exports = class UserService extends BaseService {
     }
   };
 };
-
-

@@ -100,6 +100,7 @@ module.exports = class UserRouter extends BaseRouter {
       return next(new Error(404, "Cant load site"), req, res, next);
     } else {
       ret["employee-list"] = employeeList;
+      ret.totalRecord = employeeList.length;
       CustomResponse.sendObject(res, 201, ret);
     }
   };
@@ -273,7 +274,7 @@ module.exports = class UserRouter extends BaseRouter {
  *          $ref: '#/components/updateProfile/request'
  *     responses:
  *       202:
- *         description: return message success.
+ *         description: return user profile updated.
  *         content:
  *           application/json:
  *             schema:
@@ -286,5 +287,62 @@ module.exports = class UserRouter extends BaseRouter {
  *             schema:
  *               type: object
  *               $ref: '#/components/updateProfile/response/code404'
+ */
+
+
+/**
+ * @swagger
+ * /api/user/viewOwnEmployees:
+ *   get:
+ *     tags:
+ *      - user api
+ *     summary: view employee who are in manager(current user) team
+ *     description: view employee who are in manager(current user) team
+ *     security:
+ *      - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: return array of employee available.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               $ref: '#/components/viewOwnEmployee/response/success/data'
+ *       404:
+ *         description: error if current user have no employee
+ *         content:
+ *            application/json:
+ *             schema:
+ *               type: object
+ *               oneOf:
+ *               - $ref: '#/components/viewOwnEmployee/response/code404/noEmployee'
+ *               - $ref: '#/components/viewOwnEmployee/response/code404/unAuthorized'
+ */
+
+/**
+ * @swagger
+ * /api/user/displayEmployeeList:
+ *   get:
+ *     tags:
+ *      - user api
+ *     summary: view all whose role is avalable for current user to add
+ *     description: view all whose role is avalable for current user to add(Example-> DIRECTOR can add MANAGER AND HR||MANAGER can add ONLY EMPLOYEE)
+ *     security:
+ *      - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: return array of employee available.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               $ref: '#/components/viewEmployeeList/response/success'
+ *       400:
+ *         description: error if current user have no permission
+ *         content:
+ *            application/json:
+ *             schema:
+ *               type: object
+ *               $ref: '#/components/viewOwnEmployee/response/code404/unAuthorized'
  */
 

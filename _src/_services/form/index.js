@@ -253,3 +253,32 @@ module.exports = class FormRouter extends BaseRouter {
     CustomResponse.sendObject(res, 200, approvedForm);
   };
 };
+
+
+
+/**
+ * @swagger
+ * /api/user/displayEmployeeList:
+ *   get:
+ *     tags:
+ *      - user api
+ *     summary: view all whose role is avalable for current user to add
+ *     description: view all whose role is avalable for current user to add(Example-> DIRECTOR can add MANAGER AND HR||MANAGER can add ONLY EMPLOYEE)
+ *     security:
+ *      - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: return array of employee available.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               $ref: '#/components/viewEmployeeList/response/success'
+ *       400:
+ *         description: error if current user have no permission
+ *         content:
+ *            application/json:
+ *             schema:
+ *               type: object
+ *               $ref: '#/components/viewOwnEmployee/response/code404/unAuthorized'
+ */

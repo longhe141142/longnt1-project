@@ -1,7 +1,7 @@
 const swaggerUI = require("swagger-ui-express");
 
 const swaggerJSDoc = require("swagger-jsdoc");
-let { userComponent } = require("./schema.component");
+let { userComponent, formComponent } = require("./schema.component");
 let useSwagger = (app, port) => {
   const swaggerDefinition = {
     openapi: "3.0.1",
@@ -26,15 +26,18 @@ let useSwagger = (app, port) => {
       },
     ],
     components: {
-        securitySchemes: {
-          bearerAuth: {
-            type: "http",
-            scheme: "bearer",
-            bearerFormat: "JWT",
-          },
+      securitySchemes: {
+        bearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
         },
+      },
 
       ...userComponent,
+      formComponent: {
+        ...formComponent,
+      },
     },
     security: [
       {
