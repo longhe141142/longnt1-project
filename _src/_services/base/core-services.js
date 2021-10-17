@@ -3,8 +3,6 @@ const config = require("../../_config/config");
 let dataUtils = require("../../_utils/index");
 const logger = require("../../_utils/logger");
 module.exports = class CoreService {
-
-  
   formSatus = {
     SUBMITTED: "SUBMITTED",
     NEW: "NEW",
@@ -29,7 +27,6 @@ module.exports = class CoreService {
 
   FIELD_USER_ENUM = ["userName", "age", "age", "id", "email"];
   FIELD_FORM_ENUM = ["id", "status", "userId", "dueDate"];
-
 
   simpleFunction = () => {
     console.log("simple function from core!");
@@ -59,7 +56,7 @@ module.exports = class CoreService {
     }
     logger.warn(`order type: ${this.getOrderType(orderType)}`);
     return {
-      orderBy: this.getFieldName(orderBy,type),
+      orderBy: this.getFieldName(orderBy, type),
       orderType: this.getOrderType(orderType),
       limit: size,
       offset: size * (pageIndex - 1),

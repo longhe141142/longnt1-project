@@ -8,6 +8,7 @@ const {
   userRole,
   errorMiddleware,
   userOnly,
+  pagingOPtion,
 } = require("./utils/response");
 
 let userComponent = {
@@ -1469,6 +1470,1184 @@ let formComponent = {
       },
     },
   },
+  viewEvaluateFormList: {
+    response: {
+      success: {
+        properties: {
+          data: {
+            type: "array",
+            items: {
+              properties: {
+                user: {
+                  properties: {
+                    ...userOnly,
+                  },
+                  example: {
+                    id: "4d3c7250-2b5e-11ec-8639-1b33c0b488b9",
+                    userName: "EMPLOYEE4",
+                    password:
+                      "$2b$10$wX.1Qzxm9pWgXgAFRuB.JOXbp4LESHIYMjcE4nAK7eQ4OXA.DfG.a",
+                    age: 19,
+                    email: "EMPLOYEE4@gmail.com",
+                    phone: "+84 866 841700",
+                    address: null,
+                    isActive: null,
+                    identityNumber: "021523251",
+                    socialInsurance: "00210",
+                    avatar: null,
+                    isDeleted: false,
+                    createdBy: "EMPLOYEE4",
+                    updatedBy: "EMPLOYEE4",
+                    createdAt: "2021-10-12T13:14:16.000Z",
+                    updatedAt: "2021-10-12T13:14:16.000Z",
+                  },
+                },
+                forms: {
+                  type: "array",
+                  items: {
+                    properties: {
+                      ...form,
+                      formDetail: {
+                        properties: {
+                          ...formDetail,
+                        },
+                        example: {
+                          id: "6f3ebd60-2cdd-11ec-8520-2bd7c9d982df",
+                          formId: "6f3e9650-2cdd-11ec-8520-2bd7c9d982df",
+                          content: "abc",
+                          managerComment: "",
+                          isDeleted: false,
+                          createdBy: "admindeptrai",
+                          updatedBy: "admindeptrai",
+                          createdAt: "2021-10-14T10:56:50.000Z",
+                          updatedAt: "2021-10-14T10:56:50.000Z",
+                        },
+                      },
+                    },
+                    example: {
+                      id: "6f3e9650-2cdd-11ec-8520-2bd7c9d982df",
+                      receiver: null,
+                      type: 0,
+                      userId: "4d3c7250-2b5e-11ec-8639-1b33c0b488b9",
+                      status: "SUBMITTED",
+                      dueDate: "2021-12-07T00:00:00.000Z",
+                      isApproved: 0,
+                      isRejected: 1,
+                      isDue: 0,
+                      isDeleted: false,
+                      createdBy: "admindeptrai",
+                      updatedBy: "admindeptrai",
+                      createdAt: "2021-10-14T10:56:50.000Z",
+                      updatedAt: "2021-10-14T11:39:57.000Z",
+                      FormDetail: {
+                        id: "6f3ebd60-2cdd-11ec-8520-2bd7c9d982df",
+                        formId: "6f3e9650-2cdd-11ec-8520-2bd7c9d982df",
+                        content: "abc",
+                        managerComment: "",
+                        isDeleted: false,
+                        createdBy: "admindeptrai",
+                        updatedBy: "admindeptrai",
+                        createdAt: "2021-10-14T10:56:50.000Z",
+                        updatedAt: "2021-10-14T10:56:50.000Z",
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+
+  approveForm: {
+    request: {
+      properties: {
+        id: {
+          type: "string",
+          example: "d0f80600-2cde-11ec-bc3e-db15a81a0069",
+        },
+      },
+    },
+    response: {
+      success: {
+        properties: {
+          data: {
+            properties: {
+              ...form,
+              FormDetail: {
+                properties: {
+                  ...formDetail,
+                },
+                example: {
+                  id: "d0f8f060-2cde-11ec-bc3e-db15a81a0069",
+                  formId: "d0f80600-2cde-11ec-bc3e-db15a81a0069",
+                  content: "abc",
+                  managerComment: "",
+                  isDeleted: false,
+                  createdBy: "admindeptrai",
+                  updatedBy: "admindeptrai",
+                  createdAt: "2021-10-14T11:06:44.000Z",
+                  updatedAt: "2021-10-14T11:06:44.000Z",
+                },
+              },
+            },
+            example: {
+              id: "d0f80600-2cde-11ec-bc3e-db15a81a0069",
+              receiver: null,
+              type: 1,
+              userId: "4d3c7250-2b5e-11ec-8639-1b33c0b488b9",
+              status: "SUBMITTED",
+              dueDate: "2021-12-07T00:00:00.000Z",
+              isApproved: 1,
+              isRejected: 0,
+              isDue: 0,
+              isDeleted: false,
+              createdBy: "admindeptrai",
+              updatedBy: "admindeptrai",
+              createdAt: "2021-10-14T11:06:44.000Z",
+              updatedAt: "2021-10-14T11:52:31.000Z",
+              FormDetail: {
+                id: "d0f8f060-2cde-11ec-bc3e-db15a81a0069",
+                formId: "d0f80600-2cde-11ec-bc3e-db15a81a0069",
+                content: "abc",
+                managerComment: "",
+                isDeleted: false,
+                createdBy: "admindeptrai",
+                updatedBy: "admindeptrai",
+                createdAt: "2021-10-14T11:06:44.000Z",
+                updatedAt: "2021-10-14T11:06:44.000Z",
+              },
+            },
+          },
+        },
+      },
+      code400: {
+        formNotExist: {
+          properties: {
+            error: {
+              properties: {
+                ...errorResponse,
+              },
+              example: {
+                status: "error",
+                statusCode: 400,
+                message: "FORM IS NOT EXISTED",
+              },
+            },
+          },
+        },
+        validationException: {
+          properties: {
+            error: {
+              properties: {
+                ...errorMiddleware,
+              },
+              example: {
+                status: "error",
+                statusCode: 404,
+                message: {
+                  _original: {
+                    id: "",
+                  },
+                  details: [
+                    {
+                      message: "Please fill in form id",
+                      path: ["id"],
+                      type: "string.empty",
+                      context: {
+                        label: "id",
+                        value: "",
+                        key: "id",
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+  rejectForm: {
+    request: {
+      properties: {
+        id: {
+          type: "string",
+          example: "d0f80600-2cde-11ec-bc3e-db15a81a0069",
+        },
+      },
+    },
+    response: {
+      success: {
+        properties: {
+          data: {
+            properties: {
+              ...form,
+              FormDetail: {
+                properties: {
+                  ...formDetail,
+                },
+                example: {
+                  id: "d0f8f060-2cde-11ec-bc3e-db15a81a0069",
+                  formId: "d0f80600-2cde-11ec-bc3e-db15a81a0069",
+                  content: "abc",
+                  managerComment: "",
+                  isDeleted: false,
+                  createdBy: "admindeptrai",
+                  updatedBy: "admindeptrai",
+                  createdAt: "2021-10-14T11:06:44.000Z",
+                  updatedAt: "2021-10-14T11:06:44.000Z",
+                },
+              },
+            },
+            example: {
+              id: "d0f80600-2cde-11ec-bc3e-db15a81a0069",
+              receiver: null,
+              type: 1,
+              userId: "4d3c7250-2b5e-11ec-8639-1b33c0b488b9",
+              status: "SUBMITTED",
+              dueDate: "2021-12-07T00:00:00.000Z",
+              isApproved: 0,
+              isRejected: 1,
+              isDue: 0,
+              isDeleted: false,
+              createdBy: "admindeptrai",
+              updatedBy: "admindeptrai",
+              createdAt: "2021-10-14T11:06:44.000Z",
+              updatedAt: "2021-10-14T11:52:31.000Z",
+              FormDetail: {
+                id: "d0f8f060-2cde-11ec-bc3e-db15a81a0069",
+                formId: "d0f80600-2cde-11ec-bc3e-db15a81a0069",
+                content: "abc",
+                managerComment: "",
+                isDeleted: false,
+                createdBy: "admindeptrai",
+                updatedBy: "admindeptrai",
+                createdAt: "2021-10-14T11:06:44.000Z",
+                updatedAt: "2021-10-14T11:06:44.000Z",
+              },
+            },
+          },
+        },
+      },
+      code400: {
+        formNotExist: {
+          properties: {
+            error: {
+              properties: {
+                ...errorResponse,
+              },
+              example: {
+                status: "error",
+                statusCode: 400,
+                message: "FORM IS NOT EXISTED",
+              },
+            },
+          },
+        },
+        validationException: {
+          properties: {
+            error: {
+              properties: {
+                ...errorMiddleware,
+              },
+              example: {
+                status: "error",
+                statusCode: 404,
+                message: {
+                  _original: {
+                    id: "",
+                  },
+                  details: [
+                    {
+                      message: "Please fill in form id",
+                      path: ["id"],
+                      type: "string.empty",
+                      context: {
+                        label: "id",
+                        value: "",
+                        key: "id",
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+  checkDueDate: {
+    response: {
+      success: {
+        properties: {
+          data: {
+            type: "string",
+            example: "38 form over Due!",
+          },
+        },
+      },
+      code400: {
+        unauthorized: {
+          properties: {
+            error: {
+              properties: {
+                ...errorResponse,
+              },
+              example: {
+                status: "error",
+                statusCode: 400,
+                message: "cant access",
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+  closeForm: {
+    request: {
+      properties: {
+        id: {
+          type: "string",
+          example: "336e2550-2c38-11ec-bb51-2b9b10bb6c90",
+        },
+      },
+    },
+    response: {
+      success: {
+        properties: {
+          data: {
+            type: "string",
+            example: "CLOSE FORM SUCCESSFULLY",
+          },
+        },
+      },
+      code400: {
+        unAuthorized: {
+          properties: {
+            error: {
+              properties: {
+                ...errorResponse,
+              },
+              example: {
+                status: "error",
+                statusCode: 400,
+                message: "cant access",
+              },
+            },
+          },
+        },
+      },
+
+      code404: {
+        failedInMiddleware: {
+          properties: {
+            error: {
+              properties: {
+                ...errorResponse,
+              },
+              example: {
+                status: "error",
+                statusCode: 404,
+                message: {
+                  _original: {},
+                  details: [
+                    {
+                      message: "form id is required",
+                      path: ["id"],
+                      type: "any.required",
+                      context: {
+                        label: "id",
+                        key: "id",
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  },
 };
 
-module.exports = { userComponent, formComponent, AuthenComponent };
+let adminComponent = {
+  listAllForm: {
+    response: {
+      success: {
+        properties: {
+          data: {
+            properties: {
+              ...pagingOPtion,
+              forms: {
+                type: "array",
+                items: {
+                  properties: {
+                    form: {
+                      properties: {
+                        ...form,
+                        formDetail: {
+                          properties: {
+                            ...formDetail,
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+            example: {
+              orderBy: "status",
+              orderType: "DESC",
+              limit: 5,
+              offset: 0,
+              forms: [
+                {
+                  id: "c28e0200-2c38-11ec-bb51-2b9b10bb6c90",
+                  receiver: null,
+                  type: 1,
+                  userId: "5fa82ce0-2b5e-11ec-8639-1b33c0b488b9",
+                  status: "SUBMITTED",
+                  dueDate: "2021-12-07T00:00:00.000Z",
+                  isApproved: 0,
+                  isRejected: 0,
+                  isDue: 0,
+                  isDeleted: false,
+                  createdBy: null,
+                  updatedBy: "MANAGER2",
+                  createdAt: "2021-10-13T15:18:03.000Z",
+                  updatedAt: "2021-10-17T08:15:34.000Z",
+                  FormDetail: {
+                    id: "c28f6190-2c38-11ec-bb51-2b9b10bb6c90",
+                    formId: "c28e0200-2c38-11ec-bb51-2b9b10bb6c90",
+                    content: "abc",
+                    managerComment: "update comment",
+                    isDeleted: false,
+                    createdBy: null,
+                    updatedBy: "MANAGER2",
+                    createdAt: "2021-10-13T15:18:03.000Z",
+                    updatedAt: "2021-10-14T02:14:03.000Z",
+                  },
+                },
+                {
+                  id: "6f3e9650-2cdd-11ec-8520-2bd7c9d982df",
+                  receiver: null,
+                  type: 0,
+                  userId: "4d3c7250-2b5e-11ec-8639-1b33c0b488b9",
+                  status: "SUBMITTED",
+                  dueDate: "2021-12-07T00:00:00.000Z",
+                  isApproved: 0,
+                  isRejected: 1,
+                  isDue: 0,
+                  isDeleted: false,
+                  createdBy: "admindeptrai",
+                  updatedBy: "admindeptrai",
+                  createdAt: "2021-10-14T10:56:50.000Z",
+                  updatedAt: "2021-10-14T11:39:57.000Z",
+                  FormDetail: {
+                    id: "6f3ebd60-2cdd-11ec-8520-2bd7c9d982df",
+                    formId: "6f3e9650-2cdd-11ec-8520-2bd7c9d982df",
+                    content: "abc",
+                    managerComment: "",
+                    isDeleted: false,
+                    createdBy: "admindeptrai",
+                    updatedBy: "admindeptrai",
+                    createdAt: "2021-10-14T10:56:50.000Z",
+                    updatedAt: "2021-10-14T10:56:50.000Z",
+                  },
+                },
+                {
+                  id: "cbb83300-2ea9-11ec-9089-df6da1bf74ab",
+                  receiver: null,
+                  type: 1,
+                  userId: "30eb7eb0-2b5f-11ec-8639-1b33c0b488b9",
+                  status: "SUBMITTED",
+                  dueDate: "2021-12-07T00:00:00.000Z",
+                  isApproved: 0,
+                  isRejected: 0,
+                  isDue: 0,
+                  isDeleted: false,
+                  createdBy: "bigherodz54",
+                  updatedBy: "bigherodz54",
+                  createdAt: "2021-10-16T17:52:14.000Z",
+                  updatedAt: "2021-10-16T18:04:30.000Z",
+                  FormDetail: {
+                    id: "cbb96b80-2ea9-11ec-9089-df6da1bf74ab",
+                    formId: "cbb83300-2ea9-11ec-9089-df6da1bf74ab",
+                    content: "abc",
+                    managerComment: "",
+                    isDeleted: false,
+                    createdBy: "bigherodz54",
+                    updatedBy: "bigherodz54",
+                    createdAt: "2021-10-16T17:52:14.000Z",
+                    updatedAt: "2021-10-16T17:52:14.000Z",
+                  },
+                },
+                {
+                  id: "d0f80600-2cde-11ec-bc3e-db15a81a0069",
+                  receiver: null,
+                  type: 1,
+                  userId: "4d3c7250-2b5e-11ec-8639-1b33c0b488b9",
+                  status: "SUBMITTED",
+                  dueDate: "2021-12-07T00:00:00.000Z",
+                  isApproved: 1,
+                  isRejected: 0,
+                  isDue: 0,
+                  isDeleted: false,
+                  createdBy: "admindeptrai",
+                  updatedBy: "admindeptrai",
+                  createdAt: "2021-10-14T11:06:44.000Z",
+                  updatedAt: "2021-10-17T11:52:22.000Z",
+                  FormDetail: {
+                    id: "d0f8f060-2cde-11ec-bc3e-db15a81a0069",
+                    formId: "d0f80600-2cde-11ec-bc3e-db15a81a0069",
+                    content: "abc",
+                    managerComment: "",
+                    isDeleted: false,
+                    createdBy: "admindeptrai",
+                    updatedBy: "admindeptrai",
+                    createdAt: "2021-10-14T11:06:44.000Z",
+                    updatedAt: "2021-10-14T11:06:44.000Z",
+                  },
+                },
+                {
+                  id: "9c734f80-2cdd-11ec-8520-2bd7c9d982df",
+                  receiver: null,
+                  type: 0,
+                  userId: "4d3c7250-2b5e-11ec-8639-1b33c0b488b9",
+                  status: "SUBMITTED",
+                  dueDate: "2021-12-07T00:00:00.000Z",
+                  isApproved: 0,
+                  isRejected: 0,
+                  isDue: 0,
+                  isDeleted: false,
+                  createdBy: "admindeptrai",
+                  updatedBy: "admindeptrai",
+                  createdAt: "2021-10-14T10:58:06.000Z",
+                  updatedAt: "2021-10-14T10:58:20.000Z",
+                  FormDetail: {
+                    id: "9c737690-2cdd-11ec-8520-2bd7c9d982df",
+                    formId: "9c734f80-2cdd-11ec-8520-2bd7c9d982df",
+                    content: "abc",
+                    managerComment: "",
+                    isDeleted: false,
+                    createdBy: "admindeptrai",
+                    updatedBy: "admindeptrai",
+                    createdAt: "2021-10-14T10:58:06.000Z",
+                    updatedAt: "2021-10-14T10:58:06.000Z",
+                  },
+                },
+              ],
+            },
+          },
+        },
+      },
+    },
+  },
+  listAllUser: {
+    response: {
+      success: {
+        properties: {
+          data: {
+            properties: {
+              ...pagingOPtion,
+              users: {
+                type: "array",
+                items: {
+                  type: "object",
+                  properties: {
+                    ...user,
+                    employee: {
+                      properties: {
+                        ...employee,
+                      },
+                    },
+                    roles: {
+                      type: "array",
+                      items: {
+                        properties: {
+                          ...role,
+                          userRole: {
+                            properties: {
+                              ...userRole,
+                            },
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+            example: {
+              orderBy: "id",
+              orderType: "DESC",
+              limit: 5,
+              offset: 5,
+              users: [
+                {
+                  id: "ccece480-2b5e-11ec-8639-1b33c0b488b9",
+                  userName: "EMPLOYEE06",
+                  password:
+                    "$2b$10$dDGybGLAjBRbk8SgsPY4Ru84DqS1qVUPhqQxe6.owH8OGIGx83FTa",
+                  age: 30,
+                  email: "EMPLOYEE06@gmail.com",
+                  phone: "+84866841700",
+                  address: null,
+                  isActive: null,
+                  identityNumber: "021523251",
+                  socialInsurance: "00210",
+                  avatar: null,
+                  isDeleted: false,
+                  createdBy: "EMPLOYEE06",
+                  updatedBy: "EMPLOYEE06",
+                  createdAt: "2021-10-12T13:17:50.000Z",
+                  updatedAt: "2021-10-12T13:17:50.000Z",
+                  employee: {
+                    id: "cced32a0-2b5e-11ec-8639-1b33c0b488b9",
+                    lastName: "EMPLOYEE",
+                    firstName: "SIX",
+                    fullName: "SIX EMPLOYEE",
+                    userId: "ccece480-2b5e-11ec-8639-1b33c0b488b9",
+                    managerId: "3b82dfa0-2da1-11ec-a12c-236f151614b9",
+                    isDeleted: false,
+                    createdBy: "EMPLOYEE06",
+                    updatedBy: "EMPLOYEE06",
+                    createdAt: "2021-10-12T13:17:50.000Z",
+                    updatedAt: "2021-10-16T12:54:38.000Z",
+                  },
+                  roles: [
+                    {
+                      id: 5,
+                      name: "employee",
+                      description: "xxx",
+                      isDeleted: false,
+                      createdBy: "admin",
+                      updatedBy: "admin",
+                      createdAt: "2021-10-07T07:55:07.000Z",
+                      updatedAt: "2021-10-07T07:55:07.000Z",
+                      userRole: {
+                        id: "cced59b0-2b5e-11ec-8639-1b33c0b488b9",
+                        userId: "ccece480-2b5e-11ec-8639-1b33c0b488b9",
+                        roleId: 5,
+                        isDeleted: false,
+                        createdBy: "admin",
+                        updatedBy: "admin",
+                        createdAt: "2021-10-12T13:17:50.000Z",
+                        updatedAt: "2021-10-12T13:17:50.000Z",
+                      },
+                    },
+                  ],
+                },
+                {
+                  id: "c094e320-2a61-11ec-8e61-1330d32b6766",
+                  userName: "longnt1",
+                  password:
+                    "$2b$10$ESLrQsW68n7N0fUpTZ.SSO4oMPkGhtCPR70ybbtwdFe8iW4XLC.d2",
+                  age: 19,
+                  email: "longnt1@fpt.edu.vn",
+                  phone: "+84 866 841700",
+                  address: null,
+                  isActive: null,
+                  identityNumber: "021523251",
+                  socialInsurance: "00210",
+                  avatar: null,
+                  isDeleted: false,
+                  createdBy: "longnt1",
+                  updatedBy: "longnt1",
+                  createdAt: "2021-10-11T07:06:27.000Z",
+                  updatedAt: "2021-10-11T07:06:27.000Z",
+                  employee: {
+                    id: "c09669c0-2a61-11ec-8e61-1330d32b6766",
+                    lastName: "Gtbunyo",
+                    firstName: "???",
+                    fullName: "???Gtbunyo",
+                    userId: "c094e320-2a61-11ec-8e61-1330d32b6766",
+                    managerId: null,
+                    isDeleted: false,
+                    createdBy: "longnt1",
+                    updatedBy: "longnt1",
+                    createdAt: "2021-10-11T07:06:27.000Z",
+                    updatedAt: "2021-10-11T07:06:27.000Z",
+                  },
+                  roles: [
+                    {
+                      id: 2,
+                      name: "director",
+                      description: "xxx",
+                      isDeleted: false,
+                      createdBy: "admin",
+                      updatedBy: "admin",
+                      createdAt: "2021-10-07T07:55:07.000Z",
+                      updatedAt: "2021-10-07T07:55:07.000Z",
+                      userRole: {
+                        id: "d4770580-2a6b-11ec-a97d-cd844283d96c",
+                        userId: "c094e320-2a61-11ec-8e61-1330d32b6766",
+                        roleId: 2,
+                        isDeleted: false,
+                        createdBy: "admin",
+                        updatedBy: "admin",
+                        createdAt: "2021-10-11T08:18:35.000Z",
+                        updatedAt: "2021-10-11T08:18:35.000Z",
+                      },
+                    },
+                    {
+                      id: 5,
+                      name: "employee",
+                      description: "xxx",
+                      isDeleted: false,
+                      createdBy: "admin",
+                      updatedBy: "admin",
+                      createdAt: "2021-10-07T07:55:07.000Z",
+                      updatedAt: "2021-10-07T07:55:07.000Z",
+                      userRole: {
+                        id: "c096def0-2a61-11ec-8e61-1330d32b6766",
+                        userId: "c094e320-2a61-11ec-8e61-1330d32b6766",
+                        roleId: 5,
+                        isDeleted: false,
+                        createdBy: "admin",
+                        updatedBy: "admin",
+                        createdAt: "2021-10-11T07:06:27.000Z",
+                        updatedAt: "2021-10-11T07:06:27.000Z",
+                      },
+                    },
+                  ],
+                },
+                {
+                  id: "ae15b050-2f32-11ec-9f54-2ba08a3f7d93",
+                  userName: "EMPLOYEE9",
+                  password:
+                    "$2b$10$2rIucmTkluAqv8./ntDZjeXH1NNexl2sFhcgdH/HNsOCNsRBB4g2e",
+                  age: 20,
+                  email: "EMPLOYEE9@gmail.com",
+                  phone: "+84866841700",
+                  address: null,
+                  isActive: null,
+                  identityNumber: "021523251",
+                  socialInsurance: "00210",
+                  avatar: null,
+                  isDeleted: false,
+                  createdBy: "EMPLOYEE9",
+                  updatedBy: "EMPLOYEE9",
+                  createdAt: "2021-10-17T10:12:05.000Z",
+                  updatedAt: "2021-10-17T10:12:05.000Z",
+                  employee: {
+                    id: "ae175e00-2f32-11ec-9f54-2ba08a3f7d93",
+                    lastName: "EMPLOYEE",
+                    firstName: "NINE",
+                    fullName: "NINE EMPLOYEE",
+                    userId: "ae15b050-2f32-11ec-9f54-2ba08a3f7d93",
+                    managerId: null,
+                    isDeleted: false,
+                    createdBy: "EMPLOYEE9",
+                    updatedBy: "EMPLOYEE9",
+                    createdAt: "2021-10-17T10:12:05.000Z",
+                    updatedAt: "2021-10-17T10:12:05.000Z",
+                  },
+                  roles: [
+                    {
+                      id: 5,
+                      name: "employee",
+                      description: "xxx",
+                      isDeleted: false,
+                      createdBy: "admin",
+                      updatedBy: "admin",
+                      createdAt: "2021-10-07T07:55:07.000Z",
+                      updatedAt: "2021-10-07T07:55:07.000Z",
+                      userRole: {
+                        id: "ae17d330-2f32-11ec-9f54-2ba08a3f7d93",
+                        userId: "ae15b050-2f32-11ec-9f54-2ba08a3f7d93",
+                        roleId: 5,
+                        isDeleted: false,
+                        createdBy: "admin",
+                        updatedBy: "admin",
+                        createdAt: "2021-10-17T10:12:05.000Z",
+                        updatedAt: "2021-10-17T10:12:05.000Z",
+                      },
+                    },
+                  ],
+                },
+                {
+                  id: "ac2f00d0-2b12-11ec-bc29-e58e0a69d32c",
+                  userName: "pxz41",
+                  password:
+                    "$2b$10$gUbUolwdw1TOrYdoRo2CZ.zdh0d9k7XEPPo6QKELdY27m0YcUEZra",
+                  age: 19,
+                  email: "pxz41brxc@gamil.com",
+                  phone: "+84 866 841700",
+                  address: null,
+                  isActive: null,
+                  identityNumber: "021523251",
+                  socialInsurance: "00210",
+                  avatar: null,
+                  isDeleted: false,
+                  createdBy: "pxz41",
+                  updatedBy: "pxz41",
+                  createdAt: "2021-10-12T04:12:53.000Z",
+                  updatedAt: "2021-10-12T04:12:53.000Z",
+                  employee: {
+                    id: "ac2fc420-2b12-11ec-bc29-e58e0a69d32c",
+                    lastName: "hoang",
+                    firstName: "duy",
+                    fullName: "duyhoang",
+                    userId: "ac2f00d0-2b12-11ec-bc29-e58e0a69d32c",
+                    managerId: null,
+                    isDeleted: false,
+                    createdBy: "pxz41",
+                    updatedBy: "pxz41",
+                    createdAt: "2021-10-12T04:12:53.000Z",
+                    updatedAt: "2021-10-12T04:12:53.000Z",
+                  },
+                  roles: [
+                    {
+                      id: 4,
+                      name: "manager",
+                      description: "xxx",
+                      isDeleted: false,
+                      createdBy: "admin",
+                      updatedBy: "admin",
+                      createdAt: "2021-10-07T07:55:07.000Z",
+                      updatedAt: "2021-10-07T07:55:07.000Z",
+                      userRole: {
+                        id: "beef9220-2b12-11ec-bc29-e58e0a69d32c",
+                        userId: "ac2f00d0-2b12-11ec-bc29-e58e0a69d32c",
+                        roleId: 4,
+                        isDeleted: false,
+                        createdBy: "admin",
+                        updatedBy: "admin",
+                        createdAt: "2021-10-12T04:13:25.000Z",
+                        updatedAt: "2021-10-12T04:13:25.000Z",
+                      },
+                    },
+                    {
+                      id: 5,
+                      name: "employee",
+                      description: "xxx",
+                      isDeleted: false,
+                      createdBy: "admin",
+                      updatedBy: "admin",
+                      createdAt: "2021-10-07T07:55:07.000Z",
+                      updatedAt: "2021-10-07T07:55:07.000Z",
+                      userRole: {
+                        id: "ac2feb30-2b12-11ec-bc29-e58e0a69d32c",
+                        userId: "ac2f00d0-2b12-11ec-bc29-e58e0a69d32c",
+                        roleId: 5,
+                        isDeleted: false,
+                        createdBy: "admin",
+                        updatedBy: "admin",
+                        createdAt: "2021-10-12T04:12:53.000Z",
+                        updatedAt: "2021-10-12T04:12:53.000Z",
+                      },
+                    },
+                  ],
+                },
+                {
+                  id: "ab357b10-2b11-11ec-bc29-e58e0a69d32c",
+                  userName: "longnt5",
+                  password:
+                    "$2b$10$mm7G6d4Ql0OuKexjWjvEqeC67tSNUQkpnHkOm9sTGn8Km7YzRANIi",
+                  age: 19,
+                  email: "longnt5@fpt.edu.vn",
+                  phone: "+84 866 841700",
+                  address: null,
+                  isActive: null,
+                  identityNumber: "021523251",
+                  socialInsurance: "00210",
+                  avatar: null,
+                  isDeleted: false,
+                  createdBy: "longnt5",
+                  updatedBy: "longnt5",
+                  createdAt: "2021-10-12T04:05:42.000Z",
+                  updatedAt: "2021-10-12T04:05:42.000Z",
+                  employee: {
+                    id: "ab363e60-2b11-11ec-bc29-e58e0a69d32c",
+                    lastName: "longnt",
+                    firstName: "nguyen",
+                    fullName: "nguyenlongnt",
+                    userId: "ab357b10-2b11-11ec-bc29-e58e0a69d32c",
+                    managerId: null,
+                    isDeleted: false,
+                    createdBy: "longnt5",
+                    updatedBy: "longnt5",
+                    createdAt: "2021-10-12T04:05:42.000Z",
+                    updatedAt: "2021-10-12T04:05:42.000Z",
+                  },
+                  roles: [
+                    {
+                      id: 5,
+                      name: "employee",
+                      description: "xxx",
+                      isDeleted: false,
+                      createdBy: "admin",
+                      updatedBy: "admin",
+                      createdAt: "2021-10-07T07:55:07.000Z",
+                      updatedAt: "2021-10-07T07:55:07.000Z",
+                      userRole: {
+                        id: "ab368c80-2b11-11ec-bc29-e58e0a69d32c",
+                        userId: "ab357b10-2b11-11ec-bc29-e58e0a69d32c",
+                        roleId: 5,
+                        isDeleted: false,
+                        createdBy: "admin",
+                        updatedBy: "admin",
+                        createdAt: "2021-10-12T04:05:42.000Z",
+                        updatedAt: "2021-10-12T04:05:42.000Z",
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+          },
+        },
+      },
+    },
+  },
+
+  promoteUSer: {
+    response: {
+      success: {
+        properties: {
+          data: {
+            properties: {
+              status: {
+                type: "number",
+                example: 200,
+              },
+              message: {
+                properties: {
+                  ...user,
+                  employee: {
+                    properties: {
+                      ...employee,
+                    },
+                  },
+                  roles: {
+                    type: "array",
+                    items: {
+                      properties: {
+                        ...role,
+                        userRole: {
+                          properties: {
+                            ...userRole,
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+            example: {
+              status: 200,
+              message: {
+                id: "3b82dfa0-2da1-11ec-a12c-236f151614b9",
+                userName: "MANAGER6",
+                password:
+                  "$2b$10$wMnPMSiwzCekiQF1bQMkOelnqEr4G2OdFrw7NzcI671eMYZBG1izK",
+                age: 50,
+                email: "MANAGER6@gmail.com",
+                phone: "+84866841700",
+                address: null,
+                isActive: null,
+                identityNumber: "021523251",
+                socialInsurance: "00210",
+                avatar: null,
+                isDeleted: false,
+                createdBy: "MANAGER6",
+                updatedBy: "MANAGER6",
+                createdAt: "2021-10-15T10:18:25.000Z",
+                updatedAt: "2021-10-15T10:18:25.000Z",
+                employee: {
+                  id: "3b8306b0-2da1-11ec-a12c-236f151614b9",
+                  lastName: "MANAGER",
+                  firstName: "THREE",
+                  fullName: "THREE MANAGER",
+                  userId: "3b82dfa0-2da1-11ec-a12c-236f151614b9",
+                  managerId: null,
+                  isDeleted: false,
+                  createdBy: "MANAGER6",
+                  updatedBy: "MANAGER6",
+                  createdAt: "2021-10-15T10:18:25.000Z",
+                  updatedAt: "2021-10-15T10:18:25.000Z",
+                },
+                roles: [
+                  {
+                    id: 4,
+                    name: "manager",
+                    description: "xxx",
+                    isDeleted: false,
+                    createdBy: "admin",
+                    updatedBy: "admin",
+                    createdAt: "2021-10-07T07:55:07.000Z",
+                    updatedAt: "2021-10-07T07:55:07.000Z",
+                    userRole: {
+                      id: "86a23d60-2e9f-11ec-829b-3312f77f9ee0",
+                      userId: "3b82dfa0-2da1-11ec-a12c-236f151614b9",
+                      roleId: 4,
+                      isDeleted: false,
+                      createdBy: "admin",
+                      updatedBy: "admin",
+                      createdAt: "2021-10-16T16:38:43.000Z",
+                      updatedAt: "2021-10-16T16:38:43.000Z",
+                    },
+                  },
+                  {
+                    id: 5,
+                    name: "employee",
+                    description: "xxx",
+                    isDeleted: false,
+                    createdBy: "admin",
+                    updatedBy: "admin",
+                    createdAt: "2021-10-07T07:55:07.000Z",
+                    updatedAt: "2021-10-07T07:55:07.000Z",
+                    userRole: {
+                      id: "3b832dc0-2da1-11ec-a12c-236f151614b9",
+                      userId: "3b82dfa0-2da1-11ec-a12c-236f151614b9",
+                      roleId: 5,
+                      isDeleted: false,
+                      createdBy: "admin",
+                      updatedBy: "admin",
+                      createdAt: "2021-10-15T10:18:25.000Z",
+                      updatedAt: "2021-10-15T10:18:25.000Z",
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+
+  getUSer: {
+    response: {
+      success: {
+        properties: {
+          data: {
+            properties: {
+              ...user,
+              employee: {
+                properties: {
+                  ...employee,
+                },
+              },
+              roles: {
+                type: "array",
+                items: {
+                  properties: {
+                    ...role,
+                    userRole: {
+                      properties: {
+                        ...userRole,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+            example: {
+              id: "15db4410-2b42-11ec-820e-27908212d139",
+              userName: "DIRECTOR2",
+              password:
+                "$2b$10$XhEhbxLyjIiO7gxuI4zKHujR2w8X8ORRpjMHqK9ojeFpWVJq/rbju",
+              age: 19,
+              email: "director2@gmail.com",
+              phone: "+84 866 841700",
+              address: null,
+              isActive: null,
+              identityNumber: "021523251",
+              socialInsurance: "00210",
+              avatar: null,
+              isDeleted: false,
+              createdBy: "DIRECTOR2",
+              updatedBy: "DIRECTOR2",
+              createdAt: "2021-10-12T09:52:17.000Z",
+              updatedAt: "2021-10-12T09:52:17.000Z",
+              employee: {
+                id: "15dc0760-2b42-11ec-820e-27908212d139",
+                lastName: "john",
+                firstName: "smith",
+                fullName: "smith john",
+                userId: "15db4410-2b42-11ec-820e-27908212d139",
+                managerId: null,
+                isDeleted: false,
+                createdBy: "DIRECTOR2",
+                updatedBy: "DIRECTOR2",
+                createdAt: "2021-10-12T09:52:17.000Z",
+                updatedAt: "2021-10-12T09:52:17.000Z",
+              },
+              roles: [
+                {
+                  id: 2,
+                  name: "director",
+                  description: "xxx",
+                  isDeleted: false,
+                  createdBy: "admin",
+                  updatedBy: "admin",
+                  createdAt: "2021-10-07T07:55:07.000Z",
+                  updatedAt: "2021-10-07T07:55:07.000Z",
+                  userRole: {
+                    id: "90de9d20-2beb-11ec-af6f-cfd0b2aa8737",
+                    userId: "15db4410-2b42-11ec-820e-27908212d139",
+                    roleId: 2,
+                    isDeleted: false,
+                    createdBy: "admin",
+                    updatedBy: "admin",
+                    createdAt: "2021-10-13T06:05:28.000Z",
+                    updatedAt: "2021-10-13T06:05:28.000Z",
+                  },
+                },
+                {
+                  id: 5,
+                  name: "employee",
+                  description: "xxx",
+                  isDeleted: false,
+                  createdBy: "admin",
+                  updatedBy: "admin",
+                  createdAt: "2021-10-07T07:55:07.000Z",
+                  updatedAt: "2021-10-07T07:55:07.000Z",
+                  userRole: {
+                    id: "15dc5580-2b42-11ec-820e-27908212d139",
+                    userId: "15db4410-2b42-11ec-820e-27908212d139",
+                    roleId: 5,
+                    isDeleted: false,
+                    createdBy: "admin",
+                    updatedBy: "admin",
+                    createdAt: "2021-10-12T09:52:17.000Z",
+                    updatedAt: "2021-10-12T09:52:17.000Z",
+                  },
+                },
+              ],
+            },
+          },
+        },
+      },
+    },
+  },
+
+  authorizeException: {
+    properties: {
+      error: {
+        properties: {
+          ...errorResponse,
+        },
+        example: { status: 404, message: "BAD REQUEST" },
+      },
+    },
+  },
+};
+
+module.exports = {
+  userComponent,
+  formComponent,
+  adminComponent,
+  AuthenComponent,
+};

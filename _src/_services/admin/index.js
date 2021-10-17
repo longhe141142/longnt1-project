@@ -21,7 +21,6 @@ module.exports = class AdminRouter extends BaseRouter {
     this.get("/list/all/form", this.listAllForm);
     this.get("/view/profile/:id", this.getUserDetail);
 
-
     // this.patch("/upgrade/:id", this.addPermission);
   }
 
@@ -67,8 +66,189 @@ module.exports = class AdminRouter extends BaseRouter {
   getUserDetail = async (req, res, next) => {
     let profileData = await this._service.getOneUSer(req);
     if (profileData instanceof Error) {
-      return nextErr(new ErrorHandler(400, profileData.message), req, res, next);
+      return nextErr(
+        new ErrorHandler(400, profileData.message),
+        req,
+        res,
+        next
+      );
     }
     CustomResponse.sendObject(res, 200, profileData);
   };
 };
+
+/**
+ * @swagger
+ * /api/admin/list/all/form:
+ *   get:
+ *     tags:
+ *      - admin api
+ *     summary: for admin
+ *     description: |
+ *           For admin to list all form by paging
+ *     security:
+ *      - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: pageIndex
+ *         schema:
+ *           type: integer
+ *         description: the page number
+ *       - in: query
+ *         name: orderBy
+ *         schema:
+ *           type: string
+ *         description: the sorter by field name
+ *       - in: query
+ *         name: orderType
+ *         schema:
+ *           oneOf:
+ *            - type: string
+ *            - type: integer
+ *         description: the sorter by type(asc,desc)
+ *     responses:
+ *       200:
+ *         description: all form by paging and order by
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               $ref: '#/components/adminComponent/listAllForm/response/success'
+ *       404:
+ *         description: |
+ *            error if current user have no permission to entry
+ *         content:
+ *            application/json:
+ *             schema:
+ *               type: object
+ *               anyOf:
+ *                - $ref: '#/components/adminComponent/authorizeException'
+ */
+
+/**
+ * @swagger
+ * /api/admin/list/all/user:
+ *   get:
+ *     tags:
+ *      - admin api
+ *     summary: for admin only
+ *     description: |
+ *           For admin to list all user
+ *     security:
+ *      - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: pageIndex
+ *         schema:
+ *           type: integer
+ *         description: The current page index
+ *       - in: query
+ *         name: orderBy
+ *         schema:
+ *           type: string
+ *         description: the sorter by field name
+ *       - in: query
+ *         name: orderType
+ *         schema:
+ *           oneOf:
+ *            - type: string
+ *            - type: integer
+ *         description: the sorter by type(asc,desc)
+ *     responses:
+ *       200:
+ *         description: all user by paging and order by
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               $ref: '#/components/adminComponent/listAllUser/response/success'
+ *       404:
+ *         description: |
+ *            error if current user have no permission to entry
+ *         content:
+ *            application/json:
+ *             schema:
+ *               type: object
+ *               anyOf:
+ *                - $ref: '#/components/adminComponent/authorizeException'
+ */
+
+/**
+ * @swagger
+ * /api/admin/upgrade:
+ *   post:
+ *     tags:
+ *      - admin api
+ *     summary: for admin only
+ *     description: |
+ *           For admin to promote user to higher role
+ *     security:
+ *      - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: userId
+ *         schema:
+ *           type: string
+ *         description: the id of user
+ *       - in: query
+ *         name: roleId
+ *         schema:
+ *           type: number
+ *         description: roleId
+ *     responses:
+ *       200:
+ *         description: promote user successfully then display all of user data
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               $ref: '#/components/adminComponent/promoteUSer/response/success'
+ *       404:
+ *         description: |
+ *            error if current user have no permission to entry
+ *         content:
+ *            application/json:
+ *             schema:
+ *               type: object
+ *               anyOf:
+ *                - $ref: '#/components/adminComponent/authorizeException'
+ */
+
+/**
+ * @swagger
+ * /api/admin/view/profile/{userId}:
+ *   get:
+ *     tags:
+ *      - admin api
+ *     summary: for admin only
+ *     description: |
+ *           For admin to get information of specific user by id
+ *     security:
+ *      - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: the id of user
+ *     responses:
+ *       200:
+ *         description: get user information successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               $ref: '#/components/adminComponent/getUSer/response/success'
+ *       404:
+ *         description: |
+ *            error if current user have no permission to entry
+ *         content:
+ *            application/json:
+ *             schema:
+ *               type: object
+ *               anyOf:
+ *                - $ref: '#/components/adminComponent/authorizeException'
+ */
+
+//  *           enum: [asc,desc,descending,ascending,1,-1,ascend,descend]

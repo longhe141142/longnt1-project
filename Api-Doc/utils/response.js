@@ -200,7 +200,7 @@ let userOnly = {
     type: "string",
   },
   ...common,
-}
+};
 
 let form = {
   id: {
@@ -289,6 +289,26 @@ let userRole = {
   ...common,
 };
 
+let pagingOPtion = {
+  orderBy: {
+    type: "string",
+    example: "id",
+  },
+  orderType: {
+    example: "desc",
+  },
+
+  limit: {
+    type: "number",
+    example: 5,
+  },
+
+  offset: {
+    type: "number",
+    example: 10,
+  },
+};
+
 module.exports = {
   error,
   user,
@@ -298,5 +318,6 @@ module.exports = {
   userRole,
   role,
   errorMiddleware,
-  userOnly
+  userOnly,
+  pagingOPtion
 };

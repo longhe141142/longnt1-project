@@ -20,7 +20,6 @@ module.exports = class FormService extends BaseService {
     this._eventEmitter.on("sendmail", sendMail);
   }
 
-
   checkPermission = async (currentUserId, userIdToAdd, transaction) => {
     let currentUsr_Role = await this.getHighestRole(currentUserId, transaction);
     let userToAdd_Role = await this.getHighestRole(userIdToAdd, transaction);
@@ -29,7 +28,6 @@ module.exports = class FormService extends BaseService {
     }
     return true;
   };
-
 
   addNewForm = async (req) => {
     let { formDetail, userId, ...form } = req.body;
@@ -54,7 +52,7 @@ module.exports = class FormService extends BaseService {
           await transaction.rollback();
           return new Error("User not existed");
         }
-        //higher role can add form to lower 
+        //higher role can add form to lower
         let checkPermission = await this.checkPermission(
           req.user.data.id,
           userInstance.id
@@ -68,7 +66,7 @@ module.exports = class FormService extends BaseService {
         form.isApproved = 0;
         form.status = "NEW";
         form.dueDate = new Date(form.dueDate);
-        
+
         let formData = await Form.addNew(
           { ...form, userId: id },
           transaction,
@@ -90,21 +88,22 @@ module.exports = class FormService extends BaseService {
           content: formData.content,
           from: null,
           content: "",
-          
-          mailReceiver://config the mail to receiver
+
+          //config the mail to receiver
+          mailReceiver:
             userInstance.email !== null
               ? userInstance.email
               : "bigherodz54@gmail.com",
         };
         formObj.form = formData;
         formObj.formDetail = formDetailData;
-        
+
         formArray.push(formObj);
-        
-        this._eventEmitter.emit("sendmail", options);//event send mail fired
+
+        this._eventEmitter.emit("sendmail", options); //event send mail fired
       }
       await transaction.commit();
-      return formArray;//return array of object
+      return formArray; //return array of object
     } catch (error) {
       logger.error(error);
       await transaction.rollback();
@@ -122,10 +121,9 @@ module.exports = class FormService extends BaseService {
     await formDetail.update(data);
   };
 
-
   submit = async (req) => {
-    let { id } = req.body;//get id of form to submit
-    let user = req.user.data;//get current user info
+    let { id } = req.body; //get id of form to submit
+    let user = req.user.data; //get current user info
     try {
       let form = await Form.findOne({
         where: {
@@ -183,7 +181,7 @@ module.exports = class FormService extends BaseService {
     if (feature === 0) {
       let { content, id } = req.body;
       let user = req.user.data;
-      let formObj = {};//prepare for returning data
+      let formObj = {}; //prepare for returning data
       let transaction = await Form.sequelize.transaction();
       try {
         let form = await Form.findOne(
@@ -207,7 +205,7 @@ module.exports = class FormService extends BaseService {
         //if form is submitted,can't modify
         let isSubmitted =
           form.status === this.formSatus.SUBMITTED ? true : false;
-        //if form is deleted,can't modify  
+        //if form is deleted,can't modify
         let isDeleted = form.isDeleted === true ? true : false;
         if (isSubmitted) {
           return new Error("You can't update because form is submitted");
@@ -252,7 +250,8 @@ module.exports = class FormService extends BaseService {
         logger.error(error);
         return error;
       }
-    } else {//for update manager comment (for manager and director)
+    } else {
+      //for update manager comment (for manager and director)
       let { comment, id } = req.body;
       let manager = req.user.data;
       let formObj = {};
@@ -282,10 +281,11 @@ module.exports = class FormService extends BaseService {
         //get employee(purpose: find manager of this employee)
         //if current user is not manager of this employee
         if (employee.managerId !== manager.id) {
-          return new Error("YOU HAVE NO PERMISSION TO COMMENT");//return no permission
+          return new Error("YOU HAVE NO PERMISSION TO COMMENT"); //return no permission
         }
         //check form is submitted or not? | if submitted can add comment otherwise will throw error
-        let isSubmitted = form.status === this.formSatus.SUBMITTED ? true : false;
+        let isSubmitted =
+          form.status === this.formSatus.SUBMITTED ? true : false;
 
         if (!isSubmitted) {
           return new Error(
@@ -304,7 +304,7 @@ module.exports = class FormService extends BaseService {
           },
           { transaction: transaction }
         );
-        
+
         let formDetail = await FormDetail.getDetailByWhere(
           {
             formId: form.id,
@@ -329,7 +329,6 @@ module.exports = class FormService extends BaseService {
       }
     }
   };
-
 
   //view current user forms
   viewYourForm = async (req) => {
@@ -384,15 +383,15 @@ module.exports = class FormService extends BaseService {
         //if array ret is empty return error
         return checkNoForm ? ret : new Error("No Form submitted yet!");
       } else {
-
         let ret = [];
         let managerData = req.user.data;
         let manager = await User.getDetailById(managerData.id, null);
         let employees = await manager.getOwnEmployee();
-        if (employees.length === 0) { //this current user have no employees
+        if (employees.length === 0) {
+          //this current user have no employees
           return new Error("YOU HAVE NO EMPLOYEE");
         }
-        //from employee,find all corresponding user 
+        //from employee,find all corresponding user
         let userList = await Promise.all(
           employees.map((emp) => {
             return User.findOne({
@@ -402,7 +401,7 @@ module.exports = class FormService extends BaseService {
             });
           })
         );
-        
+
         for (let user of userList) {
           let forms = await Form.getAllWithDetail(
             {
@@ -412,7 +411,7 @@ module.exports = class FormService extends BaseService {
             },
             null,
             false,
-            ["FormDetail"]//include formDetail to view content and manager comment
+            ["FormDetail"] //include formDetail to view content and manager comment
           );
           checkNoForm = forms.length > 0 ? true : checkNoForm;
           let dataObj = {
@@ -428,14 +427,13 @@ module.exports = class FormService extends BaseService {
     }
   };
 
-  
   viewForm = async (req, type) => {
     let yourRole = await this.getHighestRole(req.user.data.id);
     switch (type) {
       case 1:
-        return await this.viewListBaseOnType(req, yourRole,1);
+        return await this.viewListBaseOnType(req, yourRole, 1);
       case 2:
-        return await this.viewListBaseOnType(req, yourRole,0);
+        return await this.viewListBaseOnType(req, yourRole, 0);
       case 3:
         return await this.viewYourForm(req);
     }
@@ -508,7 +506,9 @@ module.exports = class FormService extends BaseService {
           let dueDAte = Date.parse(formInstance.dueDate);
           if (
             now - dueDAte > 0 &&
-            formInstance.status !== this.formSatus.CLOSED
+            formInstance.status !== this.formSatus.CLOSED &&
+            formInstance.status !== this.formSatus.SUBMITTED
+            && formInstance.isDeleted !== true
           ) {
             formChanged++;
             return formInstance.update(
@@ -540,16 +540,15 @@ module.exports = class FormService extends BaseService {
         return new Error("FORM IS NOT EXISTED!");
       }
 
-      if (form.status === this.formSatus.CLOSED) {
-        logger.error("FORM IS CLOSED");
-        return new Error("FORM IS CLOSED CAN'T DO IT AGAIN!");
-      }
+      // if (form.status === this.formSatus.CLOSED) {
+      //   logger.error("FORM IS CLOSED");
+      //   return new Error("FORM IS CLOSED CAN'T DO IT AGAIN!");
+      // }
 
       await form.update({
         status: this.formSatus.CLOSED,
       });
 
-      logger.info("CLOSE FORM SUCCESSFULLY");
       return `CLOSE FORM SUCCESSFULLY`;
     } catch (error) {
       return error;

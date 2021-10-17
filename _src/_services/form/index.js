@@ -287,7 +287,6 @@ module.exports = class FormRouter extends BaseRouter {
  *               $ref: '#/components/formComponent/addForm/response/code404'
  */
 
-
 /**
  * @swagger
  * /api/form/submit:
@@ -303,10 +302,10 @@ module.exports = class FormRouter extends BaseRouter {
  *        application/json:
  *         schema:
  *          type: object
- *          properties: 
- *            id: 
+ *          properties:
+ *            id:
  *             type:string
- *         example: 
+ *         example:
  *            id: d0f80600-2cde-11ec-bc3e-db15a81a0069
  *     responses:
  *       200:
@@ -317,7 +316,7 @@ module.exports = class FormRouter extends BaseRouter {
  *               type: object
  *               $ref: '#/components/formComponent/submitForm/response/success'
  *       404:
- *         description: 
+ *         description:
  *            error if user try to re-submit,|
  *            error if user have no permission to submit form,|
  *            error if form is not existed
@@ -348,12 +347,12 @@ module.exports = class FormRouter extends BaseRouter {
  *        application/json:
  *         schema:
  *          type: object
- *          properties: 
- *            id: 
+ *          properties:
+ *            id:
  *             type:string
- *            content: 
+ *            content:
  *              type:string
- *         example: 
+ *         example:
  *            id: d0f80600-2cde-11ec-bc3e-db15a81a0069
  *            content: "updated content"
  *     responses:
@@ -365,7 +364,7 @@ module.exports = class FormRouter extends BaseRouter {
  *               type: object
  *               $ref: '#/components/formComponent/modifyContent/response/success'
  *       404:
- *         description: 
+ *         description:
  *            error if form is deleted,
  *            error if form is closed,
  *            error if form is not existed
@@ -380,7 +379,6 @@ module.exports = class FormRouter extends BaseRouter {
  *                - $ref: '#/components/formComponent/modifyContent/response/code404/formNotExistException'
  */
 
-
 /**
  * @swagger
  * /api/form/modify/comment:
@@ -388,9 +386,9 @@ module.exports = class FormRouter extends BaseRouter {
  *     tags:
  *      - form api
  *     summary: modify content off current user's own form
- *     description:
- *           modify content off current user's own form,
- *           which is NOT overDue,status must be NEW and NOT deleted
+ *     description: |
+ *           modify content off current user's own form,<br>
+ *           which is NOT overDue,status must be NEW and NOT deleted<br>
  *     security:
  *      - bearerAuth: []
  *     requestBody:
@@ -398,12 +396,12 @@ module.exports = class FormRouter extends BaseRouter {
  *        application/json:
  *         schema:
  *          type: object
- *          properties: 
- *            id: 
+ *          properties:
+ *            id:
  *             type:string
- *            comment: 
+ *            comment:
  *              type:string
- *         example: 
+ *         example:
  *            id: d0f80600-2cde-11ec-bc3e-db15a81a0069
  *            comment: "updated comment"
  *     responses:
@@ -415,7 +413,7 @@ module.exports = class FormRouter extends BaseRouter {
  *               type: object
  *               $ref: '#/components/formComponent/modifyContent/response/success'
  *       404:
- *         description: 
+ *         description:
  *            error if form is deleted,
  *            error if form is closed,
  *            error if form is not existed
@@ -437,11 +435,11 @@ module.exports = class FormRouter extends BaseRouter {
  *     tags:
  *      - form api
  *     summary: for manager ,hr or director to view probation form
- *     description:
- *           for manager ,hr or director to view probation form,
- *           with manager,CAN VIEW THEIR EMPLOYEES ONLY,
- *           with director and HR can view all probate form,
- *           only form SUBMITTED is available 
+ *     description: |
+ *           for manager ,hr or director to view probation form,<br>
+ *           with manager,CAN VIEW THEIR EMPLOYEES ONLY,<br>
+ *           with director and HR can view all probate form,<br>
+ *           only form SUBMITTED is available <br>
  *     security:
  *      - bearerAuth: []
  *     responses:
@@ -453,7 +451,7 @@ module.exports = class FormRouter extends BaseRouter {
  *               type: object
  *               $ref: '#/components/formComponent/viewProbateList/response/success'
  *       400:
- *         description: 
+ *         description:
  *            error if no form is submitted,
  *            error if manager have NO employee,
  *         content:
@@ -463,4 +461,197 @@ module.exports = class FormRouter extends BaseRouter {
  *               anyOf:
  *                - $ref: '#/components/formComponent/viewProbateList/response/code400/noFormSubmitted'
  *                - $ref: '#/components/formComponent/viewProbateList/response/code400/noEmployee'
+ */
+
+/**
+ * @swagger
+ * /api/form/list/evaluate:
+ *   get:
+ *     tags:
+ *      - form api
+ *     summary: for manager ,hr or director to view PERIODIC EVALUATION form
+ *     description: |
+ *           for manager ,hr or director to view PERIODIC EVALUATION form,<br>
+ *           with manager,CAN VIEW THEIR EMPLOYEES'S FORMS ONLY,<br>
+ *           with director and HR can view all PERIODIC EVALUATION form,<br>
+ *           only form SUBMITTED is available <br>
+ *     security:
+ *      - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: return object of form submitted and user who own that form
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               $ref: '#/components/formComponent/viewEvaluateFormList/response/success'
+ *       400:
+ *         description:
+ *            error if no form is submitted,
+ *            error if manager have NO employee,
+ *         content:
+ *            application/json:
+ *             schema:
+ *               type: object
+ *               anyOf:
+ *                - $ref: '#/components/formComponent/viewProbateList/response/code400/noFormSubmitted'
+ *                - $ref: '#/components/formComponent/viewProbateList/response/code400/noEmployee'
+ */
+
+/**
+ * @swagger
+ * /api/form/approve:
+ *   put:
+ *     tags:
+ *      - form api
+ *     summary: for manager and director only
+ *     description: |
+ *           Manager and director can approve their employees's forms only,<br>
+ *           only form SUBMITTED is available
+ *     security:
+ *      - bearerAuth: []
+ *     requestBody:
+ *       content:
+ *        application/json:
+ *         schema:
+ *          type: object
+ *          $ref: '#/components/formComponent/approveForm/request'
+ *     responses:
+ *       200:
+ *         description: return object of form submitted and user who own that form
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               $ref: '#/components/formComponent/approveForm/response/success'
+ *       400:
+ *         description:
+ *            error if no form is submitted,
+ *            error if manager have NO employee,
+ *         content:
+ *            application/json:
+ *             schema:
+ *               type: object
+ *               anyOf:
+ *                - $ref: '#/components/formComponent/approveForm/response/code400/formNotExist'
+ *                - $ref: '#/components/formComponent/approveForm/response/code400/validationException'
+ */
+
+/**
+ * @swagger
+ * /api/form/reject:
+ *   put:
+ *     tags:
+ *      - form api
+ *     summary: for manager and director only
+ *     description: |
+ *           Manager and director can reject their employees's forms only,<br>
+ *           only form SUBMITTED is available
+ *     security:
+ *      - bearerAuth: []
+ *     requestBody:
+ *       content:
+ *        application/json:
+ *         schema:
+ *          type: object
+ *          $ref: '#/components/formComponent/rejectForm/request'
+ *     responses:
+ *       200:
+ *         description: return object of form submitted and user who own that form
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               $ref: '#/components/formComponent/rejectForm/response/success'
+ *       400:
+ *         description:
+ *            error if no form is submitted,
+ *            error if manager have NO employee,
+ *         content:
+ *            application/json:
+ *             schema:
+ *               type: object
+ *               anyOf:
+ *                - $ref: '#/components/formComponent/rejectForm/response/code400/formNotExist'
+ *                - $ref: '#/components/formComponent/rejectForm/response/code400/validationException'
+ */
+
+/**
+ * @swagger
+ * /api/form/checkDue:
+ *   patch:
+ *     tags:
+ *      - form api
+ *     summary: for director and hr only
+ *     description: |
+ *           Check all form,if is over due then delete them
+ *           only form status NEW and isDeleted = false is available
+ *     security:
+ *      - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: return total of form record
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               $ref: '#/components/formComponent/checkDueDate/response/success'
+ *       400:
+ *         description: |
+ *            error if current user have no permission to entry
+ *         content:
+ *            application/json:
+ *             schema:
+ *               type: object
+ *               anyOf:
+ *                - $ref: '#/components/formComponent/checkDueDate/response/code400/unauthorized'
+ */
+
+/**
+ * @swagger
+ * /api/form/close:
+ *   put:
+ *     tags:
+ *      - form api
+ *     summary: for director and hr only to close form
+ *     description: |
+ *           Check form in request body<br>
+ *           If no form exist throw error code 404<br>
+ *           If unauthorized throw error code 400<br>
+ *           If failed in middleware validator throw error code 404<br>
+ *           If form is already closed throw error code 404<br>
+ *     security:
+ *      - bearerAuth: []
+ *     requestBody:
+ *       content:
+ *        application/json:
+ *         schema:
+ *          type: object
+ *          $ref: '#/components/formComponent/closeForm/request'
+ *     responses:
+ *       200:
+ *         description: return total of form record
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               $ref: '#/components/formComponent/closeForm/response/success'
+ *       400:
+ *         description: |
+ *             unauthorized throw error 
+ *         content:
+ *            application/json:
+ *             schema:
+ *               type: object
+ *               anyOf:
+ *                - $ref: '#/components/formComponent/closeForm/response/code400/unAuthorized'
+*       404:
+ *         description: |
+ *            error if failed middleware validation
+ *         content:
+ *            application/json:
+ *             schema:
+ *               type: object
+ *               anyOf:
+ *                - $ref: '#/components/formComponent/closeForm/response/code404/failedInMiddleware'
  */

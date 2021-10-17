@@ -5,22 +5,24 @@ let {
   userComponent,
   formComponent,
   AuthenComponent,
+  adminComponent,
 } = require("./schema.component");
+
 let useSwagger = (app, port) => {
   const swaggerDefinition = {
     openapi: "3.0.1",
     info: {
-      title: "Express API for JSONPlaceholder",
+      title: "API-DOC FOR HUMAN-RESOURCE SYSTEM",
       version: "1.0.0",
       description:
-        "This is a REST API application made with Express. It retrieves data from JSONPlaceholder.",
+        "THIS IS AN API DOCUMENT FOR HUMAN-RESOURCE PROJECT DEMAND FOR DEVELOPMENT PURPOSE",
       license: {
         name: "Licensed Under MIT",
-        url: "https://spdx.org/licenses/MIT.html",
+        // url: "https://spdx.org/licenses/MIT.html",
       },
       contact: {
-        name: "JSONPlaceholder",
-        url: "https://jsonplaceholder.typicode.com",
+        name: "developing by longnt1",
+        url: "https://www.facebook.com/he141142/",
       },
     },
     servers: [
@@ -44,6 +46,9 @@ let useSwagger = (app, port) => {
       },
       AuthComponent: {
         ...AuthenComponent,
+      },
+      adminComponent: {
+        ...adminComponent,
       },
     },
     security: [
