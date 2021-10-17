@@ -4,6 +4,10 @@ const {
   employee,
   form,
   formDetail,
+  role,
+  userRole,
+  errorMiddleware,
+  userOnly,
 } = require("./utils/response");
 
 let userComponent = {
@@ -655,6 +659,394 @@ let userComponent = {
   },
 };
 
+let AuthenComponent = {
+  login: {
+    request: {
+      type: "object",
+      properties: {
+        username: {
+          type: "string",
+          example: "MANAGER6",
+        },
+        password: {
+          type: "string",
+          example: "12345678",
+        },
+      },
+    },
+    response: {
+      success: {
+        properties: {
+          data: {
+            properties: {
+              status: {
+                type: "number",
+                example: 200,
+              },
+              user: {
+                properties: {
+                  ...user,
+                  roles: {
+                    properties: {
+                      ...role,
+                      userRole: {
+                        properties: {
+                          ...userRole,
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+              token: {
+                type: "string",
+                example: "token",
+              },
+            },
+          },
+        },
+        example: {
+          data: {
+            status: 200,
+            message: {
+              User: {
+                id: "3b82dfa0-2da1-11ec-a12c-236f151614b9",
+                userName: "MANAGER6",
+                password:
+                  "$2b$10$wMnPMSiwzCekiQF1bQMkOelnqEr4G2OdFrw7NzcI671eMYZBG1izK",
+                age: 50,
+                email: "MANAGER6@gmail.com",
+                phone: "+84866841700",
+                address: null,
+                isActive: null,
+                identityNumber: "021523251",
+                socialInsurance: "00210",
+                avatar: null,
+                isDeleted: false,
+                createdBy: "MANAGER6",
+                updatedBy: "MANAGER6",
+                createdAt: "2021-10-15T10:18:25.000Z",
+                updatedAt: "2021-10-15T10:18:25.000Z",
+                employee: {
+                  id: "3b8306b0-2da1-11ec-a12c-236f151614b9",
+                  lastName: "MANAGER",
+                  firstName: "THREE",
+                  fullName: "THREE MANAGER",
+                  userId: "3b82dfa0-2da1-11ec-a12c-236f151614b9",
+                  managerId: null,
+                  isDeleted: false,
+                  createdBy: "MANAGER6",
+                  updatedBy: "MANAGER6",
+                  createdAt: "2021-10-15T10:18:25.000Z",
+                  updatedAt: "2021-10-15T10:18:25.000Z",
+                },
+                roles: [
+                  {
+                    id: 4,
+                    name: "manager",
+                    description: "xxx",
+                    isDeleted: false,
+                    createdBy: "admin",
+                    updatedBy: "admin",
+                    createdAt: "2021-10-07T07:55:07.000Z",
+                    updatedAt: "2021-10-07T07:55:07.000Z",
+                    userRole: {
+                      id: "86a23d60-2e9f-11ec-829b-3312f77f9ee0",
+                      userId: "3b82dfa0-2da1-11ec-a12c-236f151614b9",
+                      roleId: 4,
+                      isDeleted: false,
+                      createdBy: "admin",
+                      updatedBy: "admin",
+                      createdAt: "2021-10-16T16:38:43.000Z",
+                      updatedAt: "2021-10-16T16:38:43.000Z",
+                    },
+                  },
+                  {
+                    id: 5,
+                    name: "employee",
+                    description: "xxx",
+                    isDeleted: false,
+                    createdBy: "admin",
+                    updatedBy: "admin",
+                    createdAt: "2021-10-07T07:55:07.000Z",
+                    updatedAt: "2021-10-07T07:55:07.000Z",
+                    userRole: {
+                      id: "3b832dc0-2da1-11ec-a12c-236f151614b9",
+                      userId: "3b82dfa0-2da1-11ec-a12c-236f151614b9",
+                      roleId: 5,
+                      isDeleted: false,
+                      createdBy: "admin",
+                      updatedBy: "admin",
+                      createdAt: "2021-10-15T10:18:25.000Z",
+                      updatedAt: "2021-10-15T10:18:25.000Z",
+                    },
+                  },
+                ],
+              },
+              token:
+                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjoiM2I4MmRmYTAtMmRhMS0xMWVjLWExMmMtMjM2ZjE1MTYxNGI5IiwidXNlck5hbWUiOiJNQU5BR0VSNiIsInBhc3N3b3JkIjoiJDJiJDEwJHdNblBNU2l3ekNla2lRRjFiUU1rT2VsbnFFcjRHMk9kRnJ3N056Y0k2NzFlTVlaQkcxaXpLIiwiYWdlIjo1MCwiZW1haWwiOiJNQU5BR0VSNkBnbWFpbC5jb20iLCJwaG9uZSI6Iis4NDg2Njg0MTcwMCIsImFkZHJlc3MiOm51bGwsImlzQWN0aXZlIjpudWxsLCJpZGVudGl0eU51bWJlciI6IjAyMTUyMzI1MSIsInNvY2lhbEluc3VyYW5jZSI6IjAwMjEwIiwiYXZhdGFyIjpudWxsLCJpc0RlbGV0ZWQiOmZhbHNlLCJjcmVhdGVkQnkiOiJNQU5BR0VSNiIsInVwZGF0ZWRCeSI6Ik1BTkFHRVI2IiwiY3JlYXRlZEF0IjoiMjAyMS0xMC0xNVQxMDoxODoyNS4wMDBaIiwidXBkYXRlZEF0IjoiMjAyMS0xMC0xNVQxMDoxODoyNS4wMDBaIiwiZW1wbG95ZWUiOnsiaWQiOiIzYjgzMDZiMC0yZGExLTExZWMtYTEyYy0yMzZmMTUxNjE0YjkiLCJsYXN0TmFtZSI6Ik1BTkFHRVIiLCJmaXJzdE5hbWUiOiJUSFJFRSIsImZ1bGxOYW1lIjoiVEhSRUUgTUFOQUdFUiIsInVzZXJJZCI6IjNiODJkZmEwLTJkYTEtMTFlYy1hMTJjLTIzNmYxNTE2MTRiOSIsIm1hbmFnZXJJZCI6bnVsbCwiaXNEZWxldGVkIjpmYWxzZSwiY3JlYXRlZEJ5IjoiTUFOQUdFUjYiLCJ1cGRhdGVkQnkiOiJNQU5BR0VSNiIsImNyZWF0ZWRBdCI6IjIwMjEtMTAtMTVUMTA6MTg6MjUuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMjEtMTAtMTVUMTA6MTg6MjUuMDAwWiJ9LCJyb2xlcyI6W3siaWQiOjQsIm5hbWUiOiJtYW5hZ2VyIiwiZGVzY3JpcHRpb24iOiJ4eHgiLCJpc0RlbGV0ZWQiOmZhbHNlLCJjcmVhdGVkQnkiOiJhZG1pbiIsInVwZGF0ZWRCeSI6ImFkbWluIiwiY3JlYXRlZEF0IjoiMjAyMS0xMC0wN1QwNzo1NTowNy4wMDBaIiwidXBkYXRlZEF0IjoiMjAyMS0xMC0wN1QwNzo1NTowNy4wMDBaIiwidXNlclJvbGUiOnsiaWQiOiI4NmEyM2Q2MC0yZTlmLTExZWMtODI5Yi0zMzEyZjc3ZjllZTAiLCJ1c2VySWQiOiIzYjgyZGZhMC0yZGExLTExZWMtYTEyYy0yMzZmMTUxNjE0YjkiLCJyb2xlSWQiOjQsImlzRGVsZXRlZCI6ZmFsc2UsImNyZWF0ZWRCeSI6ImFkbWluIiwidXBkYXRlZEJ5IjoiYWRtaW4iLCJjcmVhdGVkQXQiOiIyMDIxLTEwLTE2VDE2OjM4OjQzLjAwMFoiLCJ1cGRhdGVkQXQiOiIyMDIxLTEwLTE2VDE2OjM4OjQzLjAwMFoifX0seyJpZCI6NSwibmFtZSI6ImVtcGxveWVlIiwiZGVzY3JpcHRpb24iOiJ4eHgiLCJpc0RlbGV0ZWQiOmZhbHNlLCJjcmVhdGVkQnkiOiJhZG1pbiIsInVwZGF0ZWRCeSI6ImFkbWluIiwiY3JlYXRlZEF0IjoiMjAyMS0xMC0wN1QwNzo1NTowNy4wMDBaIiwidXBkYXRlZEF0IjoiMjAyMS0xMC0wN1QwNzo1NTowNy4wMDBaIiwidXNlclJvbGUiOnsiaWQiOiIzYjgzMmRjMC0yZGExLTExZWMtYTEyYy0yMzZmMTUxNjE0YjkiLCJ1c2VySWQiOiIzYjgyZGZhMC0yZGExLTExZWMtYTEyYy0yMzZmMTUxNjE0YjkiLCJyb2xlSWQiOjUsImlzRGVsZXRlZCI6ZmFsc2UsImNyZWF0ZWRCeSI6ImFkbWluIiwidXBkYXRlZEJ5IjoiYWRtaW4iLCJjcmVhdGVkQXQiOiIyMDIxLTEwLTE1VDEwOjE4OjI1LjAwMFoiLCJ1cGRhdGVkQXQiOiIyMDIxLTEwLTE1VDEwOjE4OjI1LjAwMFoifX1dfSwiaWF0IjoxNjM0NDU4OTQ0fQ.lsKf_iXtEddI7QOMfHwz5_yB8NGNFLl1zVo5aoOTnz4",
+            },
+          },
+        },
+      },
+      code404: {
+        incorrectUser: {
+          properties: {
+            error: {
+              properties: {
+                ...errorResponse,
+              },
+              example: {
+                status: "error",
+                statusCode: 404,
+                message: "Inccorect UserName or Password",
+              },
+            },
+          },
+        },
+        validationFailed: {
+          properties: {
+            error: {
+              properties: {
+                ...errorMiddleware,
+              },
+              example: {
+                status: "error",
+                statusCode: 404,
+                message: {
+                  _original: {
+                    userName: "",
+                    password: "admin123",
+                  },
+                  details: [
+                    {
+                      message: "Please fill in userName",
+                      path: ["userName"],
+                      type: "string.empty",
+                      context: {
+                        label: "userName",
+                        value: "",
+                        key: "userName",
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+  register: {
+    request: {
+      properties: {
+        userName: {
+          type: "string",
+          example: "EMPLOYEE9",
+        },
+        password: {
+          type: "string",
+          example: "12345678",
+        },
+        email: {
+          type: "string",
+          example: "EMPLOYEE9@gmail.com",
+        },
+        phone: {
+          type: "string",
+          example: "+84866841700",
+        },
+        age: {
+          type: "number",
+          example: 20,
+        },
+        socialInsurance: {
+          type: "string",
+          example: "00210",
+        },
+        identityNumber: {
+          type: "string",
+          example: "021523251",
+        },
+        employee: {
+          type: "object",
+          properties: {
+            lastName: {
+              type: "string",
+              example: "NINE",
+            },
+            firstName: {
+              type: "string",
+              example: "EMPLOYEE",
+            },
+          },
+        },
+      },
+    },
+    response: {
+      success: {
+        properties: {
+          data: {
+            properties: {
+              ...user,
+              employee: {
+                properties: {
+                  ...employee,
+                },
+              },
+              roles: {
+                type: "array",
+                items: {
+                  properties: {
+                    ...role,
+                    userRole: {
+                      properties: {
+                        ...userRole,
+                      },
+                    },
+                  },
+                },
+              },
+              userRoles: {
+                type: "array",
+                items: {
+                  properties: {
+                    ...userRole,
+                  },
+                },
+              },
+            },
+            example: {
+              id: "ae15b050-2f32-11ec-9f54-2ba08a3f7d93",
+              userName: "EMPLOYEE9",
+              password:
+                "$2b$10$2rIucmTkluAqv8./ntDZjeXH1NNexl2sFhcgdH/HNsOCNsRBB4g2e",
+              age: 20,
+              email: "EMPLOYEE9@gmail.com",
+              phone: "+84866841700",
+              address: null,
+              isActive: null,
+              identityNumber: "021523251",
+              socialInsurance: "00210",
+              avatar: null,
+              isDeleted: false,
+              createdBy: "EMPLOYEE9",
+              updatedBy: "EMPLOYEE9",
+              createdAt: "2021-10-17T10:12:05.000Z",
+              updatedAt: "2021-10-17T10:12:05.000Z",
+              employee: {
+                id: "ae175e00-2f32-11ec-9f54-2ba08a3f7d93",
+                lastName: "EMPLOYEE",
+                firstName: "NINE",
+                fullName: "NINE EMPLOYEE",
+                userId: "ae15b050-2f32-11ec-9f54-2ba08a3f7d93",
+                managerId: null,
+                isDeleted: false,
+                createdBy: "EMPLOYEE9",
+                updatedBy: "EMPLOYEE9",
+                createdAt: "2021-10-17T10:12:05.000Z",
+                updatedAt: "2021-10-17T10:12:05.000Z",
+              },
+              roles: [
+                {
+                  id: 5,
+                  name: "employee",
+                  description: "xxx",
+                  isDeleted: false,
+                  createdBy: "admin",
+                  updatedBy: "admin",
+                  createdAt: "2021-10-07T07:55:07.000Z",
+                  updatedAt: "2021-10-07T07:55:07.000Z",
+                  userRole: {
+                    id: "ae17d330-2f32-11ec-9f54-2ba08a3f7d93",
+                    userId: "ae15b050-2f32-11ec-9f54-2ba08a3f7d93",
+                    roleId: 5,
+                    isDeleted: false,
+                    createdBy: "admin",
+                    updatedBy: "admin",
+                    createdAt: "2021-10-17T10:12:05.000Z",
+                    updatedAt: "2021-10-17T10:12:05.000Z",
+                  },
+                },
+              ],
+              userRoles: [
+                {
+                  id: "ae17d330-2f32-11ec-9f54-2ba08a3f7d93",
+                  userId: "ae15b050-2f32-11ec-9f54-2ba08a3f7d93",
+                  roleId: 5,
+                  isDeleted: false,
+                  createdBy: "admin",
+                  updatedBy: "admin",
+                  createdAt: "2021-10-17T10:12:05.000Z",
+                  updatedAt: "2021-10-17T10:12:05.000Z",
+                },
+              ],
+            },
+          },
+        },
+      },
+      code404: {
+        userNameExisted: {
+          properties: {
+            error: {
+              properties: {
+                ...errorResponse,
+              },
+              example: {
+                status: "error",
+                statusCode: 404,
+                message: "USerName already in use",
+              },
+            },
+          },
+        },
+        failedInMiddleware: {
+          properties: {
+            error: {
+              properties: {
+                ...errorMiddleware,
+              },
+              example: {
+                status: "error",
+                statusCode: 404,
+                message: {
+                  _original: {
+                    userName: "EMPLOYEE9",
+                    email: "EMPLOYEE9@gmail.us",
+                    password: "12345678",
+                    phone: "+84866841700",
+                    age: "20",
+                    identityNumber: "021523251",
+                    socialInsurance: "00210",
+                    employee: {
+                      lastName: "EMPLOYEE",
+                      firstName: "NINE",
+                    },
+                  },
+                  details: [
+                    {
+                      message: "invalid email",
+                      path: ["email"],
+                      type: "string.email",
+                      context: {
+                        value: "EMPLOYEE9@gmail.us",
+                        invalids: ["EMPLOYEE9@gmail.us"],
+                        label: "email",
+                        key: "email",
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+};
+
 let formComponent = {
   addForm: {
     request: {
@@ -835,6 +1227,248 @@ let formComponent = {
       },
     },
   },
+
+  modifyContent: {
+    response: {
+      success: {
+        properties: {
+          data: {
+            properties: {
+              form: {
+                properties: {
+                  ...form,
+                },
+              },
+              formDetail: {
+                properties: {
+                  ...formDetail,
+                },
+              },
+            },
+            example: {
+              form: {
+                id: "4142e1e0-2c54-11ec-b143-8d67b78cb9b8",
+                receiver: null,
+                type: 1,
+                userId: "30eb7eb0-2b5f-11ec-8639-1b33c0b488b9",
+                status: "NEW",
+                dueDate: "2021-12-07T00:00:00.000Z",
+                isApproved: 0,
+                isRejected: 0,
+                isDue: 0,
+                isDeleted: false,
+                createdBy: null,
+                updatedBy: "EMPLOYEE7",
+                createdAt: "2021-10-13T18:34:52.000Z",
+                updatedAt: "2021-10-17T02:42:22.183Z",
+              },
+              formDetail: {
+                id: "4144ddb0-2c54-11ec-b143-8d67b78cb9b8",
+                formId: "4142e1e0-2c54-11ec-b143-8d67b78cb9b8",
+                content: "updated content",
+                managerComment: "",
+                isDeleted: false,
+                createdBy: null,
+                updatedBy: "EMPLOYEE7",
+                createdAt: "2021-10-13T18:34:52.000Z",
+                updatedAt: "2021-10-17T02:42:22.196Z",
+              },
+            },
+          },
+        },
+      },
+      code404: {
+        formIsClosedException: {
+          description: "form is closed",
+          properties: {
+            error: {
+              properties: {
+                ...errorResponse,
+              },
+              example: {
+                status: "error",
+                statusCode: 404,
+                message: "You can't update because form is closed",
+              },
+            },
+          },
+        },
+        isDeletedException: {
+          description: "form is deleted",
+          properties: {
+            error: {
+              properties: {
+                ...errorResponse,
+              },
+              example: {
+                status: "error",
+                statusCode: 404,
+                message: "You can't update because form is deleted",
+              },
+            },
+          },
+        },
+        formNotExistException: {
+          description: "form is not existed",
+          properties: {
+            error: {
+              properties: {
+                ...errorResponse,
+              },
+              example: {
+                status: "error",
+                statusCode: 404,
+                message: "FORM IS NOT EXISTED!",
+              },
+            },
+          },
+        },
+        noPermission: {
+          description: "form is not not yours",
+          properties: {
+            error: {
+              properties: {
+                ...errorResponse,
+              },
+              example: {
+                status: "error",
+                statusCode: 404,
+                message: "YOU DONT HAVE PERMISSION TO EDIT THIS FORM!",
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+  viewProbateList: {
+    response: {
+      success: {
+        properties: {
+          data: {
+            type: "array",
+            items: {
+              properties: {
+                user: {
+                  properties: {
+                    ...userOnly,
+                  },
+                  example: {
+                    id: "4d3c7250-2b5e-11ec-8639-1b33c0b488b9",
+                    userName: "EMPLOYEE4",
+                    password:
+                      "$2b$10$wX.1Qzxm9pWgXgAFRuB.JOXbp4LESHIYMjcE4nAK7eQ4OXA.DfG.a",
+                    age: 19,
+                    email: "EMPLOYEE4@gmail.com",
+                    phone: "+84 866 841700",
+                    address: null,
+                    isActive: null,
+                    identityNumber: "021523251",
+                    socialInsurance: "00210",
+                    avatar: null,
+                    isDeleted: false,
+                    createdBy: "EMPLOYEE4",
+                    updatedBy: "EMPLOYEE4",
+                    createdAt: "2021-10-12T13:14:16.000Z",
+                    updatedAt: "2021-10-12T13:14:16.000Z",
+                  },
+                },
+                forms: {
+                  type: "array",
+                  items: {
+                    properties: {
+                      ...form,
+                      formDetail: {
+                        properties: {
+                          ...formDetail,
+                        },
+                        example: {
+                          id: "d0f8f060-2cde-11ec-bc3e-db15a81a0069",
+                          formId: "d0f80600-2cde-11ec-bc3e-db15a81a0069",
+                          content: "abc",
+                          managerComment: "",
+                          isDeleted: false,
+                          createdBy: "admindeptrai",
+                          updatedBy: "admindeptrai",
+                          createdAt: "2021-10-14T11:06:44.000Z",
+                          updatedAt: "2021-10-14T11:06:44.000Z",
+                        },
+                      },
+                    },
+                    example: {
+                      id: "d0f80600-2cde-11ec-bc3e-db15a81a0069",
+                      receiver: null,
+                      type: 1,
+                      userId: "4d3c7250-2b5e-11ec-8639-1b33c0b488b9",
+                      status: "SUBMITTED",
+                      dueDate: "2021-12-07T00:00:00.000Z",
+                      isApproved: 1,
+                      isRejected: 0,
+                      isDue: 0,
+                      isDeleted: false,
+                      createdBy: "admindeptrai",
+                      updatedBy: "admindeptrai",
+                      createdAt: "2021-10-14T11:06:44.000Z",
+                      updatedAt: "2021-10-14T11:52:31.000Z",
+                      FormDetail: {
+                        id: "d0f8f060-2cde-11ec-bc3e-db15a81a0069",
+                        formId: "d0f80600-2cde-11ec-bc3e-db15a81a0069",
+                        content: "abc",
+                        managerComment: "",
+                        isDeleted: false,
+                        createdBy: "admindeptrai",
+                        updatedBy: "admindeptrai",
+                        createdAt: "2021-10-14T11:06:44.000Z",
+                        updatedAt: "2021-10-14T11:06:44.000Z",
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      code400: {
+        noEmployee: {
+          properties: {
+            data: {
+              properties: {
+                error: {
+                  properties: {
+                    ...errorResponse,
+                  },
+                  example: {
+                    status: "error",
+                    statusCode: 400,
+                    message: "YOU HAVE NO EMPLOYEE",
+                  },
+                },
+              },
+            },
+          },
+        },
+        noFormSubmitted: {
+          properties: {
+            data: {
+              properties: {
+                error: {
+                  properties: {
+                    ...errorResponse,
+                  },
+                  example: {
+                    status: "error",
+                    statusCode: 400,
+                    message: "No Form submitted yet!",
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  },
 };
 
-module.exports = { userComponent, formComponent };
+module.exports = { userComponent, formComponent, AuthenComponent };

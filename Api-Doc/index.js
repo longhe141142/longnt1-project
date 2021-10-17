@@ -1,7 +1,11 @@
 const swaggerUI = require("swagger-ui-express");
 
 const swaggerJSDoc = require("swagger-jsdoc");
-let { userComponent, formComponent } = require("./schema.component");
+let {
+  userComponent,
+  formComponent,
+  AuthenComponent,
+} = require("./schema.component");
 let useSwagger = (app, port) => {
   const swaggerDefinition = {
     openapi: "3.0.1",
@@ -38,6 +42,9 @@ let useSwagger = (app, port) => {
       formComponent: {
         ...formComponent,
       },
+      AuthComponent: {
+        ...AuthenComponent,
+      },
     },
     security: [
       {
@@ -53,7 +60,6 @@ let useSwagger = (app, port) => {
   };
   const swaggerSpec = swaggerJSDoc(options);
   app.use("/docs", swaggerUI.serve, swaggerUI.setup(swaggerSpec));
-  console.log(options);
 };
 
 module.exports = { useSwagger };

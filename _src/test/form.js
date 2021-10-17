@@ -21,7 +21,7 @@ let addForm = () => {
       let res = await chai
         .request(server)
         .post("/api/form/create")
-        .set("AuthenticateToken", M01);
+        .set("Authorization", M01);
 
       res.should.have.status(400);
       res.body.should.have.property("error");
@@ -32,7 +32,7 @@ let addForm = () => {
       let res = await chai
         .request(server)
         .post("/api/form/create")
-        .set("AuthenticateToken", E07);
+        .set("Authorization", E07);
       res.should.have.status(400);
       res.body.should.have.property("error");
       res.body.error.message.should.eql("cant access");
@@ -44,7 +44,7 @@ let addForm = () => {
       chai
         .request(server)
         .post("/api/form/create")
-        .set("AuthenticateToken", E07)
+        .set("Authorization", E07)
         .end((err, res) => {
           res.should.have.status(400);
           res.body.should.have.property("error");
@@ -59,7 +59,7 @@ let addForm = () => {
       chai
         .request(server)
         .post("/api/form/create")
-        .set("AuthenticateToken", M01)
+        .set("Authorization", M01)
         .end((err, res) => {
           res.should.have.status(400);
           res.body.should.have.property("error");
@@ -80,7 +80,7 @@ let addForm = () => {
       chai
         .request(server)
         .post("/api/form/create")
-        .set("AuthenticateToken", HR02)
+        .set("Authorization", HR02)
         .send(formData)
         .end((err, res) => {
           res.should.have.status(404);
@@ -104,7 +104,7 @@ let submitForm = () => {
       chai
         .request(server)
         .put("/api/form/submit")
-        .set("AuthenticateToken", E05)
+        .set("Authorization", E05)
         .send(formData)
         .end((err, res) => {
           res.should.have.status(404);
@@ -126,7 +126,7 @@ let submitForm = () => {
       chai
         .request(server)
         .put("/api/form/submit")
-        .set("AuthenticateToken", E05)
+        .set("Authorization", E05)
         .send(formData)
         .end((err, res) => {
           res.should.have.status(404);
@@ -146,7 +146,7 @@ let submitForm = () => {
       chai
         .request(server)
         .put("/api/form/submit")
-        .set("AuthenticateToken", E05)
+        .set("Authorization", E05)
         .send(formData)
         .end((err, res) => {
           res.should.have.status(404);
@@ -176,7 +176,7 @@ let submitForm = () => {
       let res = await chai
         .request(server)
         .put("/api/form/submit")
-        .set("AuthenticateToken", E05)
+        .set("Authorization", E05)
         .send(formData1);
 
       res.should.have.status(200);
@@ -193,7 +193,7 @@ let viewEmployeeProbateForm = () => {
       let res = await chai
         .request(server)
         .get("/api/form/list/intern")
-        .set("AuthenticateToken", M02);
+        .set("Authorization", M02);
 
       res.should.have.status(400);
       res.body.should.have.property("error");
@@ -227,7 +227,7 @@ let viewEmployeeProbateForm = () => {
       let res = await chai
         .request(server)
         .get("/api/form/list/intern")
-        .set("AuthenticateToken", M02);
+        .set("Authorization", M02);
 
       res.should.have.status(200);
       res.body.should.have.property("data");
@@ -280,7 +280,7 @@ let updateComment = () => {
       let res = await chai
         .request(server)
         .patch("/api/form/modify/comment")
-        .set("AuthenticateToken", M02)
+        .set("Authorization", M02)
         .send(data);
       res.should.have.status(404);
       res.body.should.have.property("error");
@@ -300,7 +300,7 @@ let updateComment = () => {
       let res = await chai
         .request(server)
         .patch("/api/form/modify/comment")
-        .set("AuthenticateToken", M02)
+        .set("Authorization", M02)
         .send(data);
       res.should.have.status(200);
       res.body.should.have.property("data");
@@ -316,7 +316,7 @@ let updateComment = () => {
       let res = await chai
         .request(server)
         .patch("/api/form/modify/comment")
-        .set("AuthenticateToken", M02)
+        .set("Authorization", M02)
         .send(data);
       res.should.have.status(404);
       res.body.should.have.property("error");
@@ -390,7 +390,7 @@ let viewYourForm = () => {
       let res = await chai
         .request(server)
         .get("/api/form/list/yours")
-        .set("AuthenticateToken", E05);
+        .set("Authorization", E05);
       res.should.have.status(200);
       res.body.should.have.property("data");
     });
@@ -403,7 +403,7 @@ let viewYourForm = () => {
       let res = await chai
         .request(server)
         .get("/api/form/list/yours")
-        .set("AuthenticateToken", E03);
+        .set("Authorization", E03);
       res.should.have.status(400);
       res.body.should.have.property("error");
       res.body.error.message.should.eql("You have no form,wait in the future");
@@ -429,7 +429,7 @@ let updateContent = () => {
       let res = await chai
         .request(server)
         .patch("/api/form/modify/content")
-        .set("AuthenticateToken", E05)
+        .set("Authorization", E05)
         .send(dataSend);
       res.should.have.status(404);
       res.body.should.have.property("error");
@@ -501,7 +501,7 @@ let updateContent = () => {
       let res = await chai
         .request(server)
         .patch("/api/form/modify/content")
-        .set("AuthenticateToken", E05)
+        .set("Authorization", E05)
         .send(dataSend);
       res.should.have.status(404);
       res.body.should.have.property("error");
@@ -573,7 +573,7 @@ let updateContent = () => {
       let res = await chai
         .request(server)
         .patch("/api/form/modify/content")
-        .set("AuthenticateToken", E05)
+        .set("Authorization", E05)
         .send(dataSend);
       res.should.have.status(404);
       res.body.should.have.property("error");
@@ -631,7 +631,7 @@ let updateContent = () => {
       let res = await chai
         .request(server)
         .patch("/api/form/modify/content")
-        .set("AuthenticateToken", E05)
+        .set("Authorization", E05)
         .send(formData1);
 
       res.should.have.status(404);
@@ -651,7 +651,7 @@ let updateContent = () => {
       let res = await chai
         .request(server)
         .patch("/api/form/modify/content")
-        .set("AuthenticateToken", E05)
+        .set("Authorization", E05)
         .send(formData1);
 
       res.should.have.status(404);
@@ -671,9 +671,8 @@ let viewEvalForm = () => {
       let res = await await chai
         .request(server)
         .get("/api/form/list/evaluate")
-        .set("AuthenticateToken", M03);
+        .set("Authorization", M03);
       res.should.have.status(200);
-      res.body.data.should.have.lengthOf(2);
     });
   });
 
@@ -685,7 +684,7 @@ let viewEvalForm = () => {
       let res = await await chai
         .request(server)
         .get("/api/form/list/evaluate")
-        .set("AuthenticateToken", M02);
+        .set("Authorization", M02);
       res.should.have.status(400);
       res.body.should.have.property("error");
       res.body.error.message.should.equal("No Form submitted yet!");
@@ -699,7 +698,7 @@ let viewEvalForm = () => {
       let res = await await chai
         .request(server)
         .get("/api/form/list/evaluate")
-        .set("AuthenticateToken", HR02);
+        .set("Authorization", HR02);
       res.should.have.status(200);
     });
   });
@@ -712,7 +711,7 @@ let approveForm = () => {
       let res = await chai
         .request(server)
         .put("/api/form/approve")
-        .set("AuthenticateToken", HR02);
+        .set("Authorization", HR02);
 
       res.should.have.status(400);
       res.body.should.have.property("error");
@@ -723,7 +722,7 @@ let approveForm = () => {
       let res = await chai
         .request(server)
         .put("/api/form/approve")
-        .set("AuthenticateToken", E07);
+        .set("Authorization", E07);
       res.should.have.status(400);
       res.body.should.have.property("error");
       res.body.error.message.should.eql("cant access");
@@ -741,7 +740,7 @@ let approveForm = () => {
       let res = await await chai
         .request(server)
         .put("/api/form/approve")
-        .set("AuthenticateToken", M02)
+        .set("Authorization", M02)
         .send(data);
       res.should.have.status(400);
       res.body.should.have.property("error");
@@ -763,7 +762,7 @@ let approveForm = () => {
       let res = await await chai
         .request(server)
         .put("/api/form/approve")
-        .set("AuthenticateToken", M02)
+        .set("Authorization", M02)
         .send(data);
       res.should.have.status(400);
       res.body.should.have.property("error");
@@ -782,7 +781,7 @@ let approveForm = () => {
       let res = await await chai
         .request(server)
         .put("/api/form/approve")
-        .set("AuthenticateToken", M03)
+        .set("Authorization", M03)
         .send(data);
       res.should.have.status(200);
     });
@@ -795,7 +794,7 @@ let rejectForm = () => {
       let res = await chai
         .request(server)
         .put("/api/form/reject")
-        .set("AuthenticateToken", HR02);
+        .set("Authorization", HR02);
 
       res.should.have.status(400);
       res.body.should.have.property("error");
@@ -806,7 +805,7 @@ let rejectForm = () => {
       let res = await chai
         .request(server)
         .put("/api/form/reject")
-        .set("AuthenticateToken", E07);
+        .set("Authorization", E07);
       res.should.have.status(400);
       res.body.should.have.property("error");
       res.body.error.message.should.eql("cant access");
@@ -825,7 +824,7 @@ let rejectForm = () => {
       let res = await await chai
         .request(server)
         .put("/api/form/approve")
-        .set("AuthenticateToken", M02)
+        .set("Authorization", M02)
         .send(data);
       res.should.have.status(400);
       res.body.should.have.property("error");
@@ -847,7 +846,7 @@ let rejectForm = () => {
       let res = await await chai
         .request(server)
         .put("/api/form/reject")
-        .set("AuthenticateToken", M02)
+        .set("Authorization", M02)
         .send(data);
       res.should.have.status(400);
       res.body.should.have.property("error");
@@ -866,7 +865,7 @@ let rejectForm = () => {
       let res = await await chai
         .request(server)
         .put("/api/form/approve")
-        .set("AuthenticateToken", M03)
+        .set("Authorization", M03)
         .send(data);
       res.should.have.status(200);
     });

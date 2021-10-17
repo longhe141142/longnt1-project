@@ -496,7 +496,7 @@ let testLogin = () => {
         userName: "employee 07",
         password: "12345678",
       };
-      let res = await chai.request(server).get("/api/login").send(data);
+      let res = await chai.request(server).post("/api/login").send(data);
       res.should.have.status(404);
       res.body.error.message.details[0].message.should.equal(
         "userName not allow whitespace"
@@ -509,7 +509,7 @@ let testLogin = () => {
         userName: "",
         password: "12345678",
       };
-      let res = await chai.request(server).get("/api/login").send(data);
+      let res = await chai.request(server).post("/api/login").send(data);
       res.should.have.status(404);
       res.body.error.message.details[0].message.should.equal(
         "Please fill in userName"
@@ -522,7 +522,7 @@ let testLogin = () => {
         userName: "       ",
         password: "12345678",
       };
-      let res = await chai.request(server).get("/api/login").send(data);
+      let res = await chai.request(server).post("/api/login").send(data);
       res.should.have.status(404);
       res.body.error.message.details[0].message.should.equal(
         "userName not allow whitespace"
@@ -535,7 +535,7 @@ let testLogin = () => {
       let data = {
         password: "12345678",
       };
-      let res = await chai.request(server).get("/api/login").send(data);
+      let res = await chai.request(server).post("/api/login").send(data);
       res.should.have.status(404);
       res.body.error.message.details[0].message.should.equal(
         "userName is required"
@@ -548,7 +548,7 @@ let testLogin = () => {
       let data = {
         userName: "abc",
       };
-      let res = await chai.request(server).get("/api/login").send(data);
+      let res = await chai.request(server).post("/api/login").send(data);
       res.should.have.status(404);
       res.body.error.message.details[0].message.should.equal(
         "password is required"
@@ -563,7 +563,7 @@ let testLogin = () => {
         userName: "abc",
         password: "123456 78",
       };
-      let res = await chai.request(server).get("/api/login").send(data);
+      let res = await chai.request(server).post("/api/login").send(data);
       res.should.have.status(404);
       res.body.error.message.details[0].message.should.equal(
         "password not allow whitespace"
@@ -575,7 +575,7 @@ let testLogin = () => {
         userName: "abc",
         password: "      ",
       };
-      let res = await chai.request(server).get("/api/login").send(data);
+      let res = await chai.request(server).post("/api/login").send(data);
       res.should.have.status(404);
       res.body.error.message.details[0].message.should.equal(
         "password not allow whitespace"
@@ -587,12 +587,12 @@ let testLogin = () => {
         userName: "abc",
         password: "",
       };
-      let res = await chai.request(server).get("/api/login").send(data);
+      let res = await chai.request(server).post("/api/login").send(data);
       res.should.have.status(404);
       res.body.error.message.details[0].message.should.equal(
         "Please fill in password"
       );
-    });  
+    });
   });
 
   describe("/GET login with noneExisted User", () => {
@@ -601,13 +601,11 @@ let testLogin = () => {
     password: "12345678"`, async () => {
       let data = {
         userName: "abc",
-        password: "12345678"
+        password: "12345678",
       };
-      let res = await chai.request(server).get("/api/login").send(data);
+      let res = await chai.request(server).post("/api/login").send(data);
       res.should.have.status(404);
-      res.body.error.message.should.equal(
-        "Inccorect UserName or Password"
-      );
+      res.body.error.message.should.equal("Inccorect UserName or Password");
     });
   });
 
@@ -617,13 +615,11 @@ let testLogin = () => {
     password: "12345678"`, async () => {
       let data = {
         userName: "EMPLOYEE7",
-        password: "123456678"
+        password: "123456678",
       };
-      let res = await chai.request(server).get("/api/login").send(data);
+      let res = await chai.request(server).post("/api/login").send(data);
       res.should.have.status(404);
-      res.body.error.message.should.equal(
-        "Inccorect UserName or Password"
-      );
+      res.body.error.message.should.equal("Inccorect UserName or Password");
     });
   });
 };

@@ -16,7 +16,7 @@ class AuthRouter extends BaseRouter {
 
     this.post("/register", authenValidation.register, this.register);
 
-    this.get("/login", authenValidation.login, this.login);
+    this.post("/login", authenValidation.login, this.login);
   }
 
   register = async (req, res, next) => {
@@ -60,4 +60,86 @@ module.exports = AuthRouter;
  *         description: A single fruit
  *       500:
  *         description: Server Error
+ */
+
+/**
+ * @swagger
+ * /api/login:
+ *   post:
+ *     tags:
+ *      - authentication api
+ *     summary: login with user to take access permission
+ *     description:
+ *           retrieve token to access features
+ *     requestBody:
+ *       content:
+ *        application/json:
+ *         schema:
+ *          type: object
+ *          properties:
+ *            userName:
+ *              type: string
+ *              example: EMPLOYEE7
+ *            password:
+ *              type: string
+ *              example: 12345678
+ *     responses:
+ *       200:
+ *         description: return object of user login success,contain his/her employee information
+ *           ,all roles and userRole then tokenize all of the Above
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               $ref: '#/components/AuthComponent/login/response/success'
+ *       404:
+ *         description:
+ *            error if the field is blank, OR
+ *            error if wrong user name or password
+ *         content:
+ *            application/json:
+ *             schema:
+ *               type: object
+ *               oneOf:
+ *                - $ref: '#/components/AuthComponent/login/response/code404/incorrectUser'
+ *                - $ref: '#/components/AuthComponent/login/response/code404/validationFailed'
+ *       
+ */
+
+/**
+ * @swagger
+ * /api/register:
+ *   post:
+ *     tags:
+ *      - authentication api
+ *     summary: register provided user information
+ *     description:
+ *           register provided user information add new user to system with DEFAULT role is EMPLOYEE
+ *     requestBody:
+ *       content:
+ *        application/json:
+ *         schema:
+ *          type: object
+ *          $ref: '#/components/AuthComponent/register/request'
+ *     responses:
+ *       200:
+ *         description: return object of user REGISTER success,contain his/her employee information
+ *           ,all roles and userRole
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               $ref: '#/components/AuthComponent/register/response/success'
+ *       404:
+ *         description:
+ *            error if the field is blank, OR
+ *            error if wrong user name or password
+ *         content:
+ *            application/json:
+ *             schema:
+ *               type: object
+ *               oneOf:
+ *                - $ref: '#/components/AuthComponent/register/response/code404/userNameExisted'
+ *                - $ref: '#/components/AuthComponent/register/response/code404/failedInMiddleware'
+ *       
  */

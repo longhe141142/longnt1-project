@@ -16,7 +16,7 @@ let viewProfileTest = () => {
       chai
         .request(server)
         .get("/api/user/profile")
-        .set("AuthenticateToken", E07)
+        .set("Authorization", E07)
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.have.property("data");
@@ -48,9 +48,9 @@ let viewProfileTest = () => {
       chai
         .request(server)
         .get("/api/user/profile")
-        .set("AuthenticateToken", "invalid token")
+        .set("Authorization", "invalid token")
         .end((err, res) => {
-          res.should.have.status(400);
+          res.should.have.status(403);
           done();
         });
     });
@@ -61,9 +61,9 @@ let viewProfileTest = () => {
       chai
         .request(server)
         .get("/api/user/profile")
-        .set("AuthenticateToken", "invalid token")
+        .set("Authorization", "invalid token")
         .end((err, res) => {
-          res.should.have.status(400);
+          res.should.have.status(403);
           done();
         });
     });
@@ -83,7 +83,7 @@ let UpdateProfiletest = () => {
       chai
         .request(server)
         .put("/api/user/update/profile")
-        .set("AuthenticateToken", E07)
+        .set("Authorization", E07)
         .send(user)
         .end((err, res) => {
           res.should.have.status(400);
@@ -102,7 +102,7 @@ let UpdateProfiletest = () => {
       chai
         .request(server)
         .put("/api/user/update/profile")
-        .set("AuthenticateToken", E07)
+        .set("Authorization", E07)
         .send(user)
         .end((err, res) => {
           res.should.have.status(202);
@@ -120,7 +120,7 @@ let UpdateProfiletest = () => {
       chai
         .request(server)
         .put("/api/user/update/profile")
-        .set("AuthenticateToken", E07)
+        .set("Authorization", E07)
         .send(user)
         .end((err, res) => {
           res.should.have.status(404);
@@ -140,7 +140,7 @@ let UpdateProfiletest = () => {
       chai
         .request(server)
         .put("/api/user/update/profile")
-        .set("AuthenticateToken", E07)
+        .set("Authorization", E07)
         .send(user)
         .end((err, res) => {
           res.should.have.status(404);
@@ -161,7 +161,7 @@ let UpdateProfiletest = () => {
       chai
         .request(server)
         .put("/api/user/update/profile")
-        .set("AuthenticateToken", E07)
+        .set("Authorization", E07)
         .send(user)
         .end((err, res) => {
           res.should.have.status(404);
@@ -182,7 +182,7 @@ let UpdateProfiletest = () => {
       chai
         .request(server)
         .put("/api/user/update/profile")
-        .set("AuthenticateToken", E07)
+        .set("Authorization", E07)
         .send(user)
         .end((err, res) => {
           res.should.have.status(202);
@@ -200,7 +200,7 @@ let UpdateProfiletest = () => {
       chai
         .request(server)
         .put("/api/user/update/profile")
-        .set("AuthenticateToken", E07)
+        .set("Authorization", E07)
         .send(user)
         .end((err, res) => {
           res.should.have.status(404);
@@ -222,7 +222,7 @@ let UpdateProfiletest = () => {
       chai
         .request(server)
         .put("/api/user/update/profile")
-        .set("AuthenticateToken", E07)
+        .set("Authorization", E07)
         .send(user)
         .end((err, res) => {
           res.should.have.status(202);
@@ -242,7 +242,7 @@ let UpdateProfiletest = () => {
       chai
         .request(server)
         .put("/api/user/update/profile")
-        .set("AuthenticateToken", E07)
+        .set("Authorization", E07)
         .send(user)
         .end((err, res) => {
           res.should.have.status(404);
@@ -264,7 +264,7 @@ let UpdateProfiletest = () => {
       chai
         .request(server)
         .put("/api/user/update/profile")
-        .set("AuthenticateToken", E07)
+        .set("Authorization", E07)
         .send(user)
         .end((err, res) => {
           res.should.have.status(404);
@@ -286,7 +286,7 @@ let UpdateProfiletest = () => {
       chai
         .request(server)
         .put("/api/user/update/profile")
-        .set("AuthenticateToken", E07)
+        .set("Authorization", E07)
         .send(user)
         .end((err, res) => {
           res.should.have.status(404);
@@ -308,7 +308,7 @@ let UpdateProfiletest = () => {
       chai
         .request(server)
         .put("/api/user/update/profile")
-        .set("AuthenticateToken", E07)
+        .set("Authorization", E07)
         .send(user)
         .end((err, res) => {
           res.should.have.status(202);
@@ -326,7 +326,7 @@ let UpdateProfiletest = () => {
       chai
         .request(server)
         .put("/api/user/update/profile")
-        .set("AuthenticateToken", E07)
+        .set("Authorization", E07)
         .send(user)
         .end((err, res) => {
           res.should.have.status(404);
@@ -346,7 +346,7 @@ let UpdateProfiletest = () => {
       chai
         .request(server)
         .put("/api/user/update/profile")
-        .set("AuthenticateToken", E07)
+        .set("Authorization", E07)
         .send(user)
         .end((err, res) => {
           res.should.have.status(404);
@@ -368,7 +368,7 @@ let UpdateProfiletest = () => {
       chai
         .request(server)
         .put("/api/user/update/profile")
-        .set("AuthenticateToken", E07)
+        .set("Authorization", E07)
         .send(user)
         .end((err, res) => {
           res.should.have.status(404);
@@ -391,7 +391,7 @@ let UpdateProfiletest = () => {
       chai
         .request(server)
         .put("/api/user/update/profile")
-        .set("AuthenticateToken", E07)
+        .set("Authorization", E07)
         .send(user)
         .end((err, res) => {
           res.should.have.status(404);
@@ -409,7 +409,7 @@ let viewEmployeeList = () => {
       chai
         .request(server)
         .get("/api/user/displayEmployeeList")
-        .set("AuthenticateToken", E07)
+        .set("Authorization", E07)
         .end((err, res) => {
           res.should.have.status(400);
           res.body.should.have.property("error");
@@ -423,7 +423,7 @@ let viewEmployeeList = () => {
       chai
         .request(server)
         .get("/api/user/displayEmployeeList")
-        .set("AuthenticateToken", D01)
+        .set("Authorization", D01)
         .end((err, res) => {
           res.should.have.status(201);
           res.body.should.have.property("data");
@@ -439,7 +439,7 @@ let viewEmployeeList = () => {
       chai
         .request(server)
         .get("/api/user/displayEmployeeList")
-        .set("AuthenticateToken", M01)
+        .set("Authorization", M01)
         .end((err, res) => {
           res.should.have.status(201);
           res.body.should.have.property("data");
@@ -457,7 +457,7 @@ let viewOwnEmployee = () => {
       chai
         .request(server)
         .get("/api/user/viewOwnEmployees")
-        .set("AuthenticateToken", E07)
+        .set("Authorization", E07)
         .end((err, res) => {
           res.should.have.status(400);
           res.body.should.have.property("error");
@@ -472,7 +472,7 @@ let viewOwnEmployee = () => {
       chai
         .request(server)
         .get("/api/user/viewOwnEmployees")
-        .set("AuthenticateToken", M01)
+        .set("Authorization", M01)
         .end((err, res) => {
           res.should.have.status(404);
           res.body.should.have.property("error");
@@ -490,7 +490,7 @@ let viewOwnEmployee = () => {
       chai
         .request(server)
         .get("/api/user/viewOwnEmployees")
-        .set("AuthenticateToken", M02)
+        .set("Authorization", M02)
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.have.property("data");
@@ -514,7 +514,7 @@ let addEmployeeTest = () => {
       chai
         .request(server)
         .post("/api/user/addEmployee")
-        .set("AuthenticateToken", M02)
+        .set("Authorization", M02)
         .send(employee)
         .end((err, res) => {
           res.should.have.status(404);
@@ -538,7 +538,7 @@ let addEmployeeTest = () => {
       chai
         .request(server)
         .post("/api/user/addEmployee")
-        .set("AuthenticateToken", M02)
+        .set("Authorization", M02)
         .send(employee)
         .end((err, res) => {
           res.should.have.status(200);
@@ -555,7 +555,7 @@ let addEmployeeTest = () => {
       chai
         .request(server)
         .post("/api/user/addEmployee")
-        .set("AuthenticateToken", M02)
+        .set("Authorization", M02)
         .send(employee)
         .end((err, res) => {
           res.should.have.status(404);
@@ -579,7 +579,7 @@ let addEmployeeTest = () => {
       chai
         .request(server)
         .post("/api/user/addEmployee")
-        .set("AuthenticateToken", M02)
+        .set("Authorization", M02)
         .send(employee)
         .end((err, res) => {
           res.should.have.status(404);

@@ -330,3 +330,137 @@ module.exports = class FormRouter extends BaseRouter {
  *                - $ref: '#/components/formComponent/submitForm/response/code404/formNotExist'
  *                - $ref: '#/components/formComponent/submitForm/response/code404/noPermission'
  */
+
+/**
+ * @swagger
+ * /api/form/modify/content:
+ *   patch:
+ *     tags:
+ *      - form api
+ *     summary: modify content off current user's own form
+ *     description:
+ *           modify content off current user's own form,
+ *           which is NOT overDue,status must be NEW and NOT deleted
+ *     security:
+ *      - bearerAuth: []
+ *     requestBody:
+ *       content:
+ *        application/json:
+ *         schema:
+ *          type: object
+ *          properties: 
+ *            id: 
+ *             type:string
+ *            content: 
+ *              type:string
+ *         example: 
+ *            id: d0f80600-2cde-11ec-bc3e-db15a81a0069
+ *            content: "updated content"
+ *     responses:
+ *       200:
+ *         description: return object of form submitted
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               $ref: '#/components/formComponent/modifyContent/response/success'
+ *       404:
+ *         description: 
+ *            error if form is deleted,
+ *            error if form is closed,
+ *            error if form is not existed
+ *         content:
+ *            application/json:
+ *             schema:
+ *               type: object
+ *               anyOf:
+ *                - $ref: '#/components/formComponent/modifyContent/response/code404/formIsClosedException'
+ *                - $ref: '#/components/formComponent/modifyContent/response/code404/isDeletedException'
+ *                - $ref: '#/components/formComponent/modifyContent/response/code404/noPermission'
+ *                - $ref: '#/components/formComponent/modifyContent/response/code404/formNotExistException'
+ */
+
+
+/**
+ * @swagger
+ * /api/form/modify/comment:
+ *   patch:
+ *     tags:
+ *      - form api
+ *     summary: modify content off current user's own form
+ *     description:
+ *           modify content off current user's own form,
+ *           which is NOT overDue,status must be NEW and NOT deleted
+ *     security:
+ *      - bearerAuth: []
+ *     requestBody:
+ *       content:
+ *        application/json:
+ *         schema:
+ *          type: object
+ *          properties: 
+ *            id: 
+ *             type:string
+ *            comment: 
+ *              type:string
+ *         example: 
+ *            id: d0f80600-2cde-11ec-bc3e-db15a81a0069
+ *            comment: "updated comment"
+ *     responses:
+ *       200:
+ *         description: return object of form submitted
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               $ref: '#/components/formComponent/modifyContent/response/success'
+ *       404:
+ *         description: 
+ *            error if form is deleted,
+ *            error if form is closed,
+ *            error if form is not existed
+ *         content:
+ *            application/json:
+ *             schema:
+ *               type: object
+ *               anyOf:
+ *                - $ref: '#/components/formComponent/modifyContent/response/code404/formIsClosedException'
+ *                - $ref: '#/components/formComponent/modifyContent/response/code404/isDeletedException'
+ *                - $ref: '#/components/formComponent/modifyContent/response/code404/noPermission'
+ *                - $ref: '#/components/formComponent/modifyContent/response/code404/formNotExistException'
+ */
+
+/**
+ * @swagger
+ * /api/form/list/intern:
+ *   get:
+ *     tags:
+ *      - form api
+ *     summary: for manager ,hr or director to view probation form
+ *     description:
+ *           for manager ,hr or director to view probation form,
+ *           with manager,CAN VIEW THEIR EMPLOYEES ONLY,
+ *           with director and HR can view all probate form,
+ *           only form SUBMITTED is available 
+ *     security:
+ *      - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: return object of form submitted and user who own that form
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               $ref: '#/components/formComponent/viewProbateList/response/success'
+ *       400:
+ *         description: 
+ *            error if no form is submitted,
+ *            error if manager have NO employee,
+ *         content:
+ *            application/json:
+ *             schema:
+ *               type: object
+ *               anyOf:
+ *                - $ref: '#/components/formComponent/viewProbateList/response/code400/noFormSubmitted'
+ *                - $ref: '#/components/formComponent/viewProbateList/response/code400/noEmployee'
+ */
