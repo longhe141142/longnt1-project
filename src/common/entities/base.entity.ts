@@ -5,10 +5,15 @@ import {
   Generated,
   BeforeInsert,
   BeforeUpdate,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity()
 export class BaseEntity {
+  @PrimaryGeneratedColumn('uuid')
+  id: string | Number;
+
   @Column('boolean', {
     nullable: false,
     default: () => false,
@@ -18,31 +23,43 @@ export class BaseEntity {
 
   @Column('varchar', {
     nullable: true,
-    default: () => 'admin',
     name: 'createdBy',
   })
   createdBy: string;
 
   @Column('varchar', {
     nullable: true,
-    default: () => 'admin',
     name: 'updatedBy',
   })
   updatedBy: string;
 
-  @Column('datetime', { name: 'createdAt' })
-  createdAt: Date;
+  // @CreateDateColumn()
+  // createdAt: Date;
 
-  @Column('datetime', { name: 'updatedAt' })
-  updatedAt: Date;
+  // @UpdateDateColumn()
+  // updatedAt: Date;
 
-  @BeforeInsert()
-  updateDateCreation() {
-    this.createdAt = new Date();
-  }
+  @CreateDateColumn({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP(6)',
+    nullable: true
+  })
+  public createdAt: Date;
 
-  @BeforeUpdate()
-  public setUpdatedAt() {
-    this.updatedAt = new Date();
-  }
+  @UpdateDateColumn({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP(6)',
+    onUpdate: 'CURRENT_TIMESTAMP(6)',
+    nullable: true
+  })
+  public updatedAt: Date;
+  // @BeforeInsert()
+  // updateDateCreation() {
+  //   this.createdAt = new Date();
+  // }
+
+  // @BeforeUpdate()
+  // public setUpdatedAt() {
+  //   this.updatedAt = new Date();
+  // }
 }

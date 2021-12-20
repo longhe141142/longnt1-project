@@ -1,6 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn, Generated } from 'typeorm';
 import { BaseEntity } from '../common/entities/base.entity';
 
+@Entity('api', { schema: 'F11_N12_PRO' })
 export class Api extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;

@@ -1,16 +1,15 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
+@Entity('role_permission', { schema: 'F11_N12_PRO' })
 @Entity()
 export class RolePermission {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column('varchar', {
-    nullable: true,
-    name: 'name',
-    length: 225,
+  @Column('int', {
+    name: 'roleId',
   })
-  name: string;
+  name: Number;
 
   @Column('int', {
     nullable: true,
