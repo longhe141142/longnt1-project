@@ -1,17 +1,10 @@
-import { async } from 'rxjs';
 import { EntityRepository, Repository, SelectQueryBuilder } from 'typeorm';
 import { User } from '../../entities/user';
-// interface IUser{
-//      userName:string,
-//      password:string,
-//      email:string
-// }
+
 
 @EntityRepository(User)
-export class UserRepository extends Repository<User> {
-  // alias = 'User';
-  
-  insertUser = async (userName: string, password: string,email:string, payload) => {
+export class UserRepository extends Repository<User> {  
+  insertUser = async (userName: string, password: string,email:string, payload):Promise<User | any> => {
     console.log(payload);
     let user = new User();
     user.userName = userName;
