@@ -1,7 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-
+import { BaseE } from '../common/entities/base.entity';
 @Entity('user_role', { schema: 'F11_N12_PRO' })
-export class UserRole {
+export class UserRole extends BaseE {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
