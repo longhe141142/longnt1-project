@@ -1,15 +1,31 @@
 import { async } from 'rxjs';
 import { EntityRepository, Repository, SelectQueryBuilder } from 'typeorm';
 import { User } from '../../entities/user';
+// interface IUser{
+//      userName:string,
+//      password:string,
+//      email:string
+// }
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
   // alias = 'User';
-  insertUser = async () => {
+  
+  insertUser = async (userName: string, password: string,email:string, payload) => {
+    console.log(payload);
     let user = new User();
-    user.password = 'l8019454';
-    user.userName = 'longnt1';
-    await this.save(user);
+    user.userName = userName;
+    user.password = password;
+    user.email = email
+    user.address = payload?.address
+    user.avatar= payload?.avatar
+    user.identityNumber = payload?.identityNumber
+    user.isActive = payload?.isActive
+    user.phone = payload?.phone
+    user.socialInsurance = payload?.socialInsurance
+    user.age = payload?.age
+    await this.save(user); 
+    return user;
   };
 
   getUser = async () => {

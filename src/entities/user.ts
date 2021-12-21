@@ -24,7 +24,7 @@ export class User extends BaseE {
     nullable: true,
     name: 'age',
   })
-  userId: Number;
+  age: Number;
 
   @Column('varchar', {
     name: 'email',

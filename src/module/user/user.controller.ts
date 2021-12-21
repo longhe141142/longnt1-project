@@ -19,7 +19,7 @@ export class UserController {
   @Post('create')
   async create(@Req() req, @Body() body) {
     let { userName, email, password,...payload } = body;
-    // return this.userService.create(userName,email,password,payload);
+    return await this.userService.create(userName,email,password,payload);
   }
 
   @Get()

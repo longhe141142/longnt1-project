@@ -23,9 +23,11 @@ export class UserService {
     @InjectRepository(UserRepository)
     private readonly userRepository: UserRepository,
   ) {}
-  async create(userName: string, password: string, payload: Object) {
-    await this.userRepository.insertUser();
-    return 'Success!';
+  async create(userName: string, password: string,email:string, payload: Object) {
+    let data = await this.userRepository.insertUser(userName,password,email,payload);
+    return {
+      data:data
+    };
   }
 
   async findOne(username: string): Promise<any | undefined> {
@@ -33,6 +35,10 @@ export class UserService {
   }
   findAll() {
     return `This action returns all user`;
+  }
+
+  async findByUserName(userName:string):Promise<any>{
+     
   }
 
 
