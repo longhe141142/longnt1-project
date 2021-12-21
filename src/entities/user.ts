@@ -30,26 +30,18 @@ export class User extends BaseE {
     name: 'email',
     length: 100,
   })
-<<<<<<< HEAD
-  email: string = 'admin@gmail.com';
-=======
   email: string;
 
 
->>>>>>> 3eaa42fa177de6064ae97b59e6557cfea92fcb84
 
   @Column('varchar', {
     name: 'phone',
     nullable: true,
     default: null
   })
-<<<<<<< HEAD
-  phone: string = null;
-=======
   phone: string;
 
 
->>>>>>> 3eaa42fa177de6064ae97b59e6557cfea92fcb84
 
   @Column('varchar', {
     name: 'address',

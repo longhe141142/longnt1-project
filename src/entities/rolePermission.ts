@@ -1,23 +1,14 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-<<<<<<< HEAD
-import {BaseE} from '../common/entities/base.entity'
-
-@Entity('role_permission', { schema: 'F11_N12_PRO' })
-@Entity()
-export class RolePermission extends BaseE{
-=======
+import { Column, Entity, PrimaryGeneratedColumn,ManyToOne } from 'typeorm';
 import { BaseE } from 'src/common/entities/base.entity';
+import { Role} from './role'
+import { Api} from './api'
+
 @Entity('role_permission', { schema: 'F11_N12_PRO' })
 @Entity()
 export class RolePermission extends BaseE {
->>>>>>> 3eaa42fa177de6064ae97b59e6557cfea92fcb84
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column('int', {
-    name: 'roleId',
-  })
-  name: Number;
 
   @Column('int', {
     nullable: true,
@@ -30,4 +21,10 @@ export class RolePermission extends BaseE {
     name: 'apiId',
   })
   apiId: string;
+
+  @ManyToOne(() => Role, role => role.rolePermissions)
+  public role!: Role;
+
+  @ManyToOne(() => Api, api => api.rolePermissions)
+  public api!: Api;
 }

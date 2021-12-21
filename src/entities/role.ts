@@ -1,8 +1,17 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+  OneToMany,
+  JoinTable,
+  ManyToMany,
+} from 'typeorm';
 import { BaseE } from '../common/entities/base.entity';
+import { RolePermission } from './rolePermission';
+import { Api } from './api';
 
 @Entity('role', { schema: 'F11_N12_PRO' })
-export class Employee extends BaseE {
+export class Role extends BaseE {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;
 
@@ -19,4 +28,13 @@ export class Employee extends BaseE {
     length: 225,
   })
   description: string;
+
+  @OneToMany(() => RolePermission, (rolePermission) => rolePermission.role)
+  public rolePermissions!: RolePermission[];
+
+  @ManyToMany(() => Api)
+  @JoinTable({
+    name: 'role_permission',
+  })
+  apis: Api[];
 }

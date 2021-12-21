@@ -29,28 +29,12 @@
     "@nestjs/passport": "^8.0.1",
     "@nestjs/platform-express": "^8.0.0",
     "@nestjs/typeorm": "^8.0.2",
-<<<<<<< HEAD
-    "@types/bcryptjs": "^2.4.2",
-    "@types/body-parser": "^1.19.2",
-    "@types/cors": "^2.8.12",
-    "@types/helmet": "^4.0.0",
-    "@types/jsonwebtoken": "^8.5.6",
-    "bcryptjs": "^2.4.3",
-    "class-validator": "^0.13.2",
-    "cors": "^2.8.5",
-    "helmet": "^4.6.0",
-    "jsonwebtoken": "^8.5.1",
-    "mysql": "^2.18.1",
-    "mysql2": "^2.3.3",
-    "passport": "^0.5.2",
-=======
     "bcrypt": "^5.0.1",
     "class-validator": "^0.13.2",
     "jsonwebtoken": "^8.5.1",
     "mysql": "^2.18.1",
     "mysql2": "^2.3.3",
     "passport": "^0.4.1",
->>>>>>> 3eaa42fa177de6064ae97b59e6557cfea92fcb84
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
     "reflect-metadata": "^0.1.13",
@@ -67,10 +51,6 @@
     "@types/express": "^4.17.13",
     "@types/jest": "27.0.2",
     "@types/node": "^16.0.0",
-<<<<<<< HEAD
-    "@types/passport-jwt": "^3.0.6",
-=======
->>>>>>> 3eaa42fa177de6064ae97b59e6557cfea92fcb84
     "@types/passport-local": "^1.0.34",
     "@types/supertest": "^2.0.11",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
