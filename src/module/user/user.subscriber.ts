@@ -6,18 +6,15 @@ import {
 } from 'typeorm';
 import { User } from '../../entities/user';
 import * as bcrypt from 'bcrypt';
-import { ConfigService } from '@nestjs/config';
+import { bcryptSalt } from '../../common/constants/common.constants';
 
 @EventSubscriber()
 export class UserSubscriber implements EntitySubscriberInterface<User> {
   private readonly bcryptSalt: number;
 
-  constructor(
-    connection: Connection,
-    private readonly configService: ConfigService,
-  ) {
+  constructor(connection: Connection) {
     connection.subscribers.push(this);
-    this.bcryptSalt = configService.get<number>('bcryptSalt');
+    this.bcryptSalt = bcryptSalt;
   }
 
   listenTo() {

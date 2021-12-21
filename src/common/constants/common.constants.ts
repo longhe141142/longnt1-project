@@ -3,3 +3,5 @@ export const RegValidate = {
      REMOVE_WHITESPACE_REG : /\s+/g
 }
   
+
+export const bcryptSalt = 9
