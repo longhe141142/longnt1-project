@@ -3,11 +3,11 @@ import {
   Entity,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { BaseEntity } from '../common/entities/base.entity';
+import { BaseE } from '../common/entities/base.entity';
 
 
 @Entity('form_detail', { schema: 'F11_N12_PRO' })
-export class Employee extends BaseEntity {
+export class Employee extends BaseE {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 

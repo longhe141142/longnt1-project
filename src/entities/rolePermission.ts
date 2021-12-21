@@ -1,8 +1,9 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {BaseE} from '../common/entities/base.entity'
 
 @Entity('role_permission', { schema: 'F11_N12_PRO' })
 @Entity()
-export class RolePermission {
+export class RolePermission extends BaseE{
   @PrimaryGeneratedColumn('uuid')
   id: string;
 

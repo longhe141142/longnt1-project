@@ -1,8 +1,8 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { BaseEntity } from '../common/entities/base.entity';
+import { BaseE } from '../common/entities/base.entity';
 
 @Entity('user', { schema: 'F11_N12_PRO' })
-export class User extends BaseEntity {
+export class User extends BaseE {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -30,48 +30,49 @@ export class User extends BaseEntity {
     name: 'email',
     length: 100,
   })
-  email: string;
-
-  @Column('varchar', {
-    name: 'feature',
-    length: 220,
-  })
-  feature: string;
+  email: string = 'admin@gmail.com';
 
   @Column('varchar', {
     name: 'phone',
+    nullable: true,
+    default: null
   })
-  phone: string;
-
-  @Column('boolean', {
-    name: 'isApproved',
-  })
-  isApproved: boolean = false;
+  phone: string = null;
 
   @Column('varchar', {
     name: 'address',
+    nullable: true,
+    default: null
   })
   address: string;
 
   @Column('boolean', {
     name: 'isActive',
+    nullable: true,
+    default: null
   })
   isActive: boolean = true;
 
   @Column('varchar', {
     name: 'identityNumber',
     length: 45,
+    nullable: true,
+    default: null
   })
   identityNumber: string;
 
   @Column('varchar', {
     name: 'socialInsurance',
     length: 45,
+    nullable: true,
+    default: null
   })
   socialInsurance: string;
 
   @Column('varchar', {
     name: 'avatar',
+    nullable: true,
+    default: null
   })
   avatar: string;
 }

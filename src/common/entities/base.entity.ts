@@ -5,12 +5,12 @@ import {
   Generated,
   BeforeInsert,
   BeforeUpdate,
+  BaseEntity,
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity()
-export class BaseEntity {
+export class BaseE extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string | Number;
 
@@ -33,33 +33,9 @@ export class BaseEntity {
   })
   updatedBy: string;
 
-  // @CreateDateColumn()
-  // createdAt: Date;
+  @CreateDateColumn({})
+  public createdAt: Date = new Date();
 
-  // @UpdateDateColumn()
-  // updatedAt: Date;
-
-  @CreateDateColumn({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP(6)',
-    nullable: true
-  })
-  public createdAt: Date;
-
-  @UpdateDateColumn({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP(6)',
-    onUpdate: 'CURRENT_TIMESTAMP(6)',
-    nullable: true
-  })
-  public updatedAt: Date;
-  // @BeforeInsert()
-  // updateDateCreation() {
-  //   this.createdAt = new Date();
-  // }
-
-  // @BeforeUpdate()
-  // public setUpdatedAt() {
-  //   this.updatedAt = new Date();
-  // }
+  @UpdateDateColumn({})
+  public updatedAt: Date = new Date();
 }

@@ -10,5 +10,5 @@ export const typeOrmConfig: TypeOrmModule = {
   database: dbConfig.dbName,
   logging: true,
   entities: dbConfig.entities,
-  synchronize: dbConfig.synchronize,
+  synchronize: false,
 };
