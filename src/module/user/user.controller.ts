@@ -22,10 +22,6 @@ export class UserController {
     return await this.userService.create(userName,email,password,payload);
   }
 
-  @Get()
-  findAll() {
-    return this.userService.findAll();
-  }
 
   @Get()
   getOneUser() {
