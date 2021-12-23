@@ -20,9 +20,14 @@ async function bootstrap() {
   });
   app.setViewEngine({
     engine: hbs,
-    templates: join(__dirname, '..', 'public'),
+    templates: join(__dirname, '..', 'views'),
   });
-  hbs.registerPartials(join(__dirname, '..', '/public/monster-admin/monster-html/common/partials'));
+  hbs.registerPartials(
+    join(__dirname, '..', '/public/monster-admin/monster-html/common/partials'),
+  );
+  hbs.registerHelper('setVar', function (varName, varValue, options) {
+    options.data.root[varName] = varValue;
+  });
   await app.listen(3000);
 }
 bootstrap();

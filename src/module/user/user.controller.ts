@@ -16,11 +16,6 @@ import { UpdateUserDto } from './dto/update-user.dto';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post('create')
-  async create(@Req() req, @Body() body) {
-    let { userName, email, password,...payload } = body;
-    return await this.userService.create(userName,email,password,payload);
-  }
 
 
   @Get()

@@ -12,18 +12,21 @@ export class AuthService {
   ) {}
 
   async validateUser(username: string, pass: string): Promise<any> {
-    // const user = await this.usersService.findByEmail(email);
-    // if (!user) {
-    //   throw new UnauthorizedException('Username or password is incorrect');
-    // }
-    // const compareResult = await bcrypt.compare(password, user.password);
+    console.log(username,pass)
+    const user = await this.usersService.getUserByUserName(username);
 
-    // if (!compareResult) {
-    //   throw new UnauthorizedException('Username or password is incorrect');
-    // }
+    if (!user) {
+      throw new UnauthorizedException('Username or password is incorrect');
+    }
 
-    // return user;
-    return null;
+    console.log(user)
+    const compareResult = await bcrypt.compare(pass, user.password);
+    console.log(compareResult)
+    if (!compareResult) {
+      throw new UnauthorizedException('Username or password is incorrect');
+    }
+
+    return user;
   }
   async login(user: any) {
     const payload = { username: user.username, sub: user.userId };

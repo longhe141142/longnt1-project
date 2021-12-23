@@ -43,6 +43,9 @@ export class UserService {
   }
 
 
+   getUserByUserName = async (username:string)=>{
+      return await this.userRepository.getUserByUserName(username)
+   }
 
   update(id: number, updateUserDto: UpdateUserDto) {
     return `This action updates a #${id} user`;
