@@ -1,6 +1,15 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { BaseE } from '../common/entities/base.entity';
-
+import { UserRole } from './userRole';
+import { Form } from './form';
+import { Employee } from './employee';
 @Entity('user', { schema: 'F11_N12_PRO' })
 export class User extends BaseE {
   @PrimaryGeneratedColumn('uuid')
@@ -32,28 +41,24 @@ export class User extends BaseE {
   })
   email: string;
 
-
-
   @Column('varchar', {
     name: 'phone',
     nullable: true,
-    default: null
+    default: null,
   })
   phone: string;
-
-
 
   @Column('varchar', {
     name: 'address',
     nullable: true,
-    default: null
+    default: null,
   })
   address: string;
 
   @Column('boolean', {
     name: 'isActive',
     nullable: true,
-    default: null
+    default: null,
   })
   isActive: boolean = true;
 
@@ -61,7 +66,7 @@ export class User extends BaseE {
     name: 'identityNumber',
     length: 45,
     nullable: true,
-    default: null
+    default: null,
   })
   identityNumber: string;
 
@@ -69,14 +74,27 @@ export class User extends BaseE {
     name: 'socialInsurance',
     length: 45,
     nullable: true,
-    default: null
+    default: null,
   })
   socialInsurance: string;
 
   @Column('varchar', {
     name: 'avatar',
     nullable: true,
-    default: null
+    default: null,
   })
   avatar: string;
+
+  @OneToMany(() => UserRole, (userRole) => userRole.user)
+  public userRole!: UserRole[];
+
+  @OneToMany(() => Form, (form) => form.user)
+  public forms!: Form[];
+
+  @OneToMany(() => Employee, (employee) => employee.manager)
+  public employees!: Employee[];
+
+  @OneToOne(()=>Employee,(employeeData)=>employeeData.user)
+  public employeeData!:Employee
+
 }

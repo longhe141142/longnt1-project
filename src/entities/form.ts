@@ -1,8 +1,9 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { BaseE } from '../common/entities/base.entity';
-
+import { FormDetail } from './formDetail';
+import {User } from './user'
 @Entity('form', { schema: 'F11_N12_PRO' })
-export class Employee extends BaseE {
+export class Form extends BaseE {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -56,4 +57,10 @@ export class Employee extends BaseE {
     name: 'isDue',
   })
   isDue: boolean = false;
+
+  @OneToOne(() => FormDetail, (formDetail) => formDetail.form)
+  public formDetail!: FormDetail;
+
+  @ManyToOne(()=>User,(user)=>user.forms)
+  public user!: User
 }

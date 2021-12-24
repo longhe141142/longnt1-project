@@ -9,6 +9,7 @@ import {
 import { BaseE } from '../common/entities/base.entity';
 import { RolePermission } from './rolePermission';
 import { Api } from './api';
+import { UserRole } from './userRole';
 
 @Entity('role', { schema: 'F11_N12_PRO' })
 export class Role extends BaseE {
@@ -37,4 +38,6 @@ export class Role extends BaseE {
     name: 'role_permission',
   })
   apis: Api[];
+  @OneToMany(() => UserRole, (userRole) => userRole.role)
+  public userRole!: UserRole[];
 }

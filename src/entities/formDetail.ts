@@ -1,13 +1,9 @@
-import {
-  Column,
-  Entity,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, OneToOne } from 'typeorm';
 import { BaseE } from '../common/entities/base.entity';
-
+import { Form } from './form';
 
 @Entity('form_detail', { schema: 'F11_N12_PRO' })
-export class Employee extends BaseE {
+export class FormDetail extends BaseE {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -31,4 +27,7 @@ export class Employee extends BaseE {
     length: 225,
   })
   managerComment: string;
+
+  @OneToOne(() => Form, (form) => form.formDetail)
+  public form!: Form;
 }

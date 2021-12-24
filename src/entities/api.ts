@@ -48,6 +48,7 @@ export class Api extends BaseE {
     length: 220,
   })
   description: string;
+  
   @OneToMany(() => RolePermission, (rolePermission) => rolePermission.api)
   public rolePermissions!: RolePermission[];
 
