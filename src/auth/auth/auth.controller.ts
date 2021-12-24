@@ -23,13 +23,11 @@ export class AuthController {
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  @Render('index.hbs')
+  // @Render('index.hbs')
   async login(@Request() req) {
      let data = await this.authService.login(req.user);
-     let src = '../../../';
-     let dt = "alo"
      return {
-       data,src,dt:dt
+       data
      }
 
   }
