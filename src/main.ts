@@ -1,4 +1,6 @@
 import { NestFactory } from '@nestjs/core';
+import { ValidationPipe } from '@nestjs/common';
+
 import { AppModule } from './app.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import {
@@ -28,6 +30,8 @@ async function bootstrap() {
   hbs.registerHelper('setVar', function (varName, varValue, options) {
     options.data.root[varName] = varValue;
   });
+  app.useGlobalPipes(new ValidationPipe());
+
   await app.listen(3000);
 }
 bootstrap();

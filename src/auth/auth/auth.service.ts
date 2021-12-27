@@ -19,13 +19,10 @@ export class AuthService {
       throw new UnauthorizedException('Username or password is incorrect');
     }
 
-    console.log(user)
     const compareResult = await bcrypt.compare(pass, user.password);
-    console.log(compareResult)
     if (!compareResult) {
       throw new UnauthorizedException('Username or password is incorrect');
     }
-
     return user;
   }
   async login(user: any) {

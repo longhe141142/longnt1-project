@@ -1,6 +1,10 @@
+import { async } from 'rxjs';
 import { EntityRepository, Repository, SelectQueryBuilder } from 'typeorm';
 import { User } from '../../entities/user';
-
+interface partials {
+  id: Number;
+  name: string;
+}
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
   insertUser = async (
@@ -9,12 +13,6 @@ export class UserRepository extends Repository<User> {
     email: string,
     payload,
   ): Promise<User | any> => {
-
-    console.log({
-      userName,
-      password,
-      email
-    });
     let user = new User();
     user.userName = userName;
     user.password = password;
@@ -52,5 +50,9 @@ export class UserRepository extends Repository<User> {
       `user.phone`,
       `user.userName`,
     ]);
+  };
+
+  checkUserExist = async (userName: string) => {
+    return !!await this.findOne({ userName });
   };
 }
