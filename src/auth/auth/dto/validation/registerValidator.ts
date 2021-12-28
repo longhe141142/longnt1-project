@@ -23,27 +23,19 @@ export function Equal3(property: string) {
 }
 
 export class CustomValidation {
-  constructor(
-    private readonly UserService:UserService
-  ){}
+  constructor(private readonly UserService: UserService) {}
   static checkPhoneNumberFormat(property: string) {
     return function (object, propertyName: string) {
       registerDecorator({
-        name: 'equal 3',
+        name: 'Check Phone Number',
         target: object.constructor,
         propertyName: propertyName,
         constraints: [property],
-        // Not the best way but it works, i'll update the answer later ;)
         options: {
           message: ErrorMessage.INVALID_PHONE_NUMBER,
         },
         validator: {
           validate(value: any) {
-            //   return RegValidation.checkPhone(p) ;
-            console.log(object[propertyName]);
-            console.log();
-            console.log(propertyName);
-
             return RegValidation.checkPhone(value);
           },
         },
@@ -54,37 +46,54 @@ export class CustomValidation {
   static isNotBlankFormat(property: string) {
     return function (object, propertyName: string) {
       registerDecorator({
-        name: 'equal 3',
+        name: 'Check Blank',
         target: object.constructor,
         propertyName: propertyName,
         constraints: [property],
         options: {
-          message: ErrorMessage.INVALID_PHONE_NUMBER,
+          message: ErrorMessage.WHITESPACE_NOT_ALLOW,
         },
         validator: {
           validate(value: any) {
-            return RegValidation.checkPhone(value);
+            return !RegValidation.isBlank(value);
           },
         },
       });
     };
   }
 
-    checkEmailExist(property:string){
-    return  function (object, propertyName: string) {
+  static checkIdentityNumber(property: string) {
+    return function (object, propertyName: string) {
       registerDecorator({
-        name: 'equal 3',
+        name: 'Check Identity Number',
         target: object.constructor,
         propertyName: propertyName,
         constraints: [property],
         options: {
-          message: ErrorMessage.EMAIL_EXISTED,
+          message: ErrorMessage.INVALID_IDENTITY_NUMBER,
         },
         validator: {
-          async validate(value: any) {
-            console.log(value);
-            // console.log(user)
-            return RegValidation.checkPhone(value);
+          validate(value: any) {
+            return !RegValidation.checkIdentityNumber(value);
+          },
+        },
+      });
+    };
+  }
+
+  static checkSocialInsurance(property: string) {
+    return function (object, propertyName: string) {
+      registerDecorator({
+        name: 'Check Social Insurance',
+        target: object.constructor,
+        propertyName: propertyName,
+        constraints: [property],
+        options: {
+          message: ErrorMessage.INVALID_SOCIAL_INSURANCE,
+        },
+        validator: {
+          validate(value: any) {
+            return !RegValidation.checkSocialInsurance(value);
           },
         },
       });

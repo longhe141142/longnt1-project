@@ -1,4 +1,4 @@
-import { RegValidate, UserReg } from '../constants/common.constants';
+import { RegValidate, UserReg, commonReg } from '../constants/common.constants';
 
 export class RegValidation {
   static validateWhiteSpace = (input: string) =>
@@ -8,4 +8,7 @@ export class RegValidation {
   static checkPhone = (str: string) => UserReg.phone.test(str);
   static checkSocialInsurance = (str: string) =>
     UserReg.socialInsurance.test(str);
+  static checkIdentityNumber = (str: string) =>
+    UserReg.identityNumber.test(str);
+  static isBlank = (str: string) => commonReg.blankReg.test(str);
 }

@@ -18,7 +18,6 @@ export class IsUserAlreadyExistConstraint
   async validate(userName: any, args: ValidationArguments) {
     console.log(this);
     const a = await this.userService.checkUserExist(userName);
-    console.log(a, '1997');
     return !(!!a);
   }
 }
@@ -31,9 +30,7 @@ export class IsEmailAlreadyExistConstraint
 {
   constructor(private readonly userService: UserService) {}
   async validate(userName: any, args: ValidationArguments) {
-    console.log(this);
     const a = await this.userService.checkUserExist(userName);
-    console.log(a, '1997');
     return !(!!a);
   }
 }

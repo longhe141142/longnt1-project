@@ -13,6 +13,7 @@ export const UserReg = {
 
 export const commonReg = {
   isValidDAte: /([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/,
+  blankReg: /((.\s)|(\s.))+/
 };
 
 export const MyCustomLevels = {
@@ -47,7 +48,10 @@ export enum ResponseMessage {
 export enum ErrorMessage {
   USER_EXISTED = 'Username already existed',
   INVALID_PHONE_NUMBER = 'invalid phone format',
-  EMAIL_EXISTED = 'email is already existed'
+  EMAIL_EXISTED = 'email is already existed',
+  WHITESPACE_NOT_ALLOW = "not allow whitespace",
+  INVALID_IDENTITY_NUMBER = "identity number is not valid",
+  INVALID_SOCIAL_INSURANCE = "invalid social insurance"
 }
 
 export enum CodeName {
@@ -58,5 +62,7 @@ export enum CodeName {
 export enum ValidationMessage{
   
 }
+
+
 
 export const bcryptSalt = 9;
