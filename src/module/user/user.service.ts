@@ -23,12 +23,12 @@ export class UserService {
     email: string,
     payload: Object,
   ) {
-    if (await this.checkUserExist(userName))
-      throw new BadRequestException({
-        statusCode: HttpStatus.BAD_REQUEST,
-        message: ErrorMessage.USER_EXISTED,
-        codeName: CodeName.USER_EXISTED,
-      });
+    // if (await this.checkUserExist(userName))
+    //   throw new BadRequestException({
+    //     statusCode: HttpStatus.BAD_REQUEST,
+    //     message: ErrorMessage.USER_EXISTED,
+    //     codeName: CodeName.USER_EXISTED,
+    //   });
 
     let data = await this.userRepository.insertUser(
       userName,
@@ -61,8 +61,10 @@ export class UserService {
   getOneAccount(user: string, password: string) {}
 
   async checkUserExist(userName: string) {
-    let flag = await this.userRepository.checkUserExist(userName);
-    console.log(flag);
-    return flag;
+    return await this.userRepository.checkUserExist(userName);
   }
+
+  // checkEmailExist = async (email: string) => {
+  //   return await this.userRepository.checkEmailExist(email)
+  // };
 }

@@ -47,6 +47,7 @@ export enum ResponseMessage {
 export enum ErrorMessage {
   USER_EXISTED = 'Username already existed',
   INVALID_PHONE_NUMBER = 'invalid phone format',
+  EMAIL_EXISTED = 'email is already existed'
 }
 
 export enum CodeName {

@@ -1,3 +1,4 @@
+import { ValidatorModule } from '../../module/validator/validator.module';
 import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
@@ -16,6 +17,7 @@ import { JwtStrategy } from '../strategy/jwt.strategy';
       secret: jwtConstants.secret,
       signOptions: { expiresIn: '600s' },
     }),
+    ValidatorModule,
   ],
   controllers: [AuthController],
   providers: [AuthService, LocalStrategy, JwtStrategy],

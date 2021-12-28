@@ -1,5 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
+import {useContainer, Validator} from "class-validator";
 
 import { AppModule } from './app.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
@@ -18,7 +19,6 @@ async function bootstrap() {
   );
   app.useStaticAssets({
     root: join(__dirname, '..', 'public'),
-    // prefix: '/public/',
   });
   app.setViewEngine({
     engine: hbs,
@@ -31,6 +31,8 @@ async function bootstrap() {
     options.data.root[varName] = varValue;
   });
   app.useGlobalPipes(new ValidationPipe());
+  useContainer(app.select(AppModule), { fallbackOnErrors: true });
+
 
   await app.listen(3000);
 }

@@ -1,4 +1,3 @@
-import { async } from 'rxjs';
 import { EntityRepository, Repository, SelectQueryBuilder } from 'typeorm';
 import { User } from '../../entities/user';
 interface partials {
@@ -52,7 +51,9 @@ export class UserRepository extends Repository<User> {
     ]);
   };
 
-  checkUserExist = async (userName: string) => {
-    return !!await this.findOne({ userName });
+  async checkUserExist(userName: string) {
+    return !!(await this.findOne({ userName }));
   };
+
+  
 }

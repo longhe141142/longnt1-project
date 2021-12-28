@@ -1,3 +1,4 @@
+import { ValidatorModule } from './module/validator/validator.module';
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -18,6 +19,7 @@ import { LoggerConfig } from './common/config/logger/logger.config';
     AuthModule,
     RoleModule,
     AdminModule,
+    ValidatorModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -8,6 +8,7 @@ import {
   Body,
   Render,
   Redirect,
+  UseFilters,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
@@ -15,7 +16,8 @@ import { LocalAuthGuard } from '../auth.guard';
 import { JwtAuthGuard } from '../jwt.guard';
 import { UserService } from '../../module/user/user.service';
 import { CreateUserDto } from '../../auth/auth/dto/register.dto';
-import {validateOrReject,validate} from 'class-validator'
+import { validateOrReject, validate } from 'class-validator';
+import { HttpExceptionFilter } from '../../utils/http-exception.filter';
 @Controller('auth')
 export class AuthController {
   constructor(
@@ -41,7 +43,8 @@ export class AuthController {
   }
 
   @Post('register')
-  async create(@Req() req, @Body() body:CreateUserDto) {
+  @UseFilters(new HttpExceptionFilter())
+  async create(@Req() req, @Body() body: CreateUserDto) {
     let { userName, email, password, ...payload } = body;
     return await this.UserService.create(userName, password, email, payload);
   }

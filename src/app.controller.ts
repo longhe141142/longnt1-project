@@ -11,6 +11,8 @@ export class AppController {
     return { message: 'Hello world!' };
   }
 
+
+
   @Get('test-layout')
   @Render('index.hbs')
   getLayout() {

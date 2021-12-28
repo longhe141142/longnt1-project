@@ -1,8 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UserService } from '../../module/user/user.service';
 import { JwtService } from '@nestjs/jwt';
-import * as bcrypt from 'bcrypt'
-
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -11,8 +10,9 @@ export class AuthService {
     private readonly JwtService: JwtService,
   ) {}
 
+
   async validateUser(username: string, pass: string): Promise<any> {
-    console.log(username,pass)
+    console.log(username, pass);
     const user = await this.usersService.getUserByUserName(username);
 
     if (!user) {
