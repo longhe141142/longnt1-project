@@ -1,14 +1,7 @@
-import {
-  Column,
-  Entity,
-  PrimaryGeneratedColumn,
-  BeforeInsert,
-  ManyToOne,
-  OneToOne,
-} from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, BeforeInsert } from 'typeorm';
 import { BaseE } from '../common/entities/base.entity';
 import { RegValidation } from '../common/untils/reg.validation';
-import { User } from './user';
+
 @Entity('employee', { schema: 'F11_N12_PRO' })
 export class Employee extends BaseE {
   @PrimaryGeneratedColumn('uuid')
@@ -57,12 +50,6 @@ export class Employee extends BaseE {
   })
   managerId: string;
 
-  @ManyToOne(() => User, (manager) => manager.employees)
-  public manager!: User;
-
-  @OneToOne(() => User, (user) => user.employeeData)
-  public user!: User;
-
   @BeforeInsert()
   public setFullName() {
     let fullName = `${this.firstName} ${this.lastName}`;
@@ -70,4 +57,8 @@ export class Employee extends BaseE {
       ? fullName
       : RegValidation.deleteWhiteSpace(fullName);
   }
+
+  
+
+
 }
