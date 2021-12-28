@@ -4,7 +4,6 @@ import { Role} from './role'
 import { Api} from './api'
 
 @Entity('role_permission', { schema: 'F11_N12_PRO' })
-@Entity()
 export class RolePermission extends BaseE {
   @PrimaryGeneratedColumn('uuid')
   id: string;
