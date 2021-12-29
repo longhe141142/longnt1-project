@@ -8,7 +8,7 @@ import { LocalStrategy } from '../strategy/local.strategy';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from '../constants';
 import { JwtStrategy } from '../strategy/jwt.strategy';
-
+import { EmployeeModule } from '../../module/employee/employee.module';
 @Module({
   imports: [
     UserModule,
@@ -18,6 +18,7 @@ import { JwtStrategy } from '../strategy/jwt.strategy';
       signOptions: { expiresIn: '600s' },
     }),
     ValidatorModule,
+    EmployeeModule,
   ],
   controllers: [AuthController],
   providers: [AuthService, LocalStrategy, JwtStrategy],

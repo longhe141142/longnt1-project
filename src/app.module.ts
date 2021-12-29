@@ -11,7 +11,7 @@ import { AuthModule } from './auth/auth/auth.module';
 import { EmployeeModule } from './module/employee/employee.module';
 import { WinstonModule } from 'nest-winston';
 import { LoggerConfig } from './common/config/logger/logger.config';
-// import {format ,myCustomLevels} from './common/config/logger/logger.config'
+
 @Module({
   imports: [
     TypeOrmModule.forRoot(typeOrmConfig),

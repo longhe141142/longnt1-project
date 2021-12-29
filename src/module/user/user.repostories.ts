@@ -77,15 +77,13 @@ export class UserRepository extends Repository<User> {
       },
       transactionEntityManager,
     );
-
     let { employee: userDetail } = data;
-    this.employeeService.simpleTest()
+    this.employeeService.simpleTest();
     let employee = await this.employeeService.insertNewEmployee(
       userDetail,
       data.userName,
       transactionEntityManager,
     );
-
     return {
       user,
       employee,

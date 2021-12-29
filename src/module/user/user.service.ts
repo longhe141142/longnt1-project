@@ -10,6 +10,7 @@ import {
   Transaction,
   TransactionManager,
 } from 'typeorm';
+import { EmployeeService } from '../employee/employee.service';
 
 export type User = any;
 import {
@@ -22,6 +23,7 @@ export class UserService {
   constructor(
     @InjectRepository(UserRepository)
     private readonly userRepository: UserRepository,
+    private readonly employeeService: EmployeeService,
     private readonly connection: Connection,
   ) {}
   async create(payload: Object) {
@@ -58,19 +60,20 @@ export class UserService {
   };
 
   async createUser(data: Partial<CreateUserDto>) {
-    let ret =  this.connection.transaction(async(manager) => {
-      return  this.userRepository.createNewUser(manager, data);
+    this.employeeService.simpleTest();
+    let ret = this.connection.transaction(async (manager) => {
+      return this.userRepository.createNewUser(manager, data);
     });
     console.log(ret);
-    
+
     return ret instanceof Error
-    ? new BadRequestException({
-        statusCode: HttpStatus.BAD_REQUEST,
-        message: ErrorMessage.USER_EXISTED,
-        codeName: CodeName.USER_EXISTED,
-      })
-    : new ResponseSuccess({
-      data:ret,
-      });
+      ? new BadRequestException({
+          statusCode: HttpStatus.BAD_REQUEST,
+          message: ErrorMessage.USER_EXISTED,
+          codeName: CodeName.USER_EXISTED,
+        })
+      : new ResponseSuccess({
+          data: ret,
+        });
   }
 }

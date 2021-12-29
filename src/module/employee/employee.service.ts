@@ -3,9 +3,6 @@ import { userInformationDto } from '../../auth/auth/dto/index';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EmployeeRepository } from '../employee/repository/employee.repository';
 import {
-  EntityRepository,
-  Repository,
-  SelectQueryBuilder,
   EntityManager,
 } from 'typeorm';
 
