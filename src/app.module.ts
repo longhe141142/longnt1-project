@@ -8,6 +8,7 @@ import { UserModule } from './module/user/user.module';
 import { RoleModule } from './module/role/role.module';
 import { AdminModule } from './module/admin/admin.module';
 import { AuthModule } from './auth/auth/auth.module';
+import { EmployeeModule } from './module/employee/employee.module';
 import { WinstonModule } from 'nest-winston';
 import { LoggerConfig } from './common/config/logger/logger.config';
 // import {format ,myCustomLevels} from './common/config/logger/logger.config'
@@ -19,6 +20,7 @@ import { LoggerConfig } from './common/config/logger/logger.config';
     AuthModule,
     RoleModule,
     AdminModule,
+    EmployeeModule,
     ValidatorModule,
   ],
   controllers: [AppController],

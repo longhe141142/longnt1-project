@@ -32,7 +32,7 @@ export class CustomValidation {
         propertyName: propertyName,
         constraints: [property],
         options: {
-          message: ErrorMessage.INVALID_PHONE_NUMBER,
+          message: ` ${ErrorMessage.INVALID_PHONE_NUMBER}`,
         },
         validator: {
           validate(value: any) {
@@ -51,7 +51,7 @@ export class CustomValidation {
         propertyName: propertyName,
         constraints: [property],
         options: {
-          message: ErrorMessage.WHITESPACE_NOT_ALLOW,
+          message: `$property:${ErrorMessage.WHITESPACE_NOT_ALLOW}`,
         },
         validator: {
           validate(value: any) {
@@ -70,11 +70,11 @@ export class CustomValidation {
         propertyName: propertyName,
         constraints: [property],
         options: {
-          message: ErrorMessage.INVALID_IDENTITY_NUMBER,
+          message: `$property: ${ErrorMessage.INVALID_IDENTITY_NUMBER}`,
         },
         validator: {
           validate(value: any) {
-            return !RegValidation.checkIdentityNumber(value);
+            return RegValidation.checkIdentityNumber(value);
           },
         },
       });
@@ -89,11 +89,11 @@ export class CustomValidation {
         propertyName: propertyName,
         constraints: [property],
         options: {
-          message: ErrorMessage.INVALID_SOCIAL_INSURANCE,
+          message: `$property:${ErrorMessage.INVALID_SOCIAL_INSURANCE}`,
         },
         validator: {
           validate(value: any) {
-            return !RegValidation.checkSocialInsurance(value);
+            return RegValidation.checkSocialInsurance(value);
           },
         },
       });

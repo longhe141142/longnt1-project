@@ -31,6 +31,7 @@ async function bootstrap() {
     options.data.root[varName] = varValue;
   });
   app.useGlobalPipes(new ValidationPipe());
+  
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
 
 

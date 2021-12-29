@@ -10,8 +10,7 @@ export const dbConfig = {
   dbName: process.env.DB_NAME,
   entities: [`${__dirname}/../../entities/*.{js,ts}`],
   type: process.env.DB_TYPE,
-  synchronize: false,
+  synchronize: process.env.DB_SYNC,
 };
 
-// console.log(path.basename(__dirname+'/../../entities/*{.ts,.js}'))
 console.log(resolve(__dirname+"/../../entities/user.js"));

@@ -1,29 +1,32 @@
-import { EntityRepository, Repository, SelectQueryBuilder } from 'typeorm';
+import {
+  EntityRepository,
+  Repository,
+  SelectQueryBuilder,
+  EntityManager,
+} from 'typeorm';
 import { User } from '../../entities/user';
+import { CreateUserDto } from '../../auth/auth/dto';
+import { EmployeeService } from '../employee/employee.service';
 interface partials {
   id: Number;
   name: string;
 }
+
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
+  constructor(private readonly employeeService: EmployeeService) {
+    super();
+  }
   insertUser = async (
-    userName: string,
-    password: string,
-    email: string,
     payload,
+    transactionEntityManager: EntityManager = null,
   ): Promise<User | any> => {
-    let user = new User();
-    user.userName = userName;
-    user.password = password;
-    user.email = email;
-    user.address = payload?.address;
-    user.avatar = payload?.avatar;
-    user.identityNumber = payload?.identityNumber;
-    user.isActive = payload?.isActive;
-    user.phone = payload?.phone;
-    user.socialInsurance = payload?.socialInsurance;
-    user.age = payload?.age;
-    await this.save(user);
+    let user = new User({ ...payload });
+    if (!transactionEntityManager) {
+      await this.save(user);
+    } else {
+      await transactionEntityManager.save(user);
+    }
     return user;
   };
 
@@ -53,7 +56,39 @@ export class UserRepository extends Repository<User> {
 
   async checkUserExist(userName: string) {
     return !!(await this.findOne({ userName }));
-  };
+  }
 
-  
+  async checkEmailExist(email: string) {
+    return !!(await this.findOne({ email }));
+  }
+
+  async createNewUser(
+    transactionEntityManager: EntityManager,
+    data: Partial<CreateUserDto>,
+  ) {
+    let createdBy = data.userName;
+    let updatedBy = data.userName;
+
+    let user = await this.insertUser(
+      {
+        ...data,
+        createdBy,
+        updatedBy,
+      },
+      transactionEntityManager,
+    );
+
+    let { employee: userDetail } = data;
+    this.employeeService.simpleTest()
+    let employee = await this.employeeService.insertNewEmployee(
+      userDetail,
+      data.userName,
+      transactionEntityManager,
+    );
+
+    return {
+      user,
+      employee,
+    };
+  }
 }

@@ -16,21 +16,21 @@ export class IsUserAlreadyExistConstraint
 {
   constructor(private readonly userService: UserService) {}
   async validate(userName: any, args: ValidationArguments) {
-    console.log(this);
     const a = await this.userService.checkUserExist(userName);
     return !(!!a);
   }
 }
 
 
+@ValidatorConstraint({ name: 'isEmailAlreadyExist', async: true })
 @Injectable()
-@ValidatorConstraint({ async: true })
 export class IsEmailAlreadyExistConstraint
   implements Partial<ValidatorConstraintInterface>
 {
   constructor(private readonly userService: UserService) {}
-  async validate(userName: any, args: ValidationArguments) {
-    const a = await this.userService.checkUserExist(userName);
+  async validate(email: any, args: ValidationArguments) {
+    console.log(this);
+    const a = await this.userService.checkEmailExist(email);
     return !(!!a);
   }
 }

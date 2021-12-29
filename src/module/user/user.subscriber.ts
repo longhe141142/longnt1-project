@@ -24,5 +24,7 @@ export class UserSubscriber implements EntitySubscriberInterface<User> {
   async beforeInsert(event: InsertEvent<User>): Promise<void> {
     const { password } = event.entity;
     event.entity.password = await bcrypt.hash(password, this.bcryptSalt);
+    event.entity.isActive = true;
   }
+  
 }

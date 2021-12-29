@@ -1,9 +1,15 @@
 import { Injectable, BadRequestException, HttpStatus } from '@nestjs/common';
-// import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { CreateUserDto } from '../../auth/auth/dto/register.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserRepository } from './user.repostories';
+import { Connection } from 'typeorm';
 import { ResponseSuccess } from '../../common/interfaces/response.interface';
+import {
+  EntityManager,
+  Repository,
+  Transaction,
+  TransactionManager,
+} from 'typeorm';
 
 export type User = any;
 import {
@@ -16,27 +22,10 @@ export class UserService {
   constructor(
     @InjectRepository(UserRepository)
     private readonly userRepository: UserRepository,
+    private readonly connection: Connection,
   ) {}
-  async create(
-    userName: string,
-    password: string,
-    email: string,
-    payload: Object,
-  ) {
-    // if (await this.checkUserExist(userName))
-    //   throw new BadRequestException({
-    //     statusCode: HttpStatus.BAD_REQUEST,
-    //     message: ErrorMessage.USER_EXISTED,
-    //     codeName: CodeName.USER_EXISTED,
-    //   });
-
-    let data = await this.userRepository.insertUser(
-      userName,
-      password,
-      email,
-      payload,
-    );
-
+  async create(payload: Object) {
+    let data = await this.userRepository.insertUser(payload);
     return data instanceof Error
       ? new BadRequestException({
           statusCode: HttpStatus.BAD_REQUEST,
@@ -64,7 +53,24 @@ export class UserService {
     return await this.userRepository.checkUserExist(userName);
   }
 
-  // checkEmailExist = async (email: string) => {
-  //   return await this.userRepository.checkEmailExist(email)
-  // };
+  checkEmailExist = async (email: string) => {
+    return await this.userRepository.checkEmailExist(email);
+  };
+
+  async createUser(data: Partial<CreateUserDto>) {
+    let ret =  this.connection.transaction(async(manager) => {
+      return  this.userRepository.createNewUser(manager, data);
+    });
+    console.log(ret);
+    
+    return ret instanceof Error
+    ? new BadRequestException({
+        statusCode: HttpStatus.BAD_REQUEST,
+        message: ErrorMessage.USER_EXISTED,
+        codeName: CodeName.USER_EXISTED,
+      })
+    : new ResponseSuccess({
+      data:ret,
+      });
+  }
 }

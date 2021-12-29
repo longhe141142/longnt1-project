@@ -15,7 +15,7 @@ import { AuthService } from './auth.service';
 import { LocalAuthGuard } from '../auth.guard';
 import { JwtAuthGuard } from '../jwt.guard';
 import { UserService } from '../../module/user/user.service';
-import { CreateUserDto } from '../../auth/auth/dto/register.dto';
+import { CreateUserDto } from '../../auth/auth/dto';
 import { validateOrReject, validate } from 'class-validator';
 import { HttpExceptionFilter } from '../../utils/http-exception.filter';
 @Controller('auth')
@@ -46,6 +46,6 @@ export class AuthController {
   @UseFilters(new HttpExceptionFilter())
   async create(@Req() req, @Body() body: CreateUserDto) {
     let { userName, email, password, ...payload } = body;
-    return await this.UserService.create(userName, password, email, payload);
+    return await this.UserService.createUser(body);
   }
 }

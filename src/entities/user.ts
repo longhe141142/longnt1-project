@@ -10,6 +10,7 @@ import { BaseE } from '../common/entities/base.entity';
 import { UserRole } from './userRole';
 import { Form } from './form';
 import { Employee } from './employee';
+
 @Entity('user', { schema: 'F11_N12_PRO' })
 export class User extends BaseE {
   @PrimaryGeneratedColumn('uuid')
@@ -57,18 +58,17 @@ export class User extends BaseE {
 
   @Column('boolean', {
     name: 'isActive',
-    nullable: true,
-    default: null,
+    nullable: false,
   })
-  isActive: boolean = true;
+  isActive: Boolean = true;
 
   @Column('varchar', {
     name: 'identityNumber',
     length: 45,
-    nullable: true,
-    default: null,
+    nullable: false,
+    default:"2323"
   })
-  identityNumber: string;
+  identityNumber: string = '12222';
 
   @Column('varchar', {
     name: 'socialInsurance',

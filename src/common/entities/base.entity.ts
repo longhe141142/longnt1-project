@@ -14,12 +14,12 @@ export class BaseE extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string | Number;
 
-  @Column('boolean', {
+  @Column('tinyint', {
     nullable: false,
-    default: () => false,
-    name: 'isDeleted',
+    default: () => true,
+    name: `isDeleted`,
   })
-  isDeleted: boolean;
+  isDeleted: boolean = false;
 
   @Column('varchar', {
     nullable: true,
@@ -34,8 +34,15 @@ export class BaseE extends BaseEntity {
   updatedBy: string;
 
   @CreateDateColumn()
-  createdAt:Date = new Date();
+  createdAt: Date = new Date();
 
   @UpdateDateColumn()
   updatedAt: Date = new Date();
+
+  constructor(fields?: Partial<BaseE | any>) {
+    super();
+    if (fields) {
+      Object.assign(this, fields);
+    }
+  }
 }
