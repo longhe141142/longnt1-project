@@ -1,5 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn, OneToOne } from 'typeorm';
-import { BaseE } from '../common/entities/base.entity';
+import { BaseE } from '../common/base';
 import { Form } from './form';
 
 @Entity('form_detail', { schema: 'F11_N12_PRO' })

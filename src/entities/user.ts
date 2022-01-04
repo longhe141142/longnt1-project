@@ -5,11 +5,16 @@ import {
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
+  JoinColumn,
+  JoinTable,
+  ManyToMany,
+  BeforeInsert,
 } from 'typeorm';
-import { BaseE } from '../common/entities/base.entity';
+import { BaseE } from '../common/base';
 import { UserRole } from './userRole';
 import { Form } from './form';
 import { Employee } from './employee';
+import { Role } from './role';
 
 @Entity('user', { schema: 'F11_N12_PRO' })
 export class User extends BaseE {
@@ -66,7 +71,7 @@ export class User extends BaseE {
     name: 'identityNumber',
     length: 45,
     nullable: false,
-    default:"2323"
+    default: '2323',
   })
   identityNumber: string = '12222';
 
@@ -94,7 +99,21 @@ export class User extends BaseE {
   @OneToMany(() => Employee, (employee) => employee.manager)
   public employees!: Employee[];
 
-  @OneToOne(()=>Employee,(employeeData)=>employeeData.user)
-  public employeeData!:Employee
+  @ManyToMany(() => Role)
+  @JoinTable({
+    name: 'userRole',
+    joinColumn: {
+      name: 'userId',
+      referencedColumnName: 'id',
+    },
+  })
+  roles: Role[];
 
+  @OneToOne(() => Employee, (employeeData) => employeeData.user)
+  public employeeData!: Employee;
+
+  @BeforeInsert()
+  beforeInsert() {
+    console.log('Success@!');
+  }
 }

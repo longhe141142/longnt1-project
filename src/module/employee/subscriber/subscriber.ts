@@ -18,6 +18,7 @@ export class EmployeeSubscriber implements EntitySubscriberInterface<Employee> {
 
   async beforeInsert(event: InsertEvent<Employee>): Promise<void> {
     const { firstName, lastName } = event.entity;
-    event.entity.fullName = firstName + ' ' + lastName;
+    event.entity.fullName = (firstName + ' ' + lastName).trim();
   }
+
 }

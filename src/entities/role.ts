@@ -6,10 +6,11 @@ import {
   JoinTable,
   ManyToMany,
 } from 'typeorm';
-import { BaseE } from '../common/entities/base.entity';
+import { BaseE } from '../common/base';
 import { RolePermission } from './rolePermission';
 import { Api } from './api';
 import { UserRole } from './userRole';
+import { User } from './user';
 
 @Entity('role', { schema: 'F11_N12_PRO' })
 export class Role extends BaseE {
@@ -38,6 +39,17 @@ export class Role extends BaseE {
     name: 'role_permission',
   })
   apis: Api[];
+
+  @ManyToMany(() => User)
+  @JoinTable({
+    name: 'userRole',
+    joinColumn: {
+      name: 'roleId',
+      referencedColumnName: 'id',
+    },
+  })
+  users: User[];
+
   @OneToMany(() => UserRole, (userRole) => userRole.role)
   public userRole!: UserRole[];
 }

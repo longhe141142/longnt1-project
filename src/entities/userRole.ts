@@ -1,8 +1,14 @@
-import { Column, Entity, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { BaseE } from '../common/base';
+import {
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  BeforeInsert,
+} from 'typeorm';
 import { Role } from './role';
 import { User } from './user';
-import { BaseE } from '../common/entities/base.entity';
-@Entity('user_role', { schema: 'F11_N12_PRO' })
+@Entity('userRole', { schema: 'F11_N12_PRO' })
 export class UserRole extends BaseE {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -24,4 +30,10 @@ export class UserRole extends BaseE {
 
   @ManyToOne(() => User, (user) => user.userRole)
   public user!: User;
+
+  @BeforeInsert()
+  beforeInsert() {
+    this.createdBy = 'admin';
+    this.updatedBy = 'admin';
+  }
 }

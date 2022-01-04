@@ -1,5 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn,ManyToOne } from 'typeorm';
-import { BaseE } from 'src/common/entities/base.entity';
+import { BaseE } from '../common/base';
 import { Role} from './role'
 import { Api} from './api'
 

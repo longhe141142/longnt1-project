@@ -1,9 +1,8 @@
 import { NestFactory } from '@nestjs/core';
-import { ValidationPipe } from '@nestjs/common';
-import {useContainer, Validator} from "class-validator";
-
+import { ValidationPipe, HttpAdapterHost } from '@nestjs/common';
+import { useContainer, Validator } from 'class-validator';
+import { GloBalHttpExceptionFilter } from './utils/http-exception.filter';
 import { AppModule } from './app.module';
-import { NestExpressApplication } from '@nestjs/platform-express';
 import {
   NestFastifyApplication,
   FastifyAdapter,
@@ -13,9 +12,10 @@ import * as hbs from 'hbs';
 import { join } from 'path';
 
 async function bootstrap() {
+  let FastifyAdapterHost = new FastifyAdapter()
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
-    new FastifyAdapter(),
+    FastifyAdapterHost
   );
   app.useStaticAssets({
     root: join(__dirname, '..', 'public'),
@@ -31,9 +31,8 @@ async function bootstrap() {
     options.data.root[varName] = varValue;
   });
   app.useGlobalPipes(new ValidationPipe());
-  
-  useContainer(app.select(AppModule), { fallbackOnErrors: true });
 
+  useContainer(app.select(AppModule), { fallbackOnErrors: true });
 
   await app.listen(3000);
 }

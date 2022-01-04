@@ -2,9 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { userInformationDto } from '../../auth/auth/dto/index';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EmployeeRepository } from '../employee/repository/employee.repository';
-import {
-  EntityManager,
-} from 'typeorm';
+import { EntityManager } from 'typeorm';
 
 @Injectable()
 export class EmployeeService {
@@ -16,16 +14,20 @@ export class EmployeeService {
   async insertNewEmployee(
     data: userInformationDto,
     createdBy: string,
+    user,
     transactionEntityManager: EntityManager = null,
   ) {
     return await this.employeeRepository.createEmployee(
       data,
       createdBy,
+      user,
       transactionEntityManager,
     );
   }
 
-  simpleTest() {
-    console.log('you can use the employee service');
+  async getEmp() {
+    return await this.employeeRepository.find({
+      relations: ['user', 'manager'],
+    });
   }
 }

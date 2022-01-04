@@ -5,24 +5,16 @@ import {
   BeforeInsert,
   ManyToOne,
   OneToOne,
+  JoinColumn,
 } from 'typeorm';
-import { BaseE } from '../common/entities/base.entity';
+import { BaseE } from '../common/base';
 import { RegValidation } from '../common/untils/reg.validation';
 import { User } from './user';
-
-
 
 @Entity('employee', { schema: 'F11_N12_PRO' })
 export class Employee extends BaseE {
   @PrimaryGeneratedColumn('uuid')
   id: string;
-
-  @Column('varchar', {
-    nullable: false,
-    name: 'url',
-    length: 70,
-  })
-  url: string;
 
   @Column('varchar', {
     nullable: false,
@@ -42,14 +34,10 @@ export class Employee extends BaseE {
     name: 'fullName',
   })
   fullName: string;
-  @Column('varchar', {
-    name: 'feature',
-    length: 220,
-  })
-  feature: string;
 
   @Column('varchar', {
     name: 'userId',
+    nullable:true,
     length: 45,
   })
   userId: string;
@@ -61,9 +49,11 @@ export class Employee extends BaseE {
   managerId: string;
 
   @ManyToOne(() => User, (manager) => manager.employees)
+  @JoinColumn()
   public manager!: User;
 
   @OneToOne(() => User, (user) => user.employeeData)
+  @JoinColumn()
   public user!: User;
 
   @BeforeInsert()

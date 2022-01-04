@@ -1,6 +1,6 @@
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { dbConfig } from './index';
-
+import { join ,resolve} from 'path';
 export const typeOrmConfig: TypeOrmModule = {
   type: dbConfig.type,
   host: dbConfig.host,
@@ -11,4 +11,7 @@ export const typeOrmConfig: TypeOrmModule = {
   logging: true,
   entities: dbConfig.entities,
   synchronize: false,
+  // subscribers: [`${__dirname}/../../module/**/*.{js,ts}`],
 };
+
+console.log(join(__dirname,`/../../module/**/*.{js,ts}`));

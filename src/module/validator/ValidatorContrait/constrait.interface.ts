@@ -29,7 +29,6 @@ export class IsEmailAlreadyExistConstraint
 {
   constructor(private readonly userService: UserService) {}
   async validate(email: any, args: ValidationArguments) {
-    console.log(this);
     const a = await this.userService.checkEmailExist(email);
     return !(!!a);
   }

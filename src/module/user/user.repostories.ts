@@ -1,3 +1,4 @@
+import { RepoBase } from '../../common/base';
 import {
   EntityRepository,
   Repository,
@@ -7,15 +8,21 @@ import {
 import { User } from '../../entities/user';
 import { CreateUserDto } from '../../auth/auth/dto';
 import { EmployeeService } from '../employee/employee.service';
+import { UserService } from './user.service';
 interface partials {
   id: Number;
   name: string;
 }
+import { Injectable } from '@nestjs/common';
 
 @EntityRepository(User)
-export class UserRepository extends Repository<User> {
-  constructor(private readonly employeeService: EmployeeService) {
-    super();
+@Injectable()
+export class UserRepository extends RepoBase<User> {
+  constructor(
+    private readonly employeeService: EmployeeService,
+    private readonly userService: UserService,
+  ) {
+    super(User, 'user', ['employeeData', 'employees']);
   }
   insertUser = async (
     payload,
@@ -30,18 +37,15 @@ export class UserRepository extends Repository<User> {
     return user;
   };
 
-  getUserByUserName = async (username: string) => {
-    return await this.createQueryBuilder('user')
-      .select([
-        `user.id`,
-        `user.email`,
-        `user.age`,
-        `user.phone`,
-        `user.userName`,
-        `user.password`,
-      ])
-      .where('user.userName = :username', { username })
-      .getOne();
+  getUserByUserName = async (
+    userName: string,
+    transactionEntityManager: EntityManager = null,
+  ) => {
+    let rel = !transactionEntityManager
+      ? await this.findOne({ userName })
+      : await transactionEntityManager.findOne(User, userName);
+    console.log(rel);
+    return rel;
   };
 
   getUser = async () => {
@@ -77,16 +81,20 @@ export class UserRepository extends Repository<User> {
       },
       transactionEntityManager,
     );
-    let { employee: userDetail } = data;
-    this.employeeService.simpleTest();
-    let employee = await this.employeeService.insertNewEmployee(
-      userDetail,
-      data.userName,
-      transactionEntityManager,
-    );
-    return {
-      user,
-      employee,
-    };
+    return user;
+    // let { employee: userDetail } = data;
+    // this.userService.findAll();
+    // this.employeeService.simpleTest();
+
+    // let employee = await this.employeeService.insertNewEmployee(
+    //   userDetail,
+    //   data.userName,
+    //   transactionEntityManager,
+    // );
+    // return {
+    //   user,
+    //   employee,
+    // };
   }
+  
 }

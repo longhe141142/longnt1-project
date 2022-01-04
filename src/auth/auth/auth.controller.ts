@@ -10,7 +10,7 @@ import {
   Redirect,
   UseFilters,
 } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
+// import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from '../auth.guard';
 import { JwtAuthGuard } from '../jwt.guard';
@@ -46,6 +46,13 @@ export class AuthController {
   @UseFilters(new HttpExceptionFilter())
   async create(@Req() req, @Body() body: CreateUserDto) {
     let { userName, email, password, ...payload } = body;
-    return await this.UserService.createUser(body);
+    let rel = await this.UserService.createUser(body);
+    if(rel instanceof Error){
+      
+      return {
+        "error":rel
+      }
+    }
+    return rel;
   }
 }

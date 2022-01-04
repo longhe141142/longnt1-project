@@ -11,4 +11,6 @@ export class RoleRopsitory extends Repository<Role> {
       relations: [this.api],
     });
   };
+
+  
 }

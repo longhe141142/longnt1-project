@@ -12,14 +12,19 @@ export class EmployeeRepository extends Repository<Employee> {
   async createEmployee(
     data: userInformationDto,
     createdBy: string,
+    user,
     transactionEntityManager: EntityManager = null,
   ) {
     let employee = new Employee({ ...data, createdBy, updatedBy: createdBy });
+    employee.user = user
     if (!transactionEntityManager) {
       await this.save(employee);
     } else {
-      await transactionEntityManager.save(employee);
+      console.log("entry here!");
+      employee =await transactionEntityManager.save(employee);
     }
+    console.log(employee);
+    
     return employee;
   }
 }

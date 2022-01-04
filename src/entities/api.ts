@@ -5,10 +5,10 @@ import {
   Generated,
   OneToMany,
   ManyToMany,
-  JoinTable
+  JoinTable,
 } from 'typeorm';
-import { BaseE } from '../common/entities/base.entity';
-import { Role} from './role'
+import { BaseE } from '../common/base';
+import { Role } from './role';
 import { RolePermission } from './rolePermission';
 
 @Entity('api', { schema: 'F11_N12_PRO' })
@@ -48,7 +48,7 @@ export class Api extends BaseE {
     length: 220,
   })
   description: string;
-  
+
   @OneToMany(() => RolePermission, (rolePermission) => rolePermission.api)
   public rolePermissions!: RolePermission[];
 
