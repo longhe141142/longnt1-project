@@ -1,3 +1,4 @@
+import { User } from './../../entities/user';
 import {
   Injectable,
   BadRequestException,
@@ -10,10 +11,15 @@ import {
 } from '@nestjs/common';
 import { ObjectType, Repository } from 'typeorm';
 import { BaseE, RepoBase } from './';
+import { Connection } from 'typeorm';
 
 @Injectable()
 export class BaseService<T extends BaseE> {
-  constructor(private readonly genericRepository:RepoBase<T>) {}
+  constructor(
+    private readonly genericRepository: RepoBase<T>,
+  ) {
+    
+  }
 
   async getAll(): Promise<T[]> {
     try {
@@ -31,11 +37,22 @@ export class BaseService<T extends BaseE> {
     }
   }
 
-  async deleteById(id: string | number):Promise<void> {
+  async deleteById(id: string | number): Promise<void> {
     try {
       this.genericRepository.deleteById(id);
     } catch (error) {
       throw new BadGatewayException(error);
     }
+  }
+
+  buildResponsePayload(user: User, accessToken: string, refreshToken?: string) {
+    return {
+      user: user,
+      payload: {
+        type: 'bearer',
+        token: accessToken,
+        ...(refreshToken ? { refresh_token: refreshToken } : {}),
+      },
+    };
   }
 }

@@ -7,7 +7,7 @@ import {
   IsObject,
   ValidateNested,
 } from 'class-validator';
-import { CustomValidation } from './validation/registerValidator';
+import { CustomValidation } from '../../../auth/auth/dto/validation/registerValidator';
 import { ValidateByConstraint } from '../../../module/validator/validator.service';
 import {
   IsUserAlreadyExistConstraint,

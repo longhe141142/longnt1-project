@@ -6,7 +6,7 @@ import {
   EntityManager,
 } from 'typeorm';
 import { User } from '../../entities/user';
-import { CreateUserDto } from '../../auth/auth/dto';
+import { CreateUserDto } from '../auth/dto/index';
 import { EmployeeService } from '../employee/employee.service';
 import { UserService } from './user.service';
 interface partials {

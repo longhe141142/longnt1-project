@@ -1,3 +1,4 @@
+import { User } from './../../entities/user';
 import {
   Controller,
   Get,
@@ -21,4 +22,6 @@ export class BaseController<T extends BaseE> {
   async getOne(): Promise<T> {
     return await this.baseService.get();
   }
+
+ 
 }

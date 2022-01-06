@@ -15,6 +15,7 @@ import { UserRole } from './userRole';
 import { Form } from './form';
 import { Employee } from './employee';
 import { Role } from './role';
+import { RefreshToken } from './refreshToken';
 
 @Entity('user', { schema: 'F11_N12_PRO' })
 export class User extends BaseE {
@@ -111,6 +112,10 @@ export class User extends BaseE {
 
   @OneToOne(() => Employee, (employeeData) => employeeData.user)
   public employeeData!: Employee;
+
+  @OneToMany(() => RefreshToken, (refreshToken) => refreshToken.user)
+  public refreshToken: RefreshToken;
+
 
   @BeforeInsert()
   beforeInsert() {

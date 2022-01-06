@@ -12,24 +12,29 @@ import {
 } from '@nestjs/common';
 // import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
-import { LocalAuthGuard } from '../auth.guard';
-import { JwtAuthGuard } from '../jwt.guard';
+import { LocalAuthGuard } from '../../auth/auth.guard';
+import { JwtAuthGuard } from '../../auth/jwt.guard';
 import { UserService } from '../../module/user/user.service';
-import { CreateUserDto } from '../../auth/auth/dto';
+import { CreateUserDto } from './dto';
 import { validateOrReject, validate } from 'class-validator';
 import { HttpExceptionFilter } from '../../utils/http-exception.filter';
+import { BaseController } from '../../common/base';
+import { RefreshToken } from '../../entities/refreshToken';
+
 @Controller('auth')
-export class AuthController {
+export class AuthController extends BaseController<RefreshToken> {
   constructor(
     private readonly authService: AuthService,
     private readonly UserService: UserService,
-  ) {}
+  ) {
+    super(authService);
+  }
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
   // @Render('index.hbs')
-  async login(@Request() req) {
-    let data = await this.authService.login(req.user);
+  async login(@Request() req, @Body() body) {
+    let data = await this.authService.login(body);
     return {
       data,
     };
@@ -38,21 +43,23 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @Get('profile')
   getProfile(@Request() req) {
-    // this.UserService.testPartial();
     return req.user;
   }
 
   @Post('register')
   @UseFilters(new HttpExceptionFilter())
   async create(@Req() req, @Body() body: CreateUserDto) {
-    let { userName, email, password, ...payload } = body;
-    let rel = await this.UserService.createUser(body);
-    if(rel instanceof Error){
-      
-      return {
-        "error":rel
-      }
-    }
+    let rel = await this.authService.register(body);
     return rel;
+  }
+
+  @Post('refresh')
+  @UseFilters(new HttpExceptionFilter())
+  async refreshToken(@Req() req, @Body() body: any) {
+    let rel = await this.authService.createAccessTokenFromRefreshToken(
+      body.refreshToken,
+    );
+    let payload = this.authService.buildResponsePayload(rel.user, rel.token);
+    return payload;
   }
 }

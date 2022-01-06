@@ -5,7 +5,7 @@ import {
   EntityManager,
 } from 'typeorm';
 import { Employee } from '../../../entities/employee';
-import { userInformationDto } from '../../../auth/auth/dto';
+import { userInformationDto } from '../../auth/dto';
 
 @EntityRepository(Employee)
 export class EmployeeRepository extends Repository<Employee> {

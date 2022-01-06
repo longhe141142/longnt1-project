@@ -10,20 +10,13 @@ import {
   Inject,
   Catch,
 } from '@nestjs/common';
-import { CreateUserDto } from '../../auth/auth/dto/register.dto';
+import { CreateUserDto } from '../auth/dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserRepository } from './user.repostories';
 import { Connection } from 'typeorm';
 import { ResponseSuccess } from '../../common/interfaces/response.interface';
 import { User } from '../../entities/user';
-import {
-  EntityManager,
-  Repository,
-  Transaction,
-  TransactionManager,
-} from 'typeorm';
-import { EmployeeService } from '../employee/employee.service';
-import { EmployeeRepository } from '../employee/repository/employee.repository';
+import { EntityManager } from 'typeorm';
 import { BaseService } from '../../common/base/service';
 import {
   ErrorMessage,
@@ -73,13 +66,11 @@ export class UserService extends BaseService<User> {
     return await this.userRepository.checkEmailExist(email);
   };
 
-  async createUser(
-    data: Partial<CreateUserDto>,
-  ): Promise<ResponseSuccess | BadRequestException> {
+  async createUser(data: Partial<CreateUserDto>,manager:EntityManager): Promise<User> {
     let ret;
     let { employee: employeeData, ...userData } = data;
     try {
-      ret = await this.connection.transaction(async (manager) => {
+      // ret = await this.connection.transaction(async (manager) => {
         let provider = {
           createdBy: data.userName,
           updatedBy: data.userName,
@@ -105,21 +96,11 @@ export class UserService extends BaseService<User> {
           relations: ['employeeData', 'employeeData.manager', 'roles'],
         });
         return user;
-      });
+      // });
     } catch (error) {
       console.error(error);
       return error;
     }
-
-    return ret instanceof Error
-      ? new BadRequestException({
-          statusCode: HttpStatus.BAD_REQUEST,
-          message: ErrorMessage.USER_EXISTED,
-          codeName: CodeName.USER_EXISTED,
-        })
-      : new ResponseSuccess({
-          data: ret,
-        });
   }
 
   async insertUser(data, manager) {
@@ -159,7 +140,7 @@ export class UserService extends BaseService<User> {
     userRole = await transactionEntityManager.save(UserRole, userRole);
   }
 
-  async getList(relations?: Array<string>){
+  async getList(relations?: Array<string>) {
     return await this.userRepository.getList(relations);
   }
 }

@@ -12,7 +12,6 @@ import { BaseE } from './';
 
 export class RepoBase<T extends BaseE> extends Repository<T> {
   private entity: ObjectType<T>;
-  private connection: Connection;
   public include: string[] = [];
   private alias: string = null;
 
@@ -27,6 +26,16 @@ export class RepoBase<T extends BaseE> extends Repository<T> {
       ? await this.findOne(where)
       : transactionEntityManager.findOne(this.entity, {
           where,
+        });
+  }
+
+  async getOneById(id: string | Number, transactionEntityManager: EntityManager = null) {
+    return !transactionEntityManager
+      ? await this.findOne({
+          where: { id },
+        })
+      : transactionEntityManager.findOne(this.entity, {
+          where: { id },
         });
   }
 
