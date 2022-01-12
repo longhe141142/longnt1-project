@@ -37,14 +37,13 @@ export class Employee extends BaseE {
 
   @Column('varchar', {
     name: 'userId',
-    nullable:true,
-    length: 45,
+    // length: 45,
   })
   userId: string;
 
   @Column('varchar', {
     name: 'managerId',
-    length: 45,
+    // length: 45,
   })
   managerId: string;
 

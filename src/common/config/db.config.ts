@@ -11,7 +11,8 @@ export const typeOrmConfig: TypeOrmModule = {
   logging: true,
   entities: dbConfig.entities,
   synchronize: false,
-  // subscribers: [`${__dirname}/../../module/**/*.{js,ts}`],
+  options: { encrypt: false },
+
 };
 
 console.log(join(__dirname,`/../../module/**/*.{js,ts}`));

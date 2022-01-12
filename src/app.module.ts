@@ -1,4 +1,3 @@
-import { IntermediaryModule } from './module/intermediary/intermediary.module';
 import { ValidatorModule } from './module/validator/validator.module';
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';

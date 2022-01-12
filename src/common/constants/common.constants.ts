@@ -63,6 +63,64 @@ export enum ValidationMessage{
   
 }
 
+export enum Role {
+  User = 'user',
+  Admin = 'admin',
+}
+
+export const Authorize = {
+  form: {
+    ROUTER: "/form",
+    createForm: {
+      URL: "/api/form/create",
+      METHOD: "/post",
+    },
+    managerComment: {
+      URL: "/api/form//modify/comment",
+      METHOD: "/patch",
+    },
+    viewIntern: {
+      URL: "/api/form/list/intern",
+      METHOD: "/get",
+    },
+    viewEvaluate: {
+      URL: "/api/form/list/evaluate",
+      METHOD: "/get",
+    },
+    approveAction: {
+      URL: "/api/form/approve",
+      METHOD: "/put",
+    },
+    rejectAction: {
+      URL: "/api/form/reject",
+      METHOD: "/put",
+    },
+    checkDue: {
+      URL: "/api/form/checkDue",
+      METHOD: "/patch",
+    },
+    closeForm:{
+      URL: "/api/form/close",
+      METHOD: "/patch",
+    }
+  },
+  user: {
+    ROUTER: "/user",
+    addEmployee: {
+      URL: "/api/user/addEmployee",
+      METHOD: "/post",
+    },
+    viewOwnEmployee: {
+      URL: "/api/user/ViewOwnEmployees",
+      METHOD: "/get",
+    },
+    viewAllEmployee: {
+      URL: "/api/user/displayEmployeeList",
+      METHOD: "/get",
+    },
+  },
+};
+
 
 
 export const bcryptSalt = 9;

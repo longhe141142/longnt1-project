@@ -34,7 +34,6 @@ export class CreateUserDto {
   @ValidateByConstraint(
     {
       message: 'User $value already exists. Choose another name.',
-      context: 400,
     },
     IsUserAlreadyExistConstraint,
   )

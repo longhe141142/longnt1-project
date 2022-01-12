@@ -10,6 +10,8 @@ import {
   Redirect,
   UseFilters,
 } from '@nestjs/common';
+import {LocalStrategy2} from "../../auth/strategy/local2.strategy";
+import { AuthGuard } from '@nestjs/passport';
 // import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from '../../auth/auth.guard';
@@ -20,6 +22,8 @@ import { validateOrReject, validate } from 'class-validator';
 import { HttpExceptionFilter } from '../../utils/http-exception.filter';
 import { BaseController } from '../../common/base';
 import { RefreshToken } from '../../entities/refreshToken';
+import {Roles} from "../../common/decorator";
+import {Role} from "../../common/constants/common.constants";
 
 @Controller('auth')
 export class AuthController extends BaseController<RefreshToken> {
@@ -30,9 +34,8 @@ export class AuthController extends BaseController<RefreshToken> {
     super(authService);
   }
 
-  @UseGuards(LocalAuthGuard)
+  @UseGuards(AuthGuard(["local"]))
   @Post('login')
-  // @Render('index.hbs')
   async login(@Request() req, @Body() body) {
     let data = await this.authService.login(body);
     return {
@@ -61,5 +64,11 @@ export class AuthController extends BaseController<RefreshToken> {
     );
     let payload = this.authService.buildResponsePayload(rel.user, rel.token);
     return payload;
+  }
+
+  @Get("test")
+  @Roles(Role.Admin,Role.User)
+  async  testFunc(){
+    console.log("Entry success!");
   }
 }

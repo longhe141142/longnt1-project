@@ -20,7 +20,7 @@ export class RefreshToken extends BaseE {
 
 
 
-  @Column('boolean', {
+  @Column('tinyint', {
     name: 'isRevoked',
   })
   isRevoked: boolean;
@@ -28,7 +28,6 @@ export class RefreshToken extends BaseE {
   @Column('varchar', {
     nullable: true,
     name: 'userId',
-    length: 45,
   })
   userId: string;
 

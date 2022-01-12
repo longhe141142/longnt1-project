@@ -21,9 +21,8 @@ export class Form extends BaseE {
   lastName: Number;
 
   @Column('varchar', {
-    nullable: true,
     name: 'userId',
-    length: 45,
+    // length: 36,
   })
   userId: string;
 
@@ -43,17 +42,17 @@ export class Form extends BaseE {
   })
   dueDate: Date;
 
-  @Column('boolean', {
+  @Column('tinyint', {
     name: 'isApproved',
   })
   isApproved: boolean = false;
 
-  @Column('boolean', {
+  @Column('tinyint', {
     name: 'isRejected',
   })
   isRejected: boolean = false;
 
-  @Column('boolean', {
+  @Column('tinyint', {
     name: 'isDue',
   })
   isDue: boolean = false;

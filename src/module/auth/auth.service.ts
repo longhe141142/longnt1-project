@@ -37,7 +37,6 @@ export class AuthService extends BaseService<RefreshToken> {
   }
 
   async validateUser(username: string, pass: string): Promise<any> {
-    console.log(username, pass);
 
     const user = await this.usersService.getUserByUserName(username);
 
@@ -51,12 +50,24 @@ export class AuthService extends BaseService<RefreshToken> {
     }
     return user;
   }
-  async login(user: User) {
-    // const payload = { username: user.userName, sub: user.id };
-    //  user = await this.
-    // return {
-    //   access_token: this.JwtService.sign(payload),
-    // };
+
+
+  async login(body: any) {
+    let user = await this.userRepository.getUserByUserName(body.userName);
+    if(!user)
+      throw new BadRequestException("No user Found!");
+
+    console.log(user,"abc34")
+    let data = {
+      userName:user.userName,
+      email:user.email,
+      password:user.password
+    }
+    let token = await this.generateAccessToken(user)
+    console.log(token)
+    return {
+      access_token: token
+    };
   }
 
   async generateAccessToken(user: User, expiresIn?: Number): Promise<string> {
@@ -95,16 +106,17 @@ export class AuthService extends BaseService<RefreshToken> {
             message: ErrorMessage.USER_EXISTED,
             codeName: CodeName.USER_EXISTED,
           });
-        let token = await this.generateAccessToken(user);
-        const refresh = await this.generateRefreshToken(
-          user,
-          60 * 60 * 24 * 30,
-          manager,
-        );
-        const payload = this.buildResponsePayload(user, token, refresh);
-        return new ResponseSuccess({
-          data: payload,
-        });
+        // let token = await this.generateAccessToken(user);
+        // const refresh = await this.generateRefreshToken(
+        //   user,
+        //   60 * 60 * 24 * 30,
+        //   manager,
+        // );
+        // const payload = this.buildResponsePayload(user, token, refresh);
+        // return new ResponseSuccess({
+        //   data: payload,
+        // });
+        return "success!"
       });
       return rel;
     } catch (e) {
@@ -129,16 +141,17 @@ export class AuthService extends BaseService<RefreshToken> {
     }
   }
 
-  async getUserFromTokenPayload(tokenPayload: TokenPayload): Promise<User> {
+  async getUserFromTokenPayload(tokenPayload: Partial<TokenPayload>): Promise<User> {
     let userId = tokenPayload.userId;
     if (!userId) {
       throw new UnprocessableEntityException('Refresh token malformed');
     }
-    return await this.userRepository.findOne({
-      where: {
-        id: userId,
-      },
-    });
+    let where = {
+      id:userId
+    }
+    let relations  = ["roles"]
+    let user = await this.userRepository.getOneAndRelation(where,relations);
+    return user;
   }
 
   async getRefreshTokenFromDatabase(

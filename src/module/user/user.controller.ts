@@ -7,16 +7,23 @@ import {
   Param,
   Delete,
   Req,
-  Inject,
+  Inject, UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
+import {Authorize} from '../../common/constants/common.constants'
 // import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
 import { BaseController } from '../../common/base/controller';
 import { User } from '../../entities/user';
+import {AuthorizeDecorator, Method, Router, URL} from "../../common/decorator";
+import {RolesGuard} from "../../auth/guard/roles.guard";
+import {JwtAuthGuard} from "../../auth/jwt.guard";
+import {AuthGuard} from "@nestjs/passport";
 
+@UseGuards(RolesGuard)
+@Router(Authorize.user.ROUTER)
 @Controller('user')
 export class UserController extends BaseController<User> {
   constructor(
@@ -28,20 +35,17 @@ export class UserController extends BaseController<User> {
 
   @Get()
   getOneUser() {
-    this.logger.info('this is a log');
-    this.logger.warn('this is a log');
-    this.logger.error('this is a log');
   }
 
   @Get('test')
+  @AuthorizeDecorator({
+      method:Authorize.user.addEmployee.METHOD,
+      url:Authorize.user.addEmployee.URL
+  })
+  @UseGuards(AuthGuard(["jwtjsonwebtoken"]))
   async test() {
-    let where = {
-      userName: 'longnt12345',
-    };
     return await this.userService.getList([
       this.userService.userRepository.include[0],
     ]);
-  }
-
-
+  };
 }

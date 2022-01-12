@@ -12,6 +12,7 @@ import {
 import { ObjectType, Repository } from 'typeorm';
 import { BaseE, RepoBase } from './';
 import { Connection } from 'typeorm';
+import {ResponseSuccess} from "../interfaces/response.interface";
 
 @Injectable()
 export class BaseService<T extends BaseE> {
@@ -54,5 +55,9 @@ export class BaseService<T extends BaseE> {
         ...(refreshToken ? { refresh_token: refreshToken } : {}),
       },
     };
+  }
+
+  buildResponseSucess(data:any){
+    return new ResponseSuccess({data});
   }
 }

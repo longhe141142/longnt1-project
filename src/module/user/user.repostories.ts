@@ -48,15 +48,15 @@ export class UserRepository extends RepoBase<User> {
     return rel;
   };
 
-  getUser = async () => {
-    return await this.createQueryBuilder('user').select([
-      `user.id`,
-      `user.email`,
-      `user.age`,
-      `user.phone`,
-      `user.userName`,
-    ]);
-  };
+  // getUser = async () => {
+  //   return await this.createQueryBuilder('user').select([
+  //     `user.id`,
+  //     `user.email`,
+  //     `user.age`,
+  //     `user.phone`,
+  //     `user.userName`,
+  //   ]);
+  // };
 
   async checkUserExist(userName: string) {
     return !!(await this.findOne({ userName }));
