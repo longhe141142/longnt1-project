@@ -1,5 +1,5 @@
 import { ValidatorModule } from './module/validator/validator.module';
-import { Module } from '@nestjs/common';
+import {forwardRef, Module} from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -11,6 +11,11 @@ import { AuthModule } from './module/auth/auth.module';
 import { EmployeeModule } from './module/employee/employee.module';
 import { WinstonModule } from 'nest-winston';
 import { LoggerConfig } from './common/config/logger/logger.config';
+import {JwtModule} from "@nestjs/jwt";
+import {jwtConstants} from "./auth/constant";
+import {JwtStrategy} from "./auth/strategy/jwt.strategy";
+import {LocalStrategy} from "./auth/strategy/local.strategy";
+import {LocalStrategy2} from "./auth/strategy/local2.strategy";
 
 @Module({
   imports: [
@@ -21,9 +26,9 @@ import { LoggerConfig } from './common/config/logger/logger.config';
     AdminModule,
     ValidatorModule,
     EmployeeModule,
-    AuthModule,
+    AuthModule
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService,],
 })
 export class AppModule {}

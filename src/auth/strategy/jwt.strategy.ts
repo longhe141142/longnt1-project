@@ -20,8 +20,6 @@ export class JwtStrategy extends PassportStrategy(Strategy,"jwtjsonwebtoken") {
       userId: payload.sub, username: payload.username
     }
     const user = await this.authService.getUserFromTokenPayload(payload);
-    console.log("user where are u?????????");
-    console.log(user);
     if(!user)
       throw new UnauthorizedException("unauthorized")
     return user;

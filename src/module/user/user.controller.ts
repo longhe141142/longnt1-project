@@ -23,6 +23,7 @@ import {JwtAuthGuard} from "../../auth/jwt.guard";
 import {AuthGuard} from "@nestjs/passport";
 
 @UseGuards(RolesGuard)
+@UseGuards(JwtAuthGuard)
 @Router(Authorize.user.ROUTER)
 @Controller('user')
 export class UserController extends BaseController<User> {
@@ -37,13 +38,14 @@ export class UserController extends BaseController<User> {
   getOneUser() {
   }
 
-  @Get('test')
+  @Get('/add-employee')
   @AuthorizeDecorator({
       method:Authorize.user.addEmployee.METHOD,
       url:Authorize.user.addEmployee.URL
   })
-  @UseGuards(AuthGuard(["jwtjsonwebtoken"]))
-  async test() {
+  async addEmployeeToManage(
+      @Body() body,
+  ) {
     return await this.userService.getList([
       this.userService.userRepository.include[0],
     ]);

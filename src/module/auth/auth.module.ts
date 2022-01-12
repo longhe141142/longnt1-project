@@ -13,6 +13,7 @@ import { jwtConstants } from '../../auth/constant';
 import { JwtStrategy } from '../../auth/strategy/jwt.strategy';
 import { EmployeeModule } from '../../module/employee/employee.module';
 import { LocalStrategy2 } from '../../auth/strategy/local2.strategy';
+import {AppModule} from "../../app.module";
 
 @Module({
   imports: [
@@ -25,10 +26,11 @@ import { LocalStrategy2 } from '../../auth/strategy/local2.strategy';
     }),
     ValidatorModule,
     EmployeeModule,
-    UserModule
+    UserModule,
+
   ],
   controllers: [AuthController],
-  providers: [AuthService, LocalStrategy, JwtStrategy, LocalStrategy2],
-  exports: [AuthService,JwtStrategy],
+  providers: [AuthService,JwtStrategy,LocalStrategy,LocalStrategy2],
+  exports: [AuthService],
 })
 export class AuthModule {}

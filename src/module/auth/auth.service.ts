@@ -10,7 +10,7 @@ import {
   Injectable,
   UnauthorizedException,
   HttpStatus,
-  UnprocessableEntityException,
+  UnprocessableEntityException, forwardRef, Inject,
 } from '@nestjs/common';
 import { UserService } from '../../module/user/user.service';
 import { JwtService } from '@nestjs/jwt';
@@ -28,6 +28,7 @@ import { Connection, EntityManager } from 'typeorm';
 export class AuthService extends BaseService<RefreshToken> {
   constructor(
     private usersService: UserService,
+    @Inject(forwardRef(() => JwtService))
     private readonly JwtService: JwtService,
     private readonly authRepository: AuthRepository,
     private readonly userRepository: UserRepository,
